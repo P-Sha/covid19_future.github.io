@@ -13,7 +13,10 @@ output:
 #### _Purnima Sharma (ps3147_)
 <br><br><br><br>
 
-### Tentative project title: "Future of covid-19: Looking at past pandemics"
+### Tentative project title: 
+***"Future of covid-19: Looking at past pandemics"***
+
+### Proposal
 
 The motivation for the project is provided by the article:
 [How the pandemic might play out in 2021 and beyond](https://www.nature.com/articles/d41586-020-02278-5)
