@@ -14,7 +14,7 @@ output:
 <br><br><br><br>
 
 ### Tentative project title: 
-***"Future of covid-19: Looking at past pandemics"***
+#### ***"Future of covid-19: Looking at past pandemics"***
 
 ### Proposal
 
