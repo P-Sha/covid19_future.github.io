@@ -1,7 +1,24 @@
 ---
-title: "Holy cow!"
+title: "p8105: Final project proposal"
+output:
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
-### I have a webpage!
+### Group members:
+#### _Jared Klug (jak2312)_
+#### _David Nemirovsky (dn2501)_
+#### _Matthew Lawlor (ml4198)_
+#### _Purnima Sharma (ps3147_)
+<br><br><br><br>
+## Tentative project title: "Future of covid-19: Looking at past pandemics"
 
-And I can put all kinds of stuff on it!
+The motivation for the project is provided by the article:
+[How the pandemic might play out in 2021 and beyond](https://www.nature.com/articles/d41586-020-02278-5)
+
+The final products aim to get a glimpse into how the current corona virus might take its course in the near future and possibly beyond, by looking into some of the past pandemics and epidemics. Comparing available data from historical infectious diseases to covid 19 in the same framework would be the aim of the project, in an effort to establish any relevant associations.
+Primary data sources would be from website kaggle.com, along with cdc.gov and who.int for covid19 data.
+[(Example of kaggle dataset)](https://www.kaggle.com/thepodclub/spanish-flu-dataset)
+
+
