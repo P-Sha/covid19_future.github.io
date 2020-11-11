@@ -1,0 +1,161 @@
+---
+title: "final_project_working_copy"
+author: "Matthew Lawlor"
+date: "11/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(tidyquant)
+```
+
+## Read and tidy
+
+### H1N1
+
+```{r}
+h1n1_df = read.csv("./data/h1n1_data.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-link) %>% 
+  mutate(
+    date = as.Date(date, "%m/%d/%y"),
+    pandemic_interval = "2009/04/24" %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+  rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths)
+
+h1n1_us = 
+  h1n1_df %>% 
+  filter(country == "United States of America") %>% 
+  mutate(
+    h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
+    h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
+  )
+```
+
+### COVID-19
+
+***US***
+
+```{r}
+covid_us_cases = read.csv("./data/case_daily_trends_united_states.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  select(-x7_day_moving_avg) %>% 
+  mutate(
+    date = as.Date(date, "%b %d %Y"),
+    pandemic_interval = "2020/01/22" %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+  rename(covid_new_cases = new_cases) %>% 
+  arrange(pandemic_duration) %>% 
+  mutate(
+    covid_cumulative_cases = CUMULATIVE_SUM(covid_new_cases)
+  )
+
+covid_us_deaths = read.csv("./data/death_daily_trends_united_states.csv", skip = 3) %>%
+  janitor::clean_names() %>% 
+  select(-x7_day_moving_avg) %>%
+  mutate(
+    date = as.Date(date, "%b %d %Y"),
+    pandemic_interval = "2020/01/22" %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+  rename(covid_new_deaths = new_deaths) %>% 
+  arrange(pandemic_duration) %>% 
+  mutate(
+    covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)
+  )
+```
+
+## Visualization
+
+### US H1N1
+
+***New cases***
+```{r}
+h1n1_us %>% 
+  ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)
+```
+
+***Cumulative cases***
+```{r}
+ h1n1_us %>% 
+  ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)
+```
+
+***New deaths***
+```{r}
+ h1n1_us %>% 
+  ggplot(aes(x = pandemic_duration, y = h1n1_new_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)
+```
+
+***Cumulative deaths***
+```{r}
+h1n1_us %>% 
+  ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)
+```
+
+### US COVID-19
+
+***New cases***
+
+```{r}
+covid_us_cases %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_new_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)
+```
+
+***Cumulative cases***
+```{r}
+covid_us_cases %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)
+```
+
+***New deaths***
+
+```{r}
+covid_us_deaths %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_new_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)
+```
+
+***Cumulative deaths***
+
+```{r}
+covid_us_deaths %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_cumulative_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)
+```
+
+### Merge US H1N1 and COVID-19 data (not quite there yet)
+
+```{r}
+us_cases =
+  full_join(h1n1_us, covid_us_cases, by = "pandemic_duration") %>% 
+  select(-date.x, -country, -pandemic_interval.x, -date.y, -pandemic_interval.y)
+
+us_df =
+  full_join(us_cases, covid_us_deaths, by = "pandemic_duration") %>% 
+  select(-date, -pandemic_interval)
+
+us_df %>% 
+  ggplot(aes(x = pandemic_duration, y = ))
+```
+
+
