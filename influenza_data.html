@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Matthew Lawlor" />
 
 
-<title>final_project_working_copy</title>
+<title>Influenza Data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -301,140 +300,12 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">final_project_working_copy</h1>
-<h4 class="author">Matthew Lawlor</h4>
-<h4 class="date">11/9/2020</h4>
+<h1 class="title toc-ignore">Influenza Data</h1>
 
 </div>
 
 
-<div id="read-and-tidy" class="section level2">
-<h2>Read and tidy</h2>
-<div id="h1n1" class="section level3">
-<h3>H1N1</h3>
-<pre class="r"><code>h1n1_df = read.csv(&quot;./data/h1n1_data.csv&quot;) %&gt;% 
-  janitor::clean_names() %&gt;% 
-  select(-link) %&gt;% 
-  mutate(
-    date = as.Date(date, &quot;%m/%d/%y&quot;),
-    pandemic_interval = &quot;2009/04/24&quot; %--% date,
-    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
-  ) %&gt;% 
-  rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths)
 
-h1n1_us = 
-  h1n1_df %&gt;% 
-  filter(country == &quot;United States of America&quot;) %&gt;% 
-  mutate(
-    h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
-    h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
-  )</code></pre>
-</div>
-<div id="covid-19" class="section level3">
-<h3>COVID-19</h3>
-<p><strong><em>US</em></strong></p>
-<pre class="r"><code>covid_us_cases = read.csv(&quot;./data/case_daily_trends_united_states.csv&quot;, skip = 3) %&gt;% 
-  janitor::clean_names() %&gt;% 
-  select(-x7_day_moving_avg) %&gt;% 
-  mutate(
-    date = as.Date(date, &quot;%b %d %Y&quot;),
-    pandemic_interval = &quot;2020/01/22&quot; %--% date,
-    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
-  ) %&gt;% 
-  rename(covid_new_cases = new_cases) %&gt;% 
-  arrange(pandemic_duration) %&gt;% 
-  mutate(
-    covid_cumulative_cases = CUMULATIVE_SUM(covid_new_cases)
-  )
-
-covid_us_deaths = read.csv(&quot;./data/death_daily_trends_united_states.csv&quot;, skip = 3) %&gt;%
-  janitor::clean_names() %&gt;% 
-  select(-x7_day_moving_avg) %&gt;%
-  mutate(
-    date = as.Date(date, &quot;%b %d %Y&quot;),
-    pandemic_interval = &quot;2020/01/22&quot; %--% date,
-    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
-  ) %&gt;% 
-  rename(covid_new_deaths = new_deaths) %&gt;% 
-  arrange(pandemic_duration) %&gt;% 
-  mutate(
-    covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)
-  )</code></pre>
-</div>
-</div>
-<div id="visualization" class="section level2">
-<h2>Visualization</h2>
-<div id="us-h1n1" class="section level3">
-<h3>US H1N1</h3>
-<p><strong><em>New cases</em></strong></p>
-<pre class="r"><code>h1n1_us %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
-  geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p><strong><em>Cumulative cases</em></strong></p>
-<pre class="r"><code> h1n1_us %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
-  geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p><strong><em>New deaths</em></strong></p>
-<pre class="r"><code> h1n1_us %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = h1n1_new_deaths)) +
-  geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p><strong><em>Cumulative deaths</em></strong></p>
-<pre class="r"><code>h1n1_us %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_deaths)) +
-  geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-</div>
-<div id="us-covid-19" class="section level3">
-<h3>US COVID-19</h3>
-<p><strong><em>New cases</em></strong></p>
-<pre class="r"><code>covid_us_cases %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = covid_new_cases)) +
-  geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p><strong><em>Cumulative cases</em></strong></p>
-<pre class="r"><code>covid_us_cases %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
-  geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<p><strong><em>New deaths</em></strong></p>
-<pre class="r"><code>covid_us_deaths %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = covid_new_deaths)) +
-  geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<p><strong><em>Cumulative deaths</em></strong></p>
-<pre class="r"><code>covid_us_deaths %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = covid_cumulative_deaths)) +
-  geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-</div>
-<div id="merge-us-h1n1-and-covid-19-data-not-quite-there-yet" class="section level3">
-<h3>Merge US H1N1 and COVID-19 data (not quite there yet)</h3>
-<pre class="r"><code>us_cases =
-  full_join(h1n1_us, covid_us_cases, by = &quot;pandemic_duration&quot;) %&gt;% 
-  select(-date.x, -country, -pandemic_interval.x, -date.y, -pandemic_interval.y)
-
-us_df =
-  full_join(us_cases, covid_us_deaths, by = &quot;pandemic_duration&quot;) %&gt;% 
-  select(-date, -pandemic_interval)
-
-us_df %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = ))</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-</div>
-</div>
 
 
 

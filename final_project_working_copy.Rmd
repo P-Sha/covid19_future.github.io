@@ -79,7 +79,7 @@ covid_us_deaths = read.csv("./data/death_daily_trends_united_states.csv", skip =
 h1n1_us %>% 
   ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ***Cumulative cases***
@@ -95,7 +95,7 @@ h1n1_us %>%
  h1n1_us %>% 
   ggplot(aes(x = pandemic_duration, y = h1n1_new_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ***Cumulative deaths***
@@ -103,7 +103,7 @@ h1n1_us %>%
 h1n1_us %>% 
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ### US COVID-19
@@ -114,7 +114,7 @@ h1n1_us %>%
 covid_us_cases %>% 
   ggplot(aes(x = pandemic_duration, y = covid_new_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ***Cumulative cases***
@@ -122,7 +122,7 @@ covid_us_cases %>%
 covid_us_cases %>% 
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ***New deaths***
@@ -131,7 +131,7 @@ covid_us_cases %>%
 covid_us_deaths %>% 
   ggplot(aes(x = pandemic_duration, y = covid_new_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ***Cumulative deaths***
@@ -140,7 +140,7 @@ covid_us_deaths %>%
 covid_us_deaths %>% 
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ### Merge US H1N1 and COVID-19 data (not quite there yet)
