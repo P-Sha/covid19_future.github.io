@@ -18,7 +18,7 @@ h1.title {color: brown}
 
 ### Introduction to the Project
 
-According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en) , corona virus is one of the most searched topics of 2020, surpassing "news" four times in the search history between March and May. Living through a running pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
+According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en) , coronavirus is one of the most searched topics of 2020, surpassing "news" four times in the search history between March and May. Living through a running pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
 ). So the question on most peoples' mind, it is safe to assume, is how would COVID-19 take its course in the near future and possibly beyond?
 
 <center>
@@ -36,7 +36,7 @@ Given the nature of new Zoonotic infectious diseases, and the resulting inconsis
 
 The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics.
 
-****** embed webcast here*************
+****** embed screencast here*************
 
 #### Data
 

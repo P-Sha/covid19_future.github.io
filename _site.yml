@@ -5,7 +5,7 @@ navbar:
   right:
     - text: "About"
       href: about.html
-    - references: "References"
+    - text: "References"
       href: references.html
     - icon: fa-envelope fa-lg
       href: mailto:<you@youremail.com>
