@@ -1,0 +1,14 @@
+---
+title: "Data Sources"
+---
+
+Data for the project was collected from various online resources:
+
+1. [(Spanish flu: Chicago)](https://www.kaggle.com/thepodclub/spanish-flu-dataset)
+2. [(Covid-19: Chicago)](https://data.cityofchicago.org/Health-Human-Services/COVID-19-Daily-Cases-Deaths-and-Hospitalizations/naz8-j4nc/data)
+3. [(Sars 2003: Global)]()
+4. [(Covid-19: Global)]()
+5. [(HINI: )]()
+6 [(Covid-19: )]()
+
+

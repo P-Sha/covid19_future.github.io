@@ -16,10 +16,9 @@ h1.title {color: brown}
 
 <brk><brk><brk>
 
-### Introduction to the Project
 
-According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en) , coronavirus is one of the most searched topics of 2020, surpassing "news" four times in the search history between March and May. Living through a running pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
-). So the question on most peoples' mind, it is safe to assume, is how would COVID-19 take its course in the near future and possibly beyond?
+According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en), coronavirus is one of the most researched topics of 2020, having been searched four times as much as "news" between March and May. As we live through this ongoing pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
+). So, a likely question on most peoples' minds is how would COVID-19 take its course in the near future and possibly beyond?
 
 <center>
 <figure>
@@ -30,9 +29,9 @@ According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3
 
 ***
 
-### Project Report
+### Report
 
-Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management via our current federal government surrounding COVID-19, we thought it would be interesting to explore into past pandemics in an effort to read a bit into the current one. The idea was encouraged by the articles ["How the pandemic might play out in 2021 and beyond"](https://www.nature.com/articles/d41586-020-02278-5), and ["Here's how the COVID-19 pandemic could play out over the next two years"](https://www.livescience.com/covid-19-pandemic-future-scenarios.html). 
+Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management via our current federal government surrounding COVID-19, we thought it would be interesting to explore into past pandemics in an effort to read into the current one. The idea was encouraged by the articles ["How the pandemic might play out in 2021 and beyond"](https://www.nature.com/articles/d41586-020-02278-5), and ["Here's how the COVID-19 pandemic could play out over the next two years"](https://www.livescience.com/covid-19-pandemic-future-scenarios.html). 
 
 The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics.
 
@@ -40,7 +39,7 @@ The questions of interest were to investigate on the expected severity of COVID-
 
 #### Data
 
-
+sources(separate html?), scraping, cleaning...
 
 
 
@@ -54,6 +53,8 @@ Data comparisons would be performed between past pandemics and the current pande
      
 
 ***
-Authors: _Jared Klug_ | _David Nemirovsky_ | _Matthew Lawlor_ | _Purnima Sharma_   
-![](pictures/Logo.png)
+Authors: _Jared Klug_ | _David Nemirovsky_ | _Matthew Lawlor_ | _Purnima Sharma_ 
+
+Students of Data Science class(Fall 2020): ![](pictures/Logo.png) 
+
 
