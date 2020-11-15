@@ -3,10 +3,14 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
+    - text: "Datasets"
+      href: datasets.html
     - text: "About"
       href: about.html
     - text: "Dashboard"
-      href: shiny_document.rmd
+      href: shiny_dashboard.html
+    - text: "References"
+      href: references.html
     - icon: fa-envelope fa-lg
       href: mailto:<you@youremail.com>
     - icon: fa-github fa-lg
