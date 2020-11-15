@@ -1,5 +1,5 @@
 ---
-title: "Future of COVID-19: Looking at past pandemics" 
+title: "Future of COVID-19: Looking at Past Pandemics" 
 output:
   html_document:
     toc: true
@@ -16,37 +16,44 @@ h1.title {color: brown}
 
 <brk><brk><brk>
 
-### Introduction to the project
+### Introduction to the Project
 
-According to [google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en) , corona virus is one of the most searched topics of 2020, surpassing news 4 times in the search history between March and May. Living through a running pandemic, what might the most googled phobia be? Well, thanks to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
-).  
+According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en) , corona virus is one of the most searched topics of 2020, surpassing "news" four times in the search history between March and May. Living through a running pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
+). So the question on most peoples' mind, it is safe to assume, is how would COVID-19 take its course in the near future and possibly beyond?
 
 <center>
 <figure>
 ![](pictures/history_of_pandemics.jpg)
-<figcaption> Corona virus in comparison to history's deadliest pandemics [1] </figcaption>
+<figcaption> Corona virus in comparison to history's deadliest pandemics, as of March 15 2020 [1] </figcaption>
 </figure>
 </center>
 
 ***
 
-### Report
+### Project Report
+
+Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management via our current federal government surrounding COVID-19, we thought it would be interesting to explore into past pandemics in an effort to read a bit into the current one. The idea was encouraged by the articles ["How the pandemic might play out in 2021 and beyond"](https://www.nature.com/articles/d41586-020-02278-5), and ["Here's how the COVID-19 pandemic could play out over the next two years"](https://www.livescience.com/covid-19-pandemic-future-scenarios.html). 
+
+The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics.
+
+****** embed webcast here*************
+
+#### Data
+
+
+
 
 
 ### Proposal
 
-The motivation for the project is provided by the article:
-[How the pandemic might play out in 2021 and beyond](https://www.nature.com/articles/d41586-020-02278-5)
-
-The final products of the project aim to get a view into how the current corona virus might take its course in the near future and possibly beyond, by looking into some of the past pandemics and epidemics. Comparing available data from historical infectious diseases to covid 19 in the same framework would be the aim of the project, in an effort to establish any relevant associations.
+ 
 Primary data sources would be from website kaggle.com, along with cdc.gov and who.int for covid19 data.
 [(Example of kaggle dataset)](https://www.kaggle.com/thepodclub/spanish-flu-dataset)
 
 Data comparisons would be performed between past pandemics and the current pandemic using parallel datasets, by analyzing statistical parameters and their visual graphics. Challenges would be to find data on some historical pandemics from time period when data collection was not well established, along with finding current complete data on the pandemic which is still in the running. 
-
-We anticipate to complete the project within 1 month, with setting up of basic structure of the site and importing/tidying data in week 1, numerical analysis and graphing in week 2, writing the report and webpage/screencast in weeks 3 and 4, by Dec 4 2020.     
+     
 
 ***
-Authors: _Jared Klug_ | _David Nemirovsky_ | _Matthew Lawlor_ | _Purnima Sharma_ 
+Authors: _Jared Klug_ | _David Nemirovsky_ | _Matthew Lawlor_ | _Purnima Sharma_   
 ![](pictures/Logo.png)
 
