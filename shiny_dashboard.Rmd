@@ -6,16 +6,18 @@ output:
     vertical_layout: fill
 runtime: shiny
 ---
-
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(viridis)
-library(p8105.datasets)
 
 library(plotly)
 library(flexdashboard)
+library(leaflet)
 ```
 
+
+Column {.sidebar}
+-----------------------------------------------------------------------
 ```{r}
 
 ```
