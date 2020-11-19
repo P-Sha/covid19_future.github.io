@@ -11,9 +11,7 @@ navbar:
       href: shiny_dashboard.html
     - text: "References"
       href: references.html
-    - icon: fa-envelope fa-lg
-      href: mailto:<you@youremail.com>
     - icon: fa-github fa-lg
-      href: http://github.com/<YOUR_GH_NAME>/
+      href: https://github.com/P-Sha/covid19_future.github.io
 output:
   html_document
