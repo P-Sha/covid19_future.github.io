@@ -30,14 +30,43 @@ scale_fill_discrete = scale_fill_viridis_d
 sars_df = 
   read_csv("./data/sars_2003_complete_dataset_clean.csv") %>% 
   janitor::clean_names() %>% 
-  select(-number_recovered)
+  select(-number_recovered) %>% 
+  group_by(country) %>% 
+  mutate(deaths_cum = cumsum(number_of_deaths))
 ```
 
 prelim plots:
 
-```{r}
+cumulative cases by country
+```{r cumulative cases by country}
 sars_df %>% 
-  ggplot(aes(x = date, y = cumulative_number_of_case_s, color = country)) +
+  ggplot(aes(x = date, y = log(cumulative_number_of_case_s, base = 10), color = country)) +
   geom_line()
 ```
 
+```{r cumulative cases in US}
+sars_df %>% 
+  filter(country == "United States") %>% 
+  ggplot(aes(x = date, y = cumulative_number_of_case_s)) +
+  geom_line()
+```
+
+```{r cumulative cases in China}
+sars_df %>% 
+  filter(country == "China") %>% 
+  ggplot(aes(x = date, y = cumulative_number_of_case_s)) +
+  geom_line()
+```
+
+```{r cumulative deaths by country}
+sars_df %>% 
+  ggplot(aes(x = date, y = deaths_cum, color = country)) +
+  geom_line()
+```
+
+```{r cumulative deaths in China and Hong Kong}
+sars_df %>% 
+  filter(country == c("China", "Hong Kong SAR, China")) %>% 
+  ggplot(aes(x = date, y = deaths_cum, color = country)) +
+  geom_line()
+```

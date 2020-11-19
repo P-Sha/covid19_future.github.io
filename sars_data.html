@@ -11,7 +11,7 @@
 
 
 
-<title>Influenza Data</title>
+<title>SARS-CoV-1 Data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -309,45 +309,97 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Influenza Data</h1>
+<h1 class="title toc-ignore">SARS-CoV-1 Data</h1>
 
 </div>
 
 
-<pre class="r"><code>influenza_df = 
-  read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
+<pre class="r"><code>sars_df = 
+  read_csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
-  select(year:end_date, a_total, b_total) %&gt;% 
-  mutate(week = as.numeric(week), a_total = as.numeric(a_total), b_total = as.numeric(b_total)) %&gt;% 
-  drop_na()</code></pre>
+  select(-number_recovered) %&gt;% 
+  group_by(country) %&gt;% 
+  mutate(deaths_cum = cumsum(number_of_deaths))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Date = col_date(format = &quot;&quot;),
+##   Country = col_character(),
+##   `Cumulative number of case(s)` = col_double(),
+##   `Number of deaths` = col_double(),
+##   `Number recovered` = col_double()
+## )</code></pre>
 <p>prelim plots:</p>
-<pre class="r"><code>influenza_df %&gt;% 
-  group_by(year) %&gt;% 
-  summarize(
-    week = week,
-    a_cum = cumsum(a_total),
-    b_cum = cumsum(b_total)
-  ) %&gt;% 
-  ggplot(aes(x = week, y = b_cum, color = year)) +
-  geom_point()</code></pre>
-<pre><code>## `summarise()` regrouping output by &#39;year&#39; (override with `.groups` argument)</code></pre>
-<p><img src="influenza_data_files/figure-html/prelim%20plots-1.png" width="90%" /></p>
-<pre class="r"><code>influenza_df %&gt;% 
-  filter(start_date &gt; &quot;2009-04-06&quot;)</code></pre>
-<pre><code>## # A tibble: 602 x 6
-##    year   week start_date end_date   a_total b_total
-##    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt;
-##  1 2009     16 2009-04-13 2009-04-19     153     186
-##  2 2009     17 2009-04-20 2009-04-26     169     113
-##  3 2009     18 2009-04-27 2009-05-03    3502     787
-##  4 2009     19 2009-05-04 2009-05-10    4431     490
-##  5 2009     20 2009-05-11 2009-05-17    2815     134
-##  6 2009     21 2009-05-18 2009-05-24    3782      93
-##  7 2009     22 2009-05-25 2009-05-31    4092      42
-##  8 2009     23 2009-06-01 2009-06-07    4971      26
-##  9 2009     24 2009-06-08 2009-06-14    5407      15
-## 10 2009     25 2009-06-15 2009-06-21    5914       9
-## # ... with 592 more rows</code></pre>
+<p>cumulative cases by country</p>
+<pre class="r"><code>sars_df %&gt;% 
+  ggplot(aes(x = date, y = log(cumulative_number_of_case_s, base = 10), color = country)) +
+  geom_line()</code></pre>
+<p><img src="sars_data_files/figure-html/cumulative%20cases%20by%20country-1.png" width="90%" /></p>
+<pre class="r"><code>sars_df %&gt;% 
+  filter(country == &quot;United States&quot;) %&gt;% 
+  ggplot(aes(x = date, y = cumulative_number_of_case_s)) +
+  geom_line()</code></pre>
+<p><img src="sars_data_files/figure-html/cumulative%20cases%20in%20US-1.png" width="90%" /></p>
+<pre class="r"><code>sars_df %&gt;% 
+  filter(country == &quot;China&quot;) %&gt;% 
+  ggplot(aes(x = date, y = cumulative_number_of_case_s)) +
+  geom_line()</code></pre>
+<p><img src="sars_data_files/figure-html/cumulative%20cases%20in%20China-1.png" width="90%" /></p>
+<pre class="r"><code>sars_df %&gt;% 
+  ggplot(aes(x = date, y = deaths_cum, color = country)) +
+  geom_line()</code></pre>
+<p><img src="sars_data_files/figure-html/cumulative%20deaths%20by%20country-1.png" width="90%" /></p>
+<pre class="r"><code>sars_df %&gt;% 
+  filter(country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;)) %&gt;% 
+  ggplot(aes(x = date, y = deaths_cum, color = country)) +
+  geom_line()</code></pre>
+<pre><code>## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length
+
+## Warning in country == c(&quot;China&quot;, &quot;Hong Kong SAR, China&quot;): longer object length
+## is not a multiple of shorter object length</code></pre>
+<p><img src="sars_data_files/figure-html/cumulative%20deaths%20in%20China%20and%20Hong%20Kong-1.png" width="90%" /></p>
 
 
 
