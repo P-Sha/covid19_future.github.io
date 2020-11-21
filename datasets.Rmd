@@ -2,13 +2,17 @@
 title: "Data Sources"
 ---
 
-Data for the project was collected from various online resources:
+Data for the project was collected from the following online resources:
 
-1. [(Spanish flu: Chicago)](https://www.kaggle.com/thepodclub/spanish-flu-dataset)
-2. [(Covid-19: Chicago)](https://data.cityofchicago.org/Health-Human-Services/COVID-19-Daily-Cases-Deaths-and-Hospitalizations/naz8-j4nc/data)
-3. [(Sars 2003: Global)]()
-4. [(Covid-19: Global)]()
-5. [(HINI: )]()
-6 [(Covid-19: )]()
+1. Spanish flu (Chicago):  [www.Kaggle.com](https://www.kaggle.com/thepodclub/spanish-flu-dataset)
 
+Description: Data contains information on 8034 mortality cases, with "Unique Point Identifier (fid)", case type as pneumonia (1) or flu/unknown(0), point-location of each death(x(m) and y(m)), and week when death was recorded (as of 9/28/1918), for all the cases. Data recorded was for 7 weeks, after a few months of onset of the disease. 
+
+2. COVID-19 (Chicago): [data.cityofchicago.org](https://data.cityofchicago.org/Health-Human-Services/COVID-19-Daily-Cases-Deaths-and-Hospitalizations/naz8-j4nc/data)
+
+3. SARS 2003 (Global): [WHO.int/csr/sars/](https://www.who.int/csr/sars/country/country2003_08_15.pdf?ua=1)
+
+4. COVID-19 (Global): [covid19.who.int/table](https://covid19.who.int/table)
+
+5. HINI : [apps.who.int/flumart](https://apps.who.int/flumart/Default?ReportNo=12)
 

@@ -19,9 +19,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -254,69 +251,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -324,16 +258,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -357,10 +281,13 @@ div.tocify {
   <a href="datasets.html">Datasets</a>
 </li>
 <li>
-  <a href="about.html">About</a>
+  <a href="full_report.html">Full Report</a>
 </li>
 <li>
-  <a href="references.html">References</a>
+  <a href="pandemics_timeline.html">Pandemics Timeline</a>
+</li>
+<li>
+  <a href="spanish_flu_analysis.html">spanish flu analysis</a>
 </li>
 <li>
   <a href="mailto:&lt;you@youremail.com&gt;">
@@ -395,39 +322,30 @@ h1.title {color: brown}
 </style>
 <hr />
 <p><brk><brk><brk></p>
+<div id="overview" class="section level2">
+<h2><em>Overview</em></h2>
 <p>According to <a href="https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en">Google Trends</a>, coronavirus is one of the most researched topics of 2020, having been searched four times as much as “news” between March and May. As we live through this ongoing pandemic, what might the most googled phobia be? Due to COVID-19, it is <a href="https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/">“the fear of other people”</a>. So, a likely question on most peoples’ minds is how would COVID-19 take its course in the near future and possibly beyond?</p>
 <center>
 <figure>
 <img src="pictures/history_of_pandemics.jpg" />
 <figcaption>
-Corona virus in comparison to history’s deadliest pandemics, as of March 15 2020 [1]
+Corona virus in comparison to history’s deadliest pandemics, as of March 15 2020 <a href="https://dailymail.co.uk/news/article-8120631">[1]</a>
 </figcaption>
 </figure>
 </center>
 <hr />
-<div id="report" class="section level3">
-<h3>Report</h3>
-<p>Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management via our current federal government surrounding COVID-19, we thought it would be interesting to explore into past pandemics in an effort to read into the current one. The idea was encouraged by the articles <a href="https://www.nature.com/articles/d41586-020-02278-5">“How the pandemic might play out in 2021 and beyond”</a>, and <a href="https://www.livescience.com/covid-19-pandemic-future-scenarios.html">“Here’s how the COVID-19 pandemic could play out over the next two years”</a>.</p>
-<p>The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics.</p>
+<p>Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management via our current federal government surrounding COVID-19, we thought it would be interesting to explore into past pandemics in an effort to read into the current one.</p>
 <p>****** embed screencast here*************</p>
-<div id="data" class="section level4">
-<h4>Data</h4>
-<p>sources(separate html?), scraping, cleaning…</p>
-</div>
-</div>
-<div id="proposal" class="section level3">
-<h3>Proposal</h3>
-<p>Primary data sources would be from website kaggle.com, along with cdc.gov and who.int for covid19 data. <a href="https://www.kaggle.com/thepodclub/spanish-flu-dataset">(Example of kaggle dataset)</a></p>
-<p>Data comparisons would be performed between past pandemics and the current pandemic using parallel datasets, by analyzing statistical parameters and their visual graphics. Challenges would be to find data on some historical pandemics from time period when data collection was not well established, along with finding current complete data on the pandemic which is still in the running.</p>
+<p>Data for the project was collected from various online sources such as <a href="https://www.kaggle.com">(kaggle.com)</a>, <a href="https://www.cdc.gov/datastatistics/">(cdc.gov)</a>, and <a href="https://www.who.int/data/">(WHO.int/data)</a> for covid19 datasets.</p>
+<p>Data comparisons were performed between past pandemics and the current pandemic using parallel datasets (in terms of time-frame and geography of the spread), by analyzing statistical parameters and their visual graphics.</p>
+<p>Visualizations…. Other results …..</p>
 <hr />
 <p>Authors: <em>Jared Klug</em> | <em>David Nemirovsky</em> | <em>Matthew Lawlor</em> | <em>Purnima Sharma</em></p>
-<p>Students of Data Science class(Fall 2020): <img src="pictures/logo.png" /></p>
+<p>Students (Data Science, Fall 2020): <img src="pictures/logo.png" /></p>
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -460,32 +378,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

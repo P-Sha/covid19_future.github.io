@@ -11,7 +11,7 @@
 
 
 
-<title>Data Sources</title>
+<title>Full Report</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -70,6 +73,7 @@ h6 {
 }
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 
 
 
@@ -250,6 +254,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -257,6 +324,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -309,25 +386,32 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Data Sources</h1>
+<h1 class="title toc-ignore">Full Report</h1>
 
 </div>
 
 
-<p>Data for the project was collected from the following online resources:</p>
-<ol style="list-style-type: decimal">
-<li>Spanish flu (Chicago): <a href="https://www.kaggle.com/thepodclub/spanish-flu-dataset">www.Kaggle.com</a></li>
-</ol>
-<p>Description: Data contains information on 8034 mortality cases, with “Unique Point Identifier (fid)”, case type as pneumonia (1) or flu/unknown(0), point-location of each death(x(m) and y(m)), and week when death was recorded (as of 9/28/1918), for all the cases. Data recorded was for 7 weeks, after a few months of onset of the disease.</p>
-<ol start="2" style="list-style-type: decimal">
-<li><p>COVID-19 (Chicago): <a href="https://data.cityofchicago.org/Health-Human-Services/COVID-19-Daily-Cases-Deaths-and-Hospitalizations/naz8-j4nc/data">data.cityofchicago.org</a></p></li>
-<li><p>SARS 2003 (Global): <a href="https://www.who.int/csr/sars/country/country2003_08_15.pdf?ua=1">WHO.int/csr/sars/</a></p></li>
-<li><p>COVID-19 (Global): <a href="https://covid19.who.int/table">covid19.who.int/table</a></p></li>
-<li><p>HINI : <a href="https://apps.who.int/flumart/Default?ReportNo=12">apps.who.int/flumart</a></p></li>
-</ol>
+<div id="motivation" class="section level3">
+<h3>Motivation</h3>
+<p>The idea was encouraged by the articles <a href="https://www.nature.com/articles/d41586-020-02278-5">“How the pandemic might play out in 2021 and beyond”</a>, and <a href="https://www.livescience.com/covid-19-pandemic-future-scenarios.html">“Here’s how the COVID-19 pandemic could play out over the next two years”</a>.</p>
+<p>The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics.</p>
+<div id="data" class="section level4">
+<h4>Data</h4>
+<p>sources(separate html?), scraping, cleaning…</p>
+</div>
+<div id="exploratory-analysis" class="section level4">
+<h4>Exploratory Analysis</h4>
+</div>
+</div>
+<div id="challenges" class="section level3">
+<h3>challenges:</h3>
+<p>Challenges would be to find data on some historical pandemics from time period when data collection was not well established, along with finding current complete data on the pandemic which is still in the running.</p>
+</div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -360,6 +444,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

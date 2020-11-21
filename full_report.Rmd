@@ -1,0 +1,24 @@
+---
+title: "Full Report"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 4
+    css: style.css
+---
+
+### Motivation
+The idea was encouraged by the articles ["How the pandemic might play out in 2021 and beyond"](https://www.nature.com/articles/d41586-020-02278-5), and ["Here's how the COVID-19 pandemic could play out over the next two years"](https://www.livescience.com/covid-19-pandemic-future-scenarios.html). 
+
+
+The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics.
+
+#### Data
+
+sources(separate html?), scraping, cleaning...
+
+#### Exploratory Analysis
+
+### challenges: 
+Challenges would be to find data on some historical pandemics from time period when data collection was not well established, along with finding current complete data on the pandemic which is still in the running. 

@@ -1,0 +1,23 @@
+---
+title: "Major Pandemics: Timeline"
+output:
+  html_document:
+    css: style.css
+---
+
+#### _Synopsis of some of the major pandemics, in chronological order, compiled based on the severity of the disease in terms of death toll._
+
+Date | Pandemic name | Death toll
+------------- | ----- | ------ | -------------
+430 BC | The plague of Athens | 25% of population
+1347–1351 | Black death | 200M
+1520-onward	| New world smallpox | 56M	
+1885 |	Third plague | 12M
+1918–1919 |	Spanish flu |	40–50M
+1981–present |	AIDS |	25–35M
+2009–2010	| Swine flu |	200K
+2019–present |	COVID-19 |	>0.5M
+	
+Source: Extracted from [The National Center for Biotechnology Information (NCBI), United States National Library of Medicine (NLM) ](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7426550/table/t4-rmmj-11-3-e0027/?report=objectonly).
+Visit the site for a complete and detailed version of the pandemics-timeline.
+		

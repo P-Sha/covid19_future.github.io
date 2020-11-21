@@ -2,8 +2,6 @@
 title: "Future of COVID-19: Looking at Past Pandemics" 
 output:
   html_document:
-    toc: true
-    toc_float: true
     css: style.css
 ---
 <style type = "text/css">
@@ -16,6 +14,7 @@ h1.title {color: brown}
 
 <brk><brk><brk>
 
+## *Overview*
 
 According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en), coronavirus is one of the most researched topics of 2020, having been searched four times as much as "news" between March and May. As we live through this ongoing pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
 ). So, a likely question on most peoples' minds is how would COVID-19 take its course in the near future and possibly beyond?
@@ -23,38 +22,28 @@ According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3
 <center>
 <figure>
 ![](pictures/history_of_pandemics.jpg)
-<figcaption> Corona virus in comparison to history's deadliest pandemics, as of March 15 2020 [1] </figcaption>
+<figcaption> Corona virus in comparison to history's deadliest pandemics, as of March 15 2020 [[1]](https://dailymail.co.uk/news/article-8120631) </figcaption>
 </figure>
 </center>
 
 ***
 
-### Report
-
-Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management via our current federal government surrounding COVID-19, we thought it would be interesting to explore into past pandemics in an effort to read into the current one. The idea was encouraged by the articles ["How the pandemic might play out in 2021 and beyond"](https://www.nature.com/articles/d41586-020-02278-5), and ["Here's how the COVID-19 pandemic could play out over the next two years"](https://www.livescience.com/covid-19-pandemic-future-scenarios.html). 
-
-The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics.
+Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management via our current federal government surrounding COVID-19, we thought it would be interesting to explore into past pandemics in an effort to read into the current one. 
 
 ****** embed screencast here*************
 
-#### Data
-
-sources(separate html?), scraping, cleaning...
+Data for the project was collected from various online sources such as [(kaggle.com)](https://www.kaggle.com), [(cdc.gov)](https://www.cdc.gov/datastatistics/), and [(WHO.int/data)](https://www.who.int/data/) for covid19 datasets.
 
 
+Data comparisons were performed between past pandemics and the current pandemic using parallel datasets (in terms of time-frame and geography of the spread), by analyzing statistical parameters and their visual graphics. 
 
-### Proposal
-
- 
-Primary data sources would be from website kaggle.com, along with cdc.gov and who.int for covid19 data.
-[(Example of kaggle dataset)](https://www.kaggle.com/thepodclub/spanish-flu-dataset)
-
-Data comparisons would be performed between past pandemics and the current pandemic using parallel datasets, by analyzing statistical parameters and their visual graphics. Challenges would be to find data on some historical pandemics from time period when data collection was not well established, along with finding current complete data on the pandemic which is still in the running. 
+Visualizations....
+Other results .....
      
 
 ***
 Authors: _Jared Klug_ | _David Nemirovsky_ | _Matthew Lawlor_ | _Purnima Sharma_ 
 
-Students of Data Science class(Fall 2020): ![](pictures/Logo.png) 
+Students (Data Science, Fall 2020): ![](pictures/Logo.png) 
 
 
