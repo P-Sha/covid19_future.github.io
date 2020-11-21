@@ -7,6 +7,7 @@ output: html_document
 library(tidyverse)
 library(rvest)
 library(httr)
+library(readxl)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -25,5 +26,31 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
+```{r read and tidy influenza data}
+influenza_df = 
+  read_excel("./data/USA_FluNetInteractiveReport.xlsx", skip = 5) %>% 
+  janitor::clean_names() %>% 
+  select(year:end_date, a_total, b_total) %>% 
+  mutate(week = as.numeric(week), a_total = as.numeric(a_total), b_total = as.numeric(b_total)) %>% 
+  drop_na()
+```
 
+prelim plots:
+
+```{r prelim plots}
+influenza_df %>% 
+  group_by(year) %>% 
+  summarize(
+    week = week,
+    a_cum = cumsum(a_total),
+    b_cum = cumsum(b_total)
+  ) %>% 
+  ggplot(aes(x = week, y = b_cum, color = year)) +
+  geom_point()
+```
+
+```{r}
+influenza_df %>% 
+  filter(start_date > "2009-04-06")
+```
 

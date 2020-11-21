@@ -295,7 +295,10 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
-  <a href="http://github.com/&lt;YOUR_GH_NAME&gt;/">
+  <a href="shiny_dashboard.html">Dashboard</a>
+</li>
+<li>
+  <a href="https://github.com/P-Sha/covid19_future.github.io">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -314,7 +317,40 @@ $(document).ready(function () {
 </div>
 
 
-
+<pre class="r"><code>influenza_df = 
+  read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(year:end_date, a_total, b_total) %&gt;% 
+  mutate(week = as.numeric(week), a_total = as.numeric(a_total), b_total = as.numeric(b_total)) %&gt;% 
+  drop_na()</code></pre>
+<p>prelim plots:</p>
+<pre class="r"><code>influenza_df %&gt;% 
+  group_by(year) %&gt;% 
+  summarize(
+    week = week,
+    a_cum = cumsum(a_total),
+    b_cum = cumsum(b_total)
+  ) %&gt;% 
+  ggplot(aes(x = week, y = b_cum, color = year)) +
+  geom_point()</code></pre>
+<pre><code>## `summarise()` regrouping output by &#39;year&#39; (override with `.groups` argument)</code></pre>
+<p><img src="influenza_data_files/figure-html/prelim%20plots-1.png" width="90%" /></p>
+<pre class="r"><code>influenza_df %&gt;% 
+  filter(start_date &gt; &quot;2009-04-06&quot;)</code></pre>
+<pre><code>## # A tibble: 602 x 6
+##    year   week start_date end_date   a_total b_total
+##    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt;
+##  1 2009     16 2009-04-13 2009-04-19     153     186
+##  2 2009     17 2009-04-20 2009-04-26     169     113
+##  3 2009     18 2009-04-27 2009-05-03    3502     787
+##  4 2009     19 2009-05-04 2009-05-10    4431     490
+##  5 2009     20 2009-05-11 2009-05-17    2815     134
+##  6 2009     21 2009-05-18 2009-05-24    3782      93
+##  7 2009     22 2009-05-25 2009-05-31    4092      42
+##  8 2009     23 2009-06-01 2009-06-07    4971      26
+##  9 2009     24 2009-06-08 2009-06-14    5407      15
+## 10 2009     25 2009-06-15 2009-06-21    5914       9
+## # ... with 592 more rows</code></pre>
 
 
 

@@ -13,7 +13,9 @@ navbar:
       href: spanish_flu_analysis.html
     - icon: fa-envelope fa-lg
       href: mailto:<you@youremail.com>
+    - text: "Dashboard"
+      href: shiny_dashboard.html
     - icon: fa-github fa-lg
-      href: http://github.com/<YOUR_GH_NAME>/
+      href: https://github.com/P-Sha/covid19_future.github.io
 output:
   html_document

@@ -1,0 +1,55 @@
+---
+title: "Shiny Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+```{r setup, include=FALSE}
+library(tidyverse)
+library(viridis)
+
+library(plotly)
+library(flexdashboard)
+library(leaflet)
+```
+
+```{r create_df}
+
+covid_world = read.csv("./data/covid19_global.csv") %>% 
+  janitor::clean_names() %>% 
+  group_by(country) %>% 
+  summarize(
+    covid_cases = max(cumulative_cases)
+  )
+
+head(covid_world)
+
+# ebola_world = read.csv("./data/ebola_data_db_format.csv") %>%
+#   janitor::clean_names() %>%
+#   group_by(country) %>%
+#   summarize(
+#     ebola_cases = max(value)
+#   )
+# 
+# head(ebola_world)
+
+h1n1_world = read.csv("./data/h1n1_data.csv") %>% 
+  janitor::clean_names() %>% 
+  group_by(country) %>% 
+  summarize(
+    h1n1_cases = sum(cumulative_no_of_cases)
+  )
+
+head(h1n1_world)
+
+
+```
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+```{r}
+
+```
+

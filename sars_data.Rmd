@@ -1,0 +1,72 @@
+---
+title: "SARS-CoV-1 Data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rvest)
+library(httr)
+library(readxl)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+```{r read and tidy sars data}
+sars_df = 
+  read_csv("./data/sars_2003_complete_dataset_clean.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-number_recovered) %>% 
+  group_by(country) %>% 
+  mutate(deaths_cum = cumsum(number_of_deaths))
+```
+
+prelim plots:
+
+cumulative cases by country
+```{r cumulative cases by country}
+sars_df %>% 
+  ggplot(aes(x = date, y = log(cumulative_number_of_case_s, base = 10), color = country)) +
+  geom_line()
+```
+
+```{r cumulative cases in US}
+sars_df %>% 
+  filter(country == "United States") %>% 
+  ggplot(aes(x = date, y = cumulative_number_of_case_s)) +
+  geom_line()
+```
+
+```{r cumulative cases in China}
+sars_df %>% 
+  filter(country == "China") %>% 
+  ggplot(aes(x = date, y = cumulative_number_of_case_s)) +
+  geom_line()
+```
+
+```{r cumulative deaths by country}
+sars_df %>% 
+  ggplot(aes(x = date, y = deaths_cum, color = country)) +
+  geom_line()
+```
+
+```{r cumulative deaths in China and Hong Kong}
+sars_df %>% 
+  filter(country == c("China", "Hong Kong SAR, China")) %>% 
+  ggplot(aes(x = date, y = deaths_cum, color = country)) +
+  geom_line()
+```
