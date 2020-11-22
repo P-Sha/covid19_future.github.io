@@ -1,10 +1,9 @@
 ---
-title: "
-Spanish flu"
+title: "Spanish flu"
 output: html_document
 ---
 
-```{r}
+```{r setup, include=FALSE}
 library(tidyverse)
 library(plotly)
 library(ggplot2)
@@ -13,7 +12,7 @@ library(dygraphs)
 
 Spanish flu vs covid19 in Chicago (7 weeks mortality, after approx. 4-6months of onset of disease in the U.S., as of )
 
-```{r}
+```{r }
 spanish_rawdf = read.csv("./data/spanish_flu_chicago.csv") 
 
 spanish_df = 
@@ -42,43 +41,43 @@ covid19_chicago =
    ) 
   
  row1 = covid19_chicago %>%  
-     filter(date >= as.Date("2020-09-01") & date <= as.Date("2020-09-07")) %>% 
+     filter(date >= as.Date("2020-04-07") & date <= as.Date("2020-04-13")) %>% 
      summarize(
        week = 1,
        mortality = sum(deaths_total))
  
  row2 = covid19_chicago %>%  
-     filter(date >= as.Date("2020-09-08") & date <= as.Date("2020-09-14")) %>% 
+     filter(date >= as.Date("2020-04-14") & date <= as.Date("2020-04-20")) %>% 
      summarize(
        week = 2,
         mortality = sum(deaths_total))
  
  row3 = covid19_chicago %>%  
-     filter(date >= as.Date("2020-09-15") & date <= as.Date("2020-09-21")) %>% 
+     filter(date >= as.Date("2020-04-21") & date <= as.Date("2020-04-27")) %>% 
      summarize(
        week = 3,
         mortality = sum(deaths_total))
  
  row4 = covid19_chicago %>%  
-     filter(date >= as.Date("2020-09-22") & date <= as.Date("2020-09-28")) %>% 
+     filter(date >= as.Date("2020-04-28") & date <= as.Date("2020-05-04")) %>% 
      summarize(
        week = 4,
         mortality = sum(deaths_total))
  
  row5 = covid19_chicago %>%  
-     filter(date >= as.Date("2020-09-29") & date <= as.Date("2020-10-06")) %>% 
+     filter(date >= as.Date("2020-05-05") & date <= as.Date("2020-05-11")) %>% 
      summarize(
        week = 5,
         mortality = sum(deaths_total))
  
  row6 = covid19_chicago %>%  
-     filter(date >= as.Date("2020-10-07") & date <= as.Date("2020-09-13")) %>% 
+     filter(date >= as.Date("2020-05-12") & date <= as.Date("2020-05-18")) %>% 
      summarize(
        week = 6,
         mortality = sum(deaths_total))
  
  row7 = covid19_chicago %>%  
-     filter(date >= as.Date("2020-10-14") & date <= as.Date("2020-10-20")) %>% 
+     filter(date >= as.Date("2020-05-19") & date <= as.Date("2020-05-25")) %>% 
      summarize(
        week = 7,
         mortality = sum(deaths_total))
@@ -89,7 +88,7 @@ plot_2 =
   covid19_chicago_df %>% 
   plot_ly(
     x = ~week, y = ~ mortality, color = ~ mortality, type = "bar") %>% 
-  layout(title = "Spanish Flu (left) vs COVID-19: 7 weeks comparison (Chicago)")
+  layout(title = "Spanish Flu (left) vs COVID-19: Peak 7 weeks comparison (Chicago)")
 ```
 
 ```{r}

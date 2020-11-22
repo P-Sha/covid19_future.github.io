@@ -23,6 +23,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -251,6 +252,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -387,6 +391,14 @@ div.tocify {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Full Report</h1>
@@ -394,21 +406,52 @@ div.tocify {
 </div>
 
 
-<div id="motivation" class="section level3">
-<h3>Motivation</h3>
-<p>The idea was encouraged by the articles <a href="https://www.nature.com/articles/d41586-020-02278-5">“How the pandemic might play out in 2021 and beyond”</a>, and <a href="https://www.livescience.com/covid-19-pandemic-future-scenarios.html">“Here’s how the COVID-19 pandemic could play out over the next two years”</a>.</p>
+<div id="motivation-and-goals" class="section level3">
+<h3>Motivation and Goals</h3>
+<p>As of the beginning of November 2020, the total deaths due to COVID-19 surpassed <a href="https://covid19.who.int/">1.3 million</a> globally. Further, as reported by WHO, the total confirmed cases exceeded 57.8 million worldwide.</p>
+<div id="motivation" class="section level4">
+<h4><em>Motivation</em></h4>
+<p>Given the scale of this pandemic, this project was inspired by the idea to try and make some sense of it by comparing it to prior pandemics. Wth uncertainty and anxiety accompanying it, and no definitive known direction to its future, we were interested in exploring how the previous similar pandemics, caused by similar pathogens, turned out over time.</p>
+</div>
+<div id="goals" class="section level4">
+<h4><em>Goals</em></h4>
+<p>By undertaking this project, we were hoping to identify and establish any existing pattern in past outbreaks, and then to look for predictability in possible direction(s) COVID-19 could turn to in the near future.</p>
+</div>
+</div>
+<div id="related-work" class="section level3">
+<h3>Related work</h3>
+<p>The idea for the project was encouraged by the articles <a href="https://www.nature.com/articles/d41586-020-02278-5">“How the pandemic might play out in 2021 and beyond”</a>, and <a href="https://www.livescience.com/covid-19-pandemic-future-scenarios.html">“Here’s how the COVID-19 pandemic could play out over the next two years”</a>.</p>
+</div>
+<div id="questions" class="section level3">
+<h3>Questions</h3>
+<div id="initial" class="section level4">
+<h4><em>Initial</em></h4>
 <p>The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics.</p>
-<div id="data" class="section level4">
-<h4>Data</h4>
-<p>sources(separate html?), scraping, cleaning…</p>
 </div>
-<div id="exploratory-analysis" class="section level4">
-<h4>Exploratory Analysis</h4>
+<div id="additional" class="section level4">
+<h4><em>Additional</em></h4>
+<p>Over the course of the project…</p>
+<p>[How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?]</p>
 </div>
 </div>
-<div id="challenges" class="section level3">
-<h3>challenges:</h3>
-<p>Challenges would be to find data on some historical pandemics from time period when data collection was not well established, along with finding current complete data on the pandemic which is still in the running.</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>Multiple datasets were used from various shareable online sources for analysis and comparison to COVID-19. Complete list of data-descriptions is provided under the “Datasets” tab. Although most of the datasets were available in ready to use CSV format, sars-2003 data was transformed from a pdf file to an updated “cleaner” CSV version.</p>
+</div>
+<div id="exploratory-analysis" class="section level3">
+<h3>Exploratory Analysis</h3>
+<p>(Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)</p>
+<p>All our codes go here</p>
+</div>
+<div id="additional-analysis-if-you-undertake-formal-statistical-analyses-describe-these-in-detail---maybe" class="section level3">
+<h3>Additional analysis: If you undertake formal statistical analyses, describe these in detail - maybe?</h3>
+</div>
+<div id="discussion" class="section level3">
+<h3>Discussion</h3>
+<p>Discuss results. What were your findings? Are they what you expect? What insights into the data can you make?</p>
+<hr />
+<p>Authors: <em>Jared Klug</em> | <em>David Nemirovsky</em> | <em>Matthew Lawlor</em> | <em>Purnima Sharma</em></p>
+<p>Students (Data Science, Fall 2020): <img src="pictures/logo.png" /></p>
 </div>
 
 
@@ -446,6 +489,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {

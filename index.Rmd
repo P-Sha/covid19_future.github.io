@@ -16,7 +16,7 @@ h1.title {color: brown}
 
 ## *Overview*
 
-According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en), coronavirus is one of the most researched topics of 2020, having been searched four times as much as "news" between March and May. As we live through this ongoing pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
+According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en), coronavirus is one of the most researched topics of 2020, having been searched four times as much as "news" between March and May of 2020. As we live through this ongoing pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
 ). So, a likely question on most peoples' minds is how would COVID-19 take its course in the near future and possibly beyond?
 
 <center>
@@ -28,22 +28,20 @@ According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3
 
 ***
 
-Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management via our current federal government surrounding COVID-19, we thought it would be interesting to explore into past pandemics in an effort to read into the current one. 
+Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management via our current federal government surrounding COVID-19, we thought it would be interesting to explore into past pandemics in an effort to read into the current one. By looking at any prevalent patterns and similarities of prior pandemics, the aim was to learn lessons from those and shed some light on the direction of COVID-19.    
 
 ****** embed screencast here*************
 
-Data for the project was collected from various online sources such as [(kaggle.com)](https://www.kaggle.com), [(cdc.gov)](https://www.cdc.gov/datastatistics/), and [(WHO.int/data)](https://www.who.int/data/) for covid19 datasets.
+Data for the project was collected from various online sources such as [(kaggle.com)](https://www.kaggle.com), [(cdc.gov)](https://www.cdc.gov/datastatistics/), and [(WHO.int/data)](https://www.who.int/data/) for covid19 data. For a complete list of datasets and descriptions click on the  "Datasets" tab above.
 
 
-Data comparisons were performed between past pandemics and the current pandemic using parallel datasets (in terms of time-frame and geography of the spread), by analyzing statistical parameters and their visual graphics. 
+Data comparisons for the project were performed between past pandemics and the current pandemic using similar and parallel, if possible, datasets (in terms of time-frame and geography of the spread). Comparisons were made by analyzing visual graphics and statistical parameters between the current and past pandemics. 
 
-Visualizations summary....
-Other results summary .....
+(Embed 1 or 2 visuals here, with descriptions.) 
+
+
+Other results summary (copy from full report).....
      
 
 ***
-Authors: _Jared Klug_ | _David Nemirovsky_ | _Matthew Lawlor_ | _Purnima Sharma_ 
-
-Students (Data Science, Fall 2020): ![](pictures/Logo.png) 
-
 
