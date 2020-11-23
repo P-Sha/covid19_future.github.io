@@ -10,7 +10,7 @@ library(ggplot2)
 library(dygraphs)
 ```
 
-Spanish flu vs covid19 in Chicago (7 weeks mortality, after approx. 4-6months of onset of disease in the U.S., as of )
+Spanish flu vs covid19 in Chicago (7 weeks mortality, at peak)
 
 ```{r }
 spanish_rawdf = read.csv("./data/spanish_flu_chicago.csv") 
@@ -28,7 +28,7 @@ spanish_df %>%
   layout(title = "Spanish Flu")
 ```
 
-mortality due to covid (Chicago, after a few months of onset, as in Spanish flu. 7 weeks shown as of Sept 1st )
+COVID-19 Mortality (Chicago): at it's peak.
 ```{r}
 covid19_chicago_rawdf =  read.csv("./data/covid19_chicago.csv") 
 

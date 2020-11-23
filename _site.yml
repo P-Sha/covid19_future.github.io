@@ -3,18 +3,16 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "Datasets"
-      href: datasets.html
     - text: "Full Report"
       href: full_report.html
-    - text: "Pandemics Timeline"
-      href: pandemics_timeline.html
-    - text: "spanish flu analysis"
-      href: spanish_flu_analysis.html
-    - icon: fa-envelope fa-lg
-      href: mailto:<you@youremail.com>
     - text: "Dashboard"
       href: shiny_dashboard.html
+    - text: "Datasets"
+      href: datasets.html
+    - text: "Pandemics Timeline"
+      href: pandemics_timeline.html
+    - icon: fa-envelope fa-lg
+      href: mailto:<you@youremail.com>
     - icon: fa-github fa-lg
       href: https://github.com/P-Sha/covid19_future.github.io
 output:
