@@ -2,8 +2,9 @@
 title: "Shiny Dashboard"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: row
     vertical_layout: fill
+    source_code: embed
 runtime: shiny
 ---
 ```{r setup, include=FALSE}
@@ -15,13 +16,16 @@ library(flexdashboard)
 library(leaflet)
 ```
 
-```{r create_df}
+```{r create_df, include=FALSE}
 
-covid_world = read.csv("./data/covid19_global.csv") %>% 
+covid_world = read_csv("./data/covid19_global.csv") %>% 
   janitor::clean_names() %>% 
-  group_by(country) %>% 
+  group_by(country_code) %>% 
   summarize(
     covid_cases = max(cumulative_cases)
+  ) %>% 
+  mutate(
+    covid_cases = str_c("# cases:" , covid_cases, sep = " ")
   )
 
 head(covid_world)
@@ -35,7 +39,7 @@ head(covid_world)
 # 
 # head(ebola_world)
 
-h1n1_world = read.csv("./data/h1n1_data.csv") %>% 
+h1n1_world = read_csv("./data/h1n1_data.csv") %>% 
   janitor::clean_names() %>% 
   group_by(country) %>% 
   summarize(
@@ -44,6 +48,12 @@ h1n1_world = read.csv("./data/h1n1_data.csv") %>%
 
 head(h1n1_world)
 
+lat_long = read_csv("./data/world_country_and_usa_states_latitude_and_longitude_values.csv") %>% 
+  select(country_code, latitude, longitude, country)
+
+
+test = left_join(covid_world, lat_long, by = "country_code") %>% 
+  drop_na()
 
 ```
 
@@ -53,3 +63,24 @@ Column {.sidebar}
 
 ```
 
+Row {data-height=650}
+-------------------------------------
+
+### Chart 1
+
+```{r}
+test %>% 
+  mutate(
+    popup = str_c(country, 
+                  covid_cases,
+                  sep = "<br>")
+  ) %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addCircleMarkers(clusterOptions = markerClusterOptions(),
+                   lng = ~longitude,
+                   lat = ~latitude,
+                   popup = ~popup
+                   )
+
+```
