@@ -26,6 +26,14 @@ library(geojsonio)
 #     covid_cases = max(cumulative_cases)
 #   ) 
 #
+# 
+# covid_world = read_csv("./data/covid19_global.csv") %>% 
+#   janitor::clean_names() %>% 
+#   group_by(country_code) %>% 
+#   summarize(
+#     covid_cases = max(cumulative_cases)
+#   ) 
+#
 # ebola_world = read.csv("./data/ebola_data_db_format.csv") %>%
 #   janitor::clean_names() %>%
 #   group_by(country) %>%
@@ -35,20 +43,21 @@ library(geojsonio)
 # 
 # head(ebola_world)
 #
-h1n1_world = read_csv("./data/h1n1_data.csv") %>% 
-  janitor::clean_names() %>% 
-  group_by(country) %>% 
-  summarize(
-    h1n1_cases = sum(cumulative_no_of_cases)
-  )
-
-
+# h1n1_world = read_csv("./data/h1n1_data.csv") %>% 
+#   janitor::clean_names() %>% 
+#   group_by(country) %>% 
+#   summarize(
+#     h1n1_cases = sum(cumulative_no_of_cases)
+#   )
+# 
+#
 # lat_long = read_csv("./data/world_country_and_usa_states_latitude_and_longitude_values.csv") %>% 
 #   select(country_code, latitude, longitude, country)
 # 
 # 
 # test = left_join(covid_world, lat_long, by = "country_code") %>% 
 #   drop_na()
+
 
 
 ####### Country polygons test
@@ -137,4 +146,5 @@ covid_countries_map %>%
     fillOpacity = 0.7,
     bringToFront = TRUE),
   popup = lables)
+
 ```
