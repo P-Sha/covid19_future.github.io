@@ -14,6 +14,7 @@ library(viridis)
 library(plotly)
 library(flexdashboard)
 library(leaflet)
+library(geojsonio)
 ```
 
 ```{r create_df, include=FALSE}
@@ -23,12 +24,7 @@ covid_world = read_csv("./data/covid19_global.csv") %>%
   group_by(country_code) %>% 
   summarize(
     covid_cases = max(cumulative_cases)
-  ) %>% 
-  mutate(
-    covid_cases = str_c("# cases:" , covid_cases, sep = " ")
-  )
-
-head(covid_world)
+  ) 
 
 # ebola_world = read.csv("./data/ebola_data_db_format.csv") %>%
 #   janitor::clean_names() %>%
@@ -46,15 +42,51 @@ h1n1_world = read_csv("./data/h1n1_data.csv") %>%
     h1n1_cases = sum(cumulative_no_of_cases)
   )
 
-head(h1n1_world)
 
-lat_long = read_csv("./data/world_country_and_usa_states_latitude_and_longitude_values.csv") %>% 
-  select(country_code, latitude, longitude, country)
+# lat_long = read_csv("./data/world_country_and_usa_states_latitude_and_longitude_values.csv") %>% 
+#   select(country_code, latitude, longitude, country)
+# 
+# 
+# test = left_join(covid_world, lat_long, by = "country_code") %>% 
+#   drop_na()
 
 
-test = left_join(covid_world, lat_long, by = "country_code") %>% 
-  drop_na()
+####### Country polygons test
 
+countries <- geojson_read("./data/countries.geo.json", what = "sp")
+
+covid_world = read_csv("./data/covid19_global.csv") %>% 
+  janitor::clean_names() %>% 
+  group_by(country) %>% 
+  summarize(
+    covid_cases = max(cumulative_cases)
+  ) %>% 
+  mutate(
+    name = country,
+    covid_cases_pct = covid_cases/sum(covid_cases) * 100,
+    name = str_replace(name, "Venezuela \\(Bolivarian Republic of\\)", "Venezuela"),
+    name = str_replace(name, "Iran \\(Islamic Republic of\\)", "Iran"),
+    name = str_replace(name, "Russian Federation", "Russia"),
+    name = str_replace(name, "The United Kingdom", "United Kingdom"),
+    name = str_replace(name, "Bolivia \\(Plurinational State of\\)", "Bolivia"),
+    name = str_replace(name, "Congo", "Republic of the Congo"),
+    name = str_replace(name, "Syrian Arab Republic", "Syria"),
+    name = str_replace(name, "Czechia", "Czech Republic"),
+    name = str_replace(name, "Serbia", "Republic of Serbia"),
+    name = str_replace(name, "Republic of Moldova", "Moldova"),
+    name = str_replace(name, "Guinea-Bissau", "Guinea Bissau"),
+    name = str_replace(name, "Lao People's Democratic Republic", "Laos"),
+    name = str_replace(name, "Viet Nam", "Vietnam"),
+    name = str_replace(name, "Republic of Korea", "South Korea"),
+    name = str_replace(name, "Falkland Islands (Malvinas)", "Falkland Islands"),
+    name = str_replace(name, "Democratic Republic of the Republic of the Congo", "Democratic Republic of the Congo")
+  ) %>% 
+  select(name, covid_cases, covid_cases_pct)
+
+
+covid_countries_map = sp::merge(x = countries, y = ctest, by = "name", all.x = TRUE)
+
+pal = colorBin("Reds", c(0,20), na.color = "#808080")
 ```
 
 Column {.sidebar}
@@ -69,18 +101,43 @@ Row {data-height=650}
 ### Chart 1
 
 ```{r}
-test %>% 
-  mutate(
-    popup = str_c(country, 
-                  covid_cases,
-                  sep = "<br>")
-  ) %>% 
-  leaflet() %>% 
-  addTiles() %>% 
-  addCircleMarkers(clusterOptions = markerClusterOptions(),
-                   lng = ~longitude,
-                   lat = ~latitude,
-                   popup = ~popup
-                   )
+### original just tiles
+# test %>%
+#   mutate(
+#     covid_cases = str_c("# cases:" , covid_cases, sep = " "),
+#     popup = str_c(country,
+#                   covid_cases,
+#                   sep = "<br>")
+#   ) %>%
+#   leaflet() %>%
+#   addTiles() %>%
+#   addCircleMarkers(clusterOptions = markerClusterOptions(),
+#                    lng = ~longitude,
+#                    lat = ~latitude,
+#                    popup = ~popup
+#                    )
 
+
+#### leaflet with colored countries
+lables = paste0("<strong>Country: </strong>", 
+                  covid_countries_map$name, 
+                  "<br><strong># of cases: </strong>", 
+                  covid_countries_map$covid_cases)
+
+covid_countries_map %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(fillColor = ~pal(covid_cases_pct),
+  weight = 1.5,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,
+  highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  popup = lables)
 ```
