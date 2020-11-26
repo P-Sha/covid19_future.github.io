@@ -2,8 +2,7 @@
 title: "Shiny Dashboard"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: row
-    vertical_layout: fill
+    orientation: rows
     source_code: embed
 runtime: shiny
 ---
@@ -123,8 +122,9 @@ Column {.sidebar}
 # )
 ```
 
-Row {data-height=650}
+Row {data-height=750}
 -------------------------------------
+### Map
 ```{r}
 ### original just tiles
 # test %>%
@@ -175,7 +175,7 @@ covid_countries_map %>%
 
 ```
 
-Row {data-height=350}
+Row {data-height=250}
 -------------------------------------
 ```{r}
 ctest %>% 
@@ -186,13 +186,8 @@ ctest %>%
          colors = "viridis")
 ```
 
-Row {data-height=350}
--------------------------------------
 ```{r}
-ctest %>% 
-  mutate(name = fct_reorder(name, covid_cases)) %>% 
-  plot_ly(x = ~covid_cases,
-         y = ~name,
-         type = "bar",
-         colors = "viridis")
+# renderPrint(
+#   input[["borough_choice"]]
+# )
 ```
