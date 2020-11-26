@@ -15,6 +15,7 @@ library(plotly)
 library(flexdashboard)
 library(leaflet)
 library(geojsonio)
+library(shiny)
 ```
 
 ```{r create_df, include=FALSE}
@@ -43,12 +44,12 @@ library(geojsonio)
 # 
 # head(ebola_world)
 #
-# h1n1_world = read_csv("./data/h1n1_data.csv") %>% 
-#   janitor::clean_names() %>% 
-#   group_by(country) %>% 
-#   summarize(
-#     h1n1_cases = sum(cumulative_no_of_cases)
-#   )
+h1n1_world = read_csv("./data/h1n1_data.csv") %>%
+  janitor::clean_names() %>%
+  group_by(country) %>%
+  summarize(
+    h1n1_cases = sum(cumulative_no_of_cases)
+  )
 # 
 #
 # lat_long = read_csv("./data/world_country_and_usa_states_latitude_and_longitude_values.csv") %>% 
@@ -100,8 +101,26 @@ pal = colorBin(palette = "YlOrRd", bins = quant_10, na.color = "#808080")
 
 Column {.sidebar}
 -----------------------------------------------------------------------
-```{r}
-
+```{r shiny_inputs}
+# borough_choices = ctest %>% pull(neighbourhood_group) %>% unique()
+# 
+# selectInput(
+#   "borough_choice",
+#   h3("Borough Choice"),
+#   choices = "borough_choices",
+#   selected = "borough_choices"
+# )
+# sliderInput(
+#   "price_range",
+#   h3("Price Range"),
+#   100, 1000, 
+#   value = c(100, 400))
+# room_choices = nyc_airbnb %>% pull(room_type) %>% unique()
+# radioButtons(
+#   "room_choice",
+#   h3("Room Type"),
+#   choices = room_choices
+# )
 ```
 
 Row {data-height=650}
@@ -154,4 +173,26 @@ covid_countries_map %>%
     , opacity = 1
   )
 
+```
+
+Row {data-height=350}
+-------------------------------------
+```{r}
+ctest %>% 
+  mutate(name = fct_reorder(name, covid_cases)) %>% 
+  plot_ly(x = ~covid_cases,
+         y = ~name,
+         type = "bar",
+         colors = "viridis")
+```
+
+Row {data-height=350}
+-------------------------------------
+```{r}
+ctest %>% 
+  mutate(name = fct_reorder(name, covid_cases)) %>% 
+  plot_ly(x = ~covid_cases,
+         y = ~name,
+         type = "bar",
+         colors = "viridis")
 ```

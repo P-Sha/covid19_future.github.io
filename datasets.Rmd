@@ -30,7 +30,7 @@ Case fatality recorded was based on cases with known outcome, irrespective of im
 
 4. H1N1 + Influenza B: [apps.who.int/flumart](https://apps.who.int/flumart/Default?ReportNo=12)
 
-Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak,  with “no report” for in many countries. Our dataset for H1N1 contained `r h1n1_df %>% nrow()` rows and `r h1n1_df %>% ncol()` columns. Our dataset for Inlfuenza B contained `r influenza_df %>% nrow()` rows and `r influenza_df %>% ncol()` columns.
+Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak,  with “no report” for in many countries. Our dataset for H1N1 contained `r #h1n1_df %>% nrow()` rows and `r #h1n1_df %>% ncol()` columns. Our dataset for Inlfuenza B contained `r #influenza_df %>% nrow()` rows and `r #influenza_df %>% ncol()` columns.
 
 
 5. COVID-19 Deaths (USA): [data.cdc.gov](https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Week-Ending-D/r8kw-7aab)
