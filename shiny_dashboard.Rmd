@@ -72,7 +72,6 @@ ctest = read_csv("./data/covid19_global.csv") %>%
   ) %>% 
   mutate(
     name = country,
-    covid_cases_pct = covid_cases/sum(covid_cases) * 100,
     name = str_replace(name, "Venezuela \\(Bolivarian Republic of\\)", "Venezuela"),
     name = str_replace(name, "Iran \\(Islamic Republic of\\)", "Iran"),
     name = str_replace(name, "Russian Federation", "Russia"),
@@ -90,12 +89,13 @@ ctest = read_csv("./data/covid19_global.csv") %>%
     name = str_replace(name, "Falkland Islands (Malvinas)", "Falkland Islands"),
     name = str_replace(name, "Democratic Republic of the Republic of the Congo", "Democratic Republic of the Congo")
   ) %>% 
-  select(name, covid_cases, covid_cases_pct)
+  select(name, covid_cases)
 
+quant_10 = ctest %>% pull(covid_cases) %>% quantile(probs = seq(0,1,.1)) %>% as.vector() %>% round()
 
 covid_countries_map = sp::merge(x = countries, y = ctest, by = "name", all.x = TRUE)
 
-pal = colorBin("Reds", c(0,20), na.color = "#808080")
+pal = colorBin(palette = "YlOrRd", bins = quant_10, na.color = "#808080")
 ```
 
 Column {.sidebar}
@@ -133,7 +133,7 @@ lables = paste0("<strong>Country: </strong>",
 covid_countries_map %>% 
   leaflet() %>%
   addTiles() %>%
-  addPolygons(fillColor = ~pal(covid_cases_pct),
+  addPolygons(fillColor = ~pal(covid_cases),
   weight = 1.5,
   opacity = 1,
   color = "white",
@@ -145,6 +145,13 @@ covid_countries_map %>%
     dashArray = "",
     fillOpacity = 0.7,
     bringToFront = TRUE),
-  popup = lables)
+  popup = lables) %>% 
+  addLegend(
+    "bottomright"
+    , pal = pal
+    , values = ~covid_cases
+    , title = "Quantile"
+    , opacity = 1
+  )
 
 ```
