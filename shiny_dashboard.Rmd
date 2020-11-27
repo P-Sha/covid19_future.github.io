@@ -14,7 +14,10 @@ library(plotly)
 library(flexdashboard)
 library(leaflet)
 library(geojsonio)
+library(rsconnect)
 library(shiny)
+
+# deployApp('./shiny_dashboard.Rmd')
 ```
 
 ```{r create_df, include=FALSE}
