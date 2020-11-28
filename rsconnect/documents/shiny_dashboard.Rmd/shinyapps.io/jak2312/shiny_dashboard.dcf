@@ -1,0 +1,10 @@
+name: shiny_dashboard
+title:
+username:
+account: jak2312
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3307976
+bundleId: 3915246
+url: https://jak2312.shinyapps.io/shiny_dashboard/
+when: 1606549327.07195

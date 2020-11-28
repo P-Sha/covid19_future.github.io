@@ -2,7 +2,7 @@
 title: "Shiny Dashboard"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: row
+    orientation: rows
     vertical_layout: fill
     source_code: embed
 runtime: shiny
@@ -15,17 +15,29 @@ library(plotly)
 library(flexdashboard)
 library(leaflet)
 library(geojsonio)
+library(rsconnect)
+library(shiny)
+
+# deployApp('./shiny_dashboard.Rmd')
 ```
 
 ```{r create_df, include=FALSE}
 
-covid_world = read_csv("./data/covid19_global.csv") %>% 
-  janitor::clean_names() %>% 
-  group_by(country_code) %>% 
-  summarize(
-    covid_cases = max(cumulative_cases)
-  ) 
-
+# covid_world = read_csv("./data/covid19_global.csv") %>% 
+#   janitor::clean_names() %>% 
+#   group_by(country_code) %>% 
+#   summarize(
+#     cum_cases = max(cumulative_cases)
+#   ) 
+#
+# 
+# covid_world = read_csv("./data/covid19_global.csv") %>% 
+#   janitor::clean_names() %>% 
+#   group_by(country_code) %>% 
+#   summarize(
+#     cum_cases = max(cumulative_cases)
+#   ) 
+#
 # ebola_world = read.csv("./data/ebola_data_db_format.csv") %>%
 #   janitor::clean_names() %>%
 #   group_by(country) %>%
@@ -34,15 +46,24 @@ covid_world = read_csv("./data/covid19_global.csv") %>%
 #   )
 # 
 # head(ebola_world)
+#
 
-h1n1_world = read_csv("./data/h1n1_data.csv") %>% 
-  janitor::clean_names() %>% 
-  group_by(country) %>% 
+## H1N1 data 4/24/09 to 7/6/09
+
+h1n1_df = read_csv("./data/h1n1_data.csv") %>%
+  janitor::clean_names() %>%
+  group_by(country) %>%
   summarize(
-    h1n1_cases = sum(cumulative_no_of_cases)
+    h1n1 = sum(cumulative_no_of_cases),
+  ) %>% 
+  rename(name = country) %>% 
+  mutate(
+    name = str_replace(name, "Guernsey, Crown Dependency", "Guernsey"),
+    name = str_replace(name, "Hong Kong Special Administrative Region", "Hong Kong"),
+    name = str_replace(name, "Viet Nam", "Vietnam")
   )
-
-
+# 
+#
 # lat_long = read_csv("./data/world_country_and_usa_states_latitude_and_longitude_values.csv") %>% 
 #   select(country_code, latitude, longitude, country)
 # 
@@ -51,19 +72,21 @@ h1n1_world = read_csv("./data/h1n1_data.csv") %>%
 #   drop_na()
 
 
+
 ####### Country polygons test
 
 countries <- geojson_read("./data/countries.geo.json", what = "sp")
 
-covid_world = read_csv("./data/covid19_global.csv") %>% 
+
+# Covid Data
+ctest = read_csv("./data/covid19_global.csv") %>% 
   janitor::clean_names() %>% 
   group_by(country) %>% 
   summarize(
-    covid_cases = max(cumulative_cases)
+    covid = max(cumulative_cases)
   ) %>% 
   mutate(
     name = country,
-    covid_cases_pct = covid_cases/sum(covid_cases) * 100,
     name = str_replace(name, "Venezuela \\(Bolivarian Republic of\\)", "Venezuela"),
     name = str_replace(name, "Iran \\(Islamic Republic of\\)", "Iran"),
     name = str_replace(name, "Russian Federation", "Russia"),
@@ -81,63 +104,167 @@ covid_world = read_csv("./data/covid19_global.csv") %>%
     name = str_replace(name, "Falkland Islands (Malvinas)", "Falkland Islands"),
     name = str_replace(name, "Democratic Republic of the Republic of the Congo", "Democratic Republic of the Congo")
   ) %>% 
-  select(name, covid_cases, covid_cases_pct)
+  select(name, covid)
 
+#SARS Data
+sars_df = 
+  read_csv("./data/sars_2003_complete_dataset_clean.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-number_recovered) %>% 
+  group_by(country) %>% 
+  filter(date == max(date)) %>% 
+  rename(
+    name = country,
+    sars = cumulative_number_of_case_s
+  ) %>% 
+  mutate(
+    name = str_replace(name, "Viet Nam", "Vietnam"),
+    name = str_replace(name, "Russian Federation", "Russia"),
+    name = str_replace(name, "Republic of Korea", "South Korea"),
+    name = str_replace(name, "United States", "United States of America")
+  ) %>% 
+  select(name, sars)
+
+#quant_10 = ctest %>% pull(covid) %>% quantile(probs = seq(0,1,.1)) %>% as.vector() %>% round()
+
+big_test = full_join(ctest, sars_df, by = "name") %>% 
+  full_join(h1n1_df, by = "name") 
+
+big_test2 = full_join(ctest, sars_df, by = "name") %>% 
+  full_join(h1n1_df, by = "name") %>% 
+  pivot_longer(cols = -name, 
+               names_to = "disease",
+               values_to = "cum_cases")
+
+
+pan_countries_map = sp::merge(x = countries, y = big_test, by = "name", all.x = TRUE)
 
 covid_countries_map = sp::merge(x = countries, y = ctest, by = "name", all.x = TRUE)
+sars_countries_map = sp::merge(x = countries, y = sars_df, by = "name", all.x = TRUE)
+h1n1_countries_map = sp::merge(x = countries, y = h1n1_df, by = "name", all.x = TRUE)
 
-pal = colorBin("Reds", c(0,20), na.color = "#808080")
+pal = colorBin(palette = "YlOrRd", bins = c(1, 100, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, Inf), na.color = "#808080")
 ```
 
 Column {.sidebar}
 -----------------------------------------------------------------------
+```{r shiny_inputs}
+# disease_choices = names(big_test)[-1]
+# 
+# selectInput(
+#   "disease_choice",
+#   h3("Pandemic:"),
+#   choices = disease_choices,
+#   selected = "covid"
+# )
+
+# sliderInput(
+#   "price_range",
+#   h3("Price Range"),
+#   100, 1000, 
+#   value = c(100, 400))
+
+# room_choices = nyc_airbnb %>% pull(room_type) %>% unique()
+# radioButtons(
+#   "room_choice",
+#   h3("Room Type"),
+#   choices = room_choices
+# )
+```
+
+Row {data-height=750}
+-------------------------------------
+### covid Map
 ```{r}
+
+# lables = paste0("<strong>Country: </strong>", 
+#                   covid_countries_map$name, 
+#                   "<br><strong># of cases: </strong>", 
+#                   covid_countries_map$input[["disease_choice"]])
+# 
+# renderLeaflet({
+#     big_test2 %>%
+#     filter(disease == input[["disease_choice"]]) %>% 
+#     select(name, cum_cases) %>% 
+#     sp::merge(x = countries, by = "name", all.x = TRUE) %>% 
+#     leaflet() %>%
+#     addTiles() %>%
+#     addPolygons(fillColor = ~pal(cum_cases),
+#     weight = 1.5,
+#     opacity = 1,
+#     color = "white",
+#     dashArray = "3",
+#     fillOpacity = 0.7,
+#     highlight = highlightOptions(
+#       weight = 5,
+#       color = "#666",
+#       dashArray = "",
+#       fillOpacity = 0.7,
+#       bringToFront = TRUE),
+#     popup = lables) %>% 
+#     addLegend(
+#       "bottomright",
+#       pal = pal,
+#       values = ~cum_cases,
+#       title = "Quantile",
+#       opacity = 1
+#     )
+# })
 
 ```
 
-Row {data-height=650}
--------------------------------------
-
-### Chart 1
-
+## sars map
 ```{r}
-### original just tiles
-# test %>%
-#   mutate(
-#     covid_cases = str_c("# cases:" , covid_cases, sep = " "),
-#     popup = str_c(country,
-#                   covid_cases,
-#                   sep = "<br>")
-#   ) %>%
+# 
+# #### leaflet with colored countries
+# lables = paste0("<strong>Country: </strong>", 
+#                   pan_countries_map$name, 
+#                   "<br><strong># of cases: </strong>", 
+#                   pan_countries_map$sars)
+# 
+# pan_countries_map %>% 
 #   leaflet() %>%
 #   addTiles() %>%
-#   addCircleMarkers(clusterOptions = markerClusterOptions(),
-#                    lng = ~longitude,
-#                    lat = ~latitude,
-#                    popup = ~popup
-#                    )
+#   addPolygons(fillColor = ~pal(sars),
+#   weight = 1.5,
+#   opacity = 1,
+#   color = "white",
+#   dashArray = "3",
+#   fillOpacity = 0.7,
+#   highlight = highlightOptions(
+#     weight = 5,
+#     color = "#666",
+#     dashArray = "",
+#     fillOpacity = 0.7,
+#     bringToFront = TRUE),
+#   popup = lables) %>% 
+#   addLegend(
+#     "bottomright", 
+#     pal = pal,
+#     values = ~sars,
+#     title = "Quantile",
+#     opacity = 1
+#   )
 
+```
 
-#### leaflet with colored countries
-lables = paste0("<strong>Country: </strong>", 
-                  covid_countries_map$name, 
-                  "<br><strong># of cases: </strong>", 
-                  covid_countries_map$covid_cases)
+Row {data-height=350}
+-------------------------------------
+```{r}
+# renderPlotly({
+#   big_test2 %>% 
+#     filter(disease == input[["disease_choice"]]) %>% 
+#     mutate(name = fct_reorder(name, cum_cases)) %>%
+#     plot_ly(
+#       x = ~cum_cases,
+#       y = ~name,
+#       type = "bar",
+#       colors = ~cum_cases)
+# })
+```
 
-covid_countries_map %>% 
-  leaflet() %>%
-  addTiles() %>%
-  addPolygons(fillColor = ~pal(covid_cases_pct),
-  weight = 1.5,
-  opacity = 1,
-  color = "white",
-  dashArray = "3",
-  fillOpacity = 0.7,
-  highlight = highlightOptions(
-    weight = 5,
-    color = "#666",
-    dashArray = "",
-    fillOpacity = 0.7,
-    bringToFront = TRUE),
-  popup = lables)
+```{r}
+# renderPrint(
+#   input[["disease_choice"]]
+# )
 ```
