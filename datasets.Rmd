@@ -28,13 +28,16 @@ Description: Data contains `r read.csv("./data/sars_2003_complete_dataset_clean.
 Case fatality recorded was based on cases with known outcome, irrespective of immediate cause of death.
 
 
-4. HINI : [apps.who.int/flumart](https://apps.who.int/flumart/Default?ReportNo=12)
+4. H1N1 + Influenza B: [apps.who.int/flumart](https://apps.who.int/flumart/Default?ReportNo=12)
 
-Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak,  with “no report” for in many countries. 
+Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak,  with “no report” for in many countries. Our dataset for H1N1 contained `r #h1n1_df %>% nrow()` rows and `r #h1n1_df %>% ncol()` columns. Our dataset for Inlfuenza B contained `r #influenza_df %>% nrow()` rows and `r #influenza_df %>% ncol()` columns.
 
 
-5. COVID-19 (Global): [covid19.who.int/table](https://covid19.who.int/table)
+5. COVID-19 Deaths (USA): [data.cdc.gov](https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Week-Ending-D/r8kw-7aab)
+
+Description: This dataset contains weekly death counts attributed to COVID-19. It is comprised of `r covid_us_deaths_df %>% nrow()` rows and `r covid_us_deaths_df %>% ncol()` columns. The variables of interest are week start, week end, state, and number of COVID-19 deaths.
+
+
+6. COVID-19 (Global): [covid19.who.int/table](https://covid19.who.int/table)
 
 Description: This data by World Health Organization provides information on total cumulative cases, newly reported cases in last 24hrs, total deaths and deaths in last 24 hrs, and method of transmission (community, cluster, sporadic or no cases) for a country or a region.
-
-

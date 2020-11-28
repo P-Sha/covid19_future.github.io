@@ -6,7 +6,7 @@ navbar:
     - text: "Full Report"
       href: full_report.html
     - text: "Dashboard"
-      href: shiny_dashboard.html
+      href: https://jak2312.shinyapps.io/shiny_dashboard/
     - text: "Datasets"
       href: datasets.html
     - text: "Pandemics Timeline"
