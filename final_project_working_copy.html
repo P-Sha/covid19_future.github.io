@@ -331,6 +331,8 @@ $(document).ready(function () {
   ) %&gt;% 
   rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths)
 
+save(h1n1_df, file = &quot;h1n1_df.rda&quot;)
+
 h1n1_us = 
   h1n1_df %&gt;% 
   filter(country == &quot;United States of America&quot;) %&gt;% 

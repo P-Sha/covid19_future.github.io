@@ -319,7 +319,8 @@ $(document).ready(function () {
   janitor::clean_names() %&gt;% 
   select(year:end_date, a_total, b_total) %&gt;% 
   mutate(week = as.numeric(week), a_total = as.numeric(a_total), b_total = as.numeric(b_total)) %&gt;% 
-  drop_na()</code></pre>
+  drop_na()
+save(influenza_df, file = &quot;influenza_df.rda&quot;)</code></pre>
 <p>prelim plots:</p>
 <pre class="r"><code>influenza_df %&gt;% 
   group_by(year) %&gt;% 
@@ -347,7 +348,7 @@ $(document).ready(function () {
 ##  8 2009     23 2009-06-01 2009-06-07    4971      26
 ##  9 2009     24 2009-06-08 2009-06-14    5407      15
 ## 10 2009     25 2009-06-15 2009-06-21    5914       9
-## # … with 592 more rows</code></pre>
+## # ... with 592 more rows</code></pre>
 
 
 

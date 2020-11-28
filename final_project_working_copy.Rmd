@@ -27,6 +27,8 @@ h1n1_df = read.csv("./data/h1n1_data.csv") %>%
   ) %>% 
   rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths)
 
+save(h1n1_df, file = "h1n1_df.rda")
+
 h1n1_us = 
   h1n1_df %>% 
   filter(country == "United States of America") %>% 

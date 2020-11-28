@@ -314,17 +314,40 @@ $(document).ready(function () {
 </div>
 
 
-<div id="u.s.-death-data" class="section level2">
-<h2>U.S. Death Data</h2>
+<div id="u.s.-data" class="section level2">
+<h2>U.S. Data</h2>
+<div id="deaths" class="section level4">
+<h4>Deaths</h4>
 <pre class="r"><code>covid_us_deaths_df = 
-  GET(&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;) %&gt;% 
+  GET(&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;, query = list(&quot;$limit&quot; = 10000)) %&gt;% 
   content(&quot;text&quot;) %&gt;% 
   jsonlite::fromJSON() %&gt;% 
+  as_tibble() %&gt;% 
   janitor::clean_names() %&gt;% 
   mutate(data_as_of = as.Date(data_as_of),
          start_week = as.Date(start_week),
          end_week = as.Date(end_week)) %&gt;% 
-  select(-group, -footnote)</code></pre>
+  select(-group, -footnote)
+
+save(covid_us_deaths_df, file = &quot;covid_us_deaths_df.rda&quot;)</code></pre>
+</div>
+<div id="cases" class="section level4">
+<h4>Cases</h4>
+<pre class="r"><code>covid_us_cases_df = 
+  GET(&quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;, query = list(&quot;$limit&quot; = 1000)) %&gt;% 
+  content(&quot;text&quot;) %&gt;% 
+  jsonlite::fromJSON() %&gt;% 
+  as_tibble() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(cdc_report_dt = as.Date(cdc_report_dt)) %&gt;% 
+  arrange(cdc_report_dt) %&gt;% 
+  mutate(case_id = row_number()) %&gt;% 
+  relocate(case_id) %&gt;% 
+  group_by(cdc_report_dt) %&gt;% 
+  summarize(cumulative_cases = max(case_id))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>save(covid_us_cases_df, file = &quot;covid_us_cases_df.rda&quot;)</code></pre>
+</div>
 </div>
 
 
