@@ -600,6 +600,147 @@ body {
 
 <body>
 
+<<<<<<< HEAD
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="full_report.html">Full Report</a>
+</li>
+<li>
+  <a href="shiny_dashboard.html">Dashboard</a>
+</li>
+<li>
+  <a href="datasets.html">Datasets</a>
+</li>
+<li>
+  <a href="pandemics_timeline.html">Pandemics Timeline</a>
+</li>
+<li>
+  <a href="mailto:&lt;you@youremail.com&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/P-Sha/covid19_future.github.io">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">COVID-19 Data</h1>
+
+</div>
+
+
+<div id="u.s.-data" class="section level2">
+<h2>U.S. Data</h2>
+<div id="deaths" class="section level4">
+<h4>Deaths</h4>
+<pre class="r"><code>covid_us_deaths_df = 
+  GET(&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;, query = list(&quot;$limit&quot; = 10000)) %&gt;% 
+  content(&quot;text&quot;) %&gt;% 
+  jsonlite::fromJSON() %&gt;% 
+  as_tibble() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(data_as_of = as.Date(data_as_of),
+         start_week = as.Date(start_week),
+         end_week = as.Date(end_week)) %&gt;% 
+  select(-group, -footnote)
+
+save(covid_us_deaths_df, file = &quot;covid_us_deaths_df.rda&quot;)</code></pre>
+</div>
+<div id="cases" class="section level4">
+<h4>Cases</h4>
+<pre class="r"><code>covid_us_cases_df = 
+  GET(&quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;, query = list(&quot;$limit&quot; = 1000)) %&gt;% 
+  content(&quot;text&quot;) %&gt;% 
+  jsonlite::fromJSON() %&gt;% 
+  as_tibble() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(cdc_report_dt = as.Date(cdc_report_dt)) %&gt;% 
+  arrange(cdc_report_dt) %&gt;% 
+  mutate(case_id = row_number()) %&gt;% 
+  relocate(case_id) %&gt;% 
+  group_by(cdc_report_dt) %&gt;% 
+  summarize(cumulative_cases = max(case_id))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>save(covid_us_cases_df, file = &quot;covid_us_cases_df.rda&quot;)</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+=======
 <h1 id="covid-19-data">COVID-19 Data</h1>
 <h2 id="us-death-data">U.S. Death Data</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>covid_us_deaths_df =<span class="st"> </span></span>
@@ -611,6 +752,7 @@ body {
 <span id="cb1-7"><a href="#cb1-7"></a>         <span class="dt">start_week =</span> <span class="kw">as.Date</span>(start_week),</span>
 <span id="cb1-8"><a href="#cb1-8"></a>         <span class="dt">end_week =</span> <span class="kw">as.Date</span>(end_week)) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1-9"><a href="#cb1-9"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>group, <span class="op">-</span>footnote)</span></code></pre></div>
+>>>>>>> 06f901dc67d43f450b4ef89cb27989c8688aae54
 
 </body>
 </html>

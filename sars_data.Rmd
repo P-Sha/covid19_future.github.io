@@ -33,6 +33,8 @@ sars_df =
   select(-number_recovered) %>% 
   group_by(country) %>% 
   mutate(deaths_cum = cumsum(number_of_deaths))
+
+save(sars_df, file = "sars_df.rda")
 ```
 
 prelim plots:

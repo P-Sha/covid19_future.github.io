@@ -33,6 +33,7 @@ influenza_df =
   select(year:end_date, a_total, b_total) %>% 
   mutate(week = as.numeric(week), a_total = as.numeric(a_total), b_total = as.numeric(b_total)) %>% 
   drop_na()
+save(influenza_df, file = "influenza_df.rda")
 ```
 
 prelim plots:
