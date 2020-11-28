@@ -8,6 +8,8 @@ library(tidyverse)
 library(plotly)
 library(ggplot2)
 library(dygraphs)
+library(rvest)
+library(httr)
 ```
 
 Spanish flu vs covid19 in Chicago (7 weeks mortality, at peak)
@@ -94,4 +96,48 @@ plot_2 =
 ```{r}
 subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 ```
+
+
+
+Basic Reproductive rate
+
+```{r}
+data_url = "https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext"
+reproductive_rate_html = read_html(data_url)   # read html from that link
+
+table_r0 =
+  reproductive_rate_html %>% 
+  html_nodes(css = "table") %>%  
+  first() %>%
+  html_table() %>% 
+  janitor::clean_names() %>%
+  select(-6) %>% 
+  filter(x == "Transmissibility, R0" | x == "Incubation period, days" | x == "Interval between symptom onset and maximum infectivity, days" | x == "Proportion with mild illness") %>% 
+  rename(
+     covid_19 = sars_co_v_2,
+     sars_2003 = sars_co_v,
+     spanish_flu = pandemic_influenza_1918,
+     h1n1_2009 = pandemic_influenza_2009
+  ) %>% 
+  mutate(x = replace(x, x == "Transmissibility, R0", "Basic Reproductive rate, R0")) %>% 
+  as_tibble() 
+
+table_r0 %>%
+  filter(x == "Basic Reproductive rate, R0") %>%            
+   pivot_longer(	
+    covid_19:h1n1_2009,
+    names_to = "pandemic",
+    values_to = "r0"
+    ) %>% 
+  plot_ly(
+    x = ~pandemic, y = ~r0, color = ~r0, type = "bar", ymin = 0) %>% 
+  layout(title = "Comparing Reproductive rates", showlegend = FALSE)
+  
+table_r0 =
+  table_r0 %>% 
+  knitr::kable()
+
+table_r0
+```
+
 
