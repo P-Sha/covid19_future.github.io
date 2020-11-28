@@ -149,14 +149,14 @@ pal = colorBin(palette = "YlOrRd", bins = c(1, 100, 1000, 5000, 10000, 50000, 10
 Column {.sidebar}
 -----------------------------------------------------------------------
 ```{r shiny_inputs}
-disease_choices = names(big_test)[-1]
-
-selectInput(
-  "disease_choice",
-  h3("Pandemic:"),
-  choices = disease_choices,
-  selected = "covid"
-)
+# disease_choices = names(big_test)[-1]
+# 
+# selectInput(
+#   "disease_choice",
+#   h3("Pandemic:"),
+#   choices = disease_choices,
+#   selected = "covid"
+# )
 
 # sliderInput(
 #   "price_range",
@@ -172,44 +172,44 @@ selectInput(
 # )
 ```
 
-Row {data-height=650}
+Row {data-height=750}
 -------------------------------------
 ### covid Map
 ```{r}
 
-lables = paste0("<strong>Country: </strong>", 
-                  covid_countries_map$name, 
-                  "<br><strong># of cases: </strong>", 
-                  covid_countries_map$input[["disease_choice"]])
-
-renderLeaflet({
-    big_test2 %>%
-    filter(disease == input[["disease_choice"]]) %>% 
-    select(name, cum_cases) %>% 
-    sp::merge(x = countries, by = "name", all.x = TRUE) %>% 
-    leaflet() %>%
-    addTiles() %>%
-    addPolygons(fillColor = ~pal(cum_cases),
-    weight = 1.5,
-    opacity = 1,
-    color = "white",
-    dashArray = "3",
-    fillOpacity = 0.7,
-    highlight = highlightOptions(
-      weight = 5,
-      color = "#666",
-      dashArray = "",
-      fillOpacity = 0.7,
-      bringToFront = TRUE),
-    popup = lables) %>% 
-    addLegend(
-      "bottomright",
-      pal = pal,
-      values = ~cum_cases,
-      title = "Quantile",
-      opacity = 1
-    )
-})
+# lables = paste0("<strong>Country: </strong>", 
+#                   covid_countries_map$name, 
+#                   "<br><strong># of cases: </strong>", 
+#                   covid_countries_map$input[["disease_choice"]])
+# 
+# renderLeaflet({
+#     big_test2 %>%
+#     filter(disease == input[["disease_choice"]]) %>% 
+#     select(name, cum_cases) %>% 
+#     sp::merge(x = countries, by = "name", all.x = TRUE) %>% 
+#     leaflet() %>%
+#     addTiles() %>%
+#     addPolygons(fillColor = ~pal(cum_cases),
+#     weight = 1.5,
+#     opacity = 1,
+#     color = "white",
+#     dashArray = "3",
+#     fillOpacity = 0.7,
+#     highlight = highlightOptions(
+#       weight = 5,
+#       color = "#666",
+#       dashArray = "",
+#       fillOpacity = 0.7,
+#       bringToFront = TRUE),
+#     popup = lables) %>% 
+#     addLegend(
+#       "bottomright",
+#       pal = pal,
+#       values = ~cum_cases,
+#       title = "Quantile",
+#       opacity = 1
+#     )
+# })
 
 ```
 
@@ -248,20 +248,23 @@ renderLeaflet({
 
 ```
 
-Row {data-height=250}
+Row {data-height=350}
 -------------------------------------
 ```{r}
-renderPlotly({sars_df %>% 
-  mutate(name = fct_reorder(name, sars)) %>% 
-  plot_ly(x = ~sars,
-         y = ~name,
-         type = "bar",
-         colors = "viridis")
-})
+# renderPlotly({
+#   big_test2 %>% 
+#     filter(disease == input[["disease_choice"]]) %>% 
+#     mutate(name = fct_reorder(name, cum_cases)) %>%
+#     plot_ly(
+#       x = ~cum_cases,
+#       y = ~name,
+#       type = "bar",
+#       colors = ~cum_cases)
+# })
 ```
 
 ```{r}
-renderPrint(
-  input[["disease_choice"]]
-)
+# renderPrint(
+#   input[["disease_choice"]]
+# )
 ```
