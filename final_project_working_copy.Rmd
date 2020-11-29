@@ -20,7 +20,7 @@ library(scales)
 ***Kaggle***
 
 ```{r}
-h1n1_global = read.csv("./data/h1n1_data.csv") %>% 
+h1n1_df = read.csv("./data/h1n1_data.csv") %>% 
   janitor::clean_names() %>% 
   select(-link) %>% 
   mutate(
@@ -28,13 +28,25 @@ h1n1_global = read.csv("./data/h1n1_data.csv") %>%
     pandemic_interval = "2009/04/24" %--% date,
     pandemic_duration = as.duration(pandemic_interval) / ddays(1)
   ) %>% 
-  arrange(pandemic_duration) %>% 
-  rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths)
+ rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths) %>% 
+  arrange(pandemic_duration)
+  
+h1n1_global = 
+  h1n1_df %>%   
+  group_by(pandemic_duration) %>% 
+  summarize(
+    h1n1_cumulative_cases = sum(h1n1_cumulative_cases, na.rm = TRUE),
+    h1n1_cumulative_deaths = sum(h1n1_cumulative_deaths, na.rm = TRUE)
+  ) %>% 
+  mutate(
+    h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
+    h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
+  )
 
 save(h1n1_global, file = "h1n1_global.rda")
 
 h1n1_us = 
-  h1n1_global %>% 
+  h1n1_df %>% 
   filter(country == "United States of America") %>% 
   mutate(
     h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
@@ -119,6 +131,20 @@ covid_us_deaths = read.csv("./data/death_daily_trends_united_states.csv", skip =
 
 ***Global***
 
+```{r}
+covid_global = read.csv("./data/covid19_global.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-country_code, -who_region, covid_new_cases = new_cases, covid_cumulative_cases = cumulative_cases, covid_new_deaths = new_deaths, covid_cumulative_deaths = cumulative_deaths) %>% 
+  mutate(
+    date = as.Date(date_reported, "%m/%d/%Y"),
+    pandemic_interval = "2020/01/03" %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+  group_by(pandemic_duration) %>% 
+  summarize(across(covid_new_cases:covid_cumulative_deaths, sum))
+```
+
+
 ### SARS
 
 ```{r}
@@ -134,7 +160,6 @@ sars_us = read.csv("./data/sars_2003_complete_dataset_clean.csv") %>%
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )
 ```
-
 
 ## Visualization
 
@@ -409,3 +434,95 @@ h1n1_global_who %>%
 
 ### Global COVID
 
+***New cases***
+
+```{r}
+covid_global %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_new_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
+```
+
+***Cumulative cases***
+```{r}
+covid_global %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
+```
+
+***New deaths***
+
+```{r}
+covid_global %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_new_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
+```
+
+***Cumulative deaths***
+
+```{r}
+covid_global %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_cumulative_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
+```
+
+### Merge global cases
+
+```{r} 
+##using WHO cases
+global_cases =
+  full_join(covid_global, h1n1_global_who, by = "pandemic_duration") %>% 
+  select(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases, covid_new_cases, covid_cumulative_cases) %>% 
+  arrange(pandemic_duration) %>% 
+  pivot_longer(
+    h1n1_new_cases:covid_cumulative_cases,
+    names_to = "class",
+    values_to = "n"
+  ) %>% 
+  separate(class, into = c("disease", "trend"), sep = "_", extra = "merge")
+```
+
+***Global new cases***
+
+```{r}
+##linear
+global_cases %>% 
+  filter(trend == "new_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+```
+
+```{r}
+##log-transformed
+global_cases %>% 
+  filter(trend == "new_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
+```
+
+***Global cumulative cases***
+
+```{r}
+##linear
+global_cases %>% 
+  filter(trend == "cumulative_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+```
+
+```{r}
+##log-transformed
+global_cases %>% 
+  filter(trend == "cumulative_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
+```
