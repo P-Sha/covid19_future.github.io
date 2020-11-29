@@ -17,8 +17,9 @@ library(scales)
 
 ### H1N1
 
+***Kaggle***
+
 ```{r}
-##kaggle datset
 h1n1_global = read.csv("./data/h1n1_data.csv") %>% 
   janitor::clean_names() %>% 
   select(-link) %>% 
@@ -41,8 +42,10 @@ h1n1_us =
   )
 ```
 
+***WHO***
+
 ```{r}
-##WHO dataset
+##US data
 h1n1_us_who = readxl::read_excel("./data/USA_FluNetInteractiveReport.xlsx", skip = 5) %>% 
   janitor::clean_names() %>% 
   select(start_date:end_date, h1n1_new_cases = a_h1n1_pdm09) %>% 
@@ -58,7 +61,27 @@ h1n1_us_who = readxl::read_excel("./data/USA_FluNetInteractiveReport.xlsx", skip
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
   )
 
+##global data
+h1n1_global_who = read.csv("./data/global_FluNetInteractiveReport.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  select(country, sdate, edate, h1n1_new_cases = ah1n12009) %>% 
+  mutate(
+    sdate = as.Date(sdate, "%m/%d/%y"),
+    edate = as.Date(edate, "%m/%d/%y"),
+    pandemic_interval = "2009/04/06" %--% edate,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+    filter(pandemic_duration >= 0) %>% 
+  arrange(pandemic_duration) %>% 
+  group_by(pandemic_duration) %>% 
+  summarize(
+    h1n1_new_cases = sum(h1n1_new_cases, na.rm = TRUE)
+  ) %>% 
+  mutate(
+    h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
+  )
 ```
+
 
 ### COVID-19
 
@@ -93,6 +116,8 @@ covid_us_deaths = read.csv("./data/death_daily_trends_united_states.csv", skip =
     covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)
   )
 ```
+
+***Global***
 
 ### SARS
 
@@ -363,3 +388,24 @@ us_deaths %>%
   geom_smooth(se = FALSE) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
 ```
+
+### Global H1N1
+
+***New cases***
+```{r}
+h1n1_global_who %>%
+  ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
+```
+
+***Cumulative cases***
+```{r}
+ h1n1_global_who %>%
+  ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)
+```
+
+### Global COVID
+

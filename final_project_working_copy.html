@@ -330,8 +330,8 @@ $(document).ready(function () {
 <h2>Read and tidy</h2>
 <div id="h1n1" class="section level3">
 <h3>H1N1</h3>
-<pre class="r"><code>##kaggle datset
-h1n1_global = read.csv(&quot;./data/h1n1_data.csv&quot;) %&gt;% 
+<p><strong><em>Kaggle</em></strong></p>
+<pre class="r"><code>h1n1_global = read.csv(&quot;./data/h1n1_data.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
   select(-link) %&gt;% 
   mutate(
@@ -351,7 +351,8 @@ h1n1_us =
     h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
     h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
   )</code></pre>
-<pre class="r"><code>##WHO dataset
+<p><strong><em>WHO</em></strong></p>
+<pre class="r"><code>##US data
 h1n1_us_who = readxl::read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
   janitor::clean_names() %&gt;% 
   select(start_date:end_date, h1n1_new_cases = a_h1n1_pdm09) %&gt;% 
@@ -365,7 +366,28 @@ h1n1_us_who = readxl::read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&q
   mutate(
     h1n1_new_cases = as.numeric(h1n1_new_cases),
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
+  )
+
+##global data
+h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;, skip = 3) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(country, sdate, edate, h1n1_new_cases = ah1n12009) %&gt;% 
+  mutate(
+    sdate = as.Date(sdate, &quot;%m/%d/%y&quot;),
+    edate = as.Date(edate, &quot;%m/%d/%y&quot;),
+    pandemic_interval = &quot;2009/04/06&quot; %--% edate,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %&gt;% 
+    filter(pandemic_duration &gt;= 0) %&gt;% 
+  arrange(pandemic_duration) %&gt;% 
+  group_by(pandemic_duration) %&gt;% 
+  summarize(
+    h1n1_new_cases = sum(h1n1_new_cases, na.rm = TRUE)
+  ) %&gt;% 
+  mutate(
+    h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
   )</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 </div>
 <div id="covid-19" class="section level3">
 <h3>COVID-19</h3>
@@ -397,6 +419,7 @@ covid_us_deaths = read.csv(&quot;./data/death_daily_trends_united_states.csv&quo
   mutate(
     covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)
   )</code></pre>
+<p><strong><em>Global</em></strong></p>
 </div>
 <div id="sars" class="section level3">
 <h3>SARS</h3>
@@ -655,6 +678,24 @@ us_deaths %&gt;%
 <pre><code>## Warning: Removed 856 rows containing non-finite values (stat_smooth).</code></pre>
 <pre><code>## Warning: Removed 720 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+</div>
+<div id="global-h1n1" class="section level3">
+<h3>Global H1N1</h3>
+<p><strong><em>New cases</em></strong></p>
+<pre class="r"><code>h1n1_global_who %&gt;%
+  ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><strong><em>Cumulative cases</em></strong></p>
+<pre class="r"><code> h1n1_global_who %&gt;%
+  ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+</div>
+<div id="global-covid" class="section level3">
+<h3>Global COVID</h3>
 </div>
 </div>
 
