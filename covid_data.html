@@ -600,159 +600,37 @@ body {
 
 <body>
 
-<<<<<<< HEAD
-
-<div class="container-fluid main-container">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Home</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="full_report.html">Full Report</a>
-</li>
-<li>
-  <a href="shiny_dashboard.html">Dashboard</a>
-</li>
-<li>
-  <a href="datasets.html">Datasets</a>
-</li>
-<li>
-  <a href="pandemics_timeline.html">Pandemics Timeline</a>
-</li>
-<li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
-    <span class="fa fa-envelope fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://github.com/P-Sha/covid19_future.github.io">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div class="fluid-row" id="header">
-
-
-
-<h1 class="title toc-ignore">COVID-19 Data</h1>
-
-</div>
-
-
-<div id="u.s.-data" class="section level2">
-<h2>U.S. Data</h2>
-<div id="deaths" class="section level4">
-<h4>Deaths</h4>
-<pre class="r"><code>covid_us_deaths_df = 
-  GET(&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;, query = list(&quot;$limit&quot; = 10000)) %&gt;% 
-  content(&quot;text&quot;) %&gt;% 
-  jsonlite::fromJSON() %&gt;% 
-  as_tibble() %&gt;% 
-  janitor::clean_names() %&gt;% 
-  mutate(data_as_of = as.Date(data_as_of),
-         start_week = as.Date(start_week),
-         end_week = as.Date(end_week)) %&gt;% 
-  select(-group, -footnote)
-
-save(covid_us_deaths_df, file = &quot;covid_us_deaths_df.rda&quot;)</code></pre>
-</div>
-<div id="cases" class="section level4">
-<h4>Cases</h4>
-<pre class="r"><code>covid_us_cases_df = 
-  GET(&quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;, query = list(&quot;$limit&quot; = 1000)) %&gt;% 
-  content(&quot;text&quot;) %&gt;% 
-  jsonlite::fromJSON() %&gt;% 
-  as_tibble() %&gt;% 
-  janitor::clean_names() %&gt;% 
-  mutate(cdc_report_dt = as.Date(cdc_report_dt)) %&gt;% 
-  arrange(cdc_report_dt) %&gt;% 
-  mutate(case_id = row_number()) %&gt;% 
-  relocate(case_id) %&gt;% 
-  group_by(cdc_report_dt) %&gt;% 
-  summarize(cumulative_cases = max(case_id))</code></pre>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<pre class="r"><code>save(covid_us_cases_df, file = &quot;covid_us_cases_df.rda&quot;)</code></pre>
-</div>
-</div>
-
-
-
-
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
-<!-- code folding -->
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-=======
 <h1 id="covid-19-data">COVID-19 Data</h1>
-<h2 id="us-death-data">U.S. Death Data</h2>
+<h2 id="us-data">U.S. Data</h2>
+<h4 id="deaths">Deaths</h4>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>covid_us_deaths_df =<span class="st"> </span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="st">  </span><span class="kw">GET</span>(<span class="st">&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="st">  </span><span class="kw">GET</span>(<span class="st">&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;</span>, <span class="dt">query =</span> <span class="kw">list</span>(<span class="st">&quot;$limit&quot;</span> =<span class="st"> </span><span class="dv">10000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="st">  </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="st">  </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data_as_of =</span> <span class="kw">as.Date</span>(data_as_of),</span>
-<span id="cb1-7"><a href="#cb1-7"></a>         <span class="dt">start_week =</span> <span class="kw">as.Date</span>(start_week),</span>
-<span id="cb1-8"><a href="#cb1-8"></a>         <span class="dt">end_week =</span> <span class="kw">as.Date</span>(end_week)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>group, <span class="op">-</span>footnote)</span></code></pre></div>
->>>>>>> 06f901dc67d43f450b4ef89cb27989c8688aae54
+<span id="cb1-5"><a href="#cb1-5"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data_as_of =</span> <span class="kw">as.Date</span>(data_as_of),</span>
+<span id="cb1-8"><a href="#cb1-8"></a>         <span class="dt">start_week =</span> <span class="kw">as.Date</span>(start_week),</span>
+<span id="cb1-9"><a href="#cb1-9"></a>         <span class="dt">end_week =</span> <span class="kw">as.Date</span>(end_week)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>group, <span class="op">-</span>footnote)</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="kw">save</span>(covid_us_deaths_df, <span class="dt">file =</span> <span class="st">&quot;covid_us_deaths_df.rda&quot;</span>)</span></code></pre></div>
+<h4 id="cases">Cases</h4>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>covid_us_cases_df =<span class="st"> </span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span><span class="kw">GET</span>(<span class="st">&quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;</span>, <span class="dt">query =</span> <span class="kw">list</span>(<span class="st">&quot;$limit&quot;</span> =<span class="st"> </span><span class="dv">1000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="st">  </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="st">  </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cdc_report_dt =</span> <span class="kw">as.Date</span>(cdc_report_dt)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="st">  </span><span class="kw">arrange</span>(cdc_report_dt) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">case_id =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="st">  </span><span class="kw">relocate</span>(case_id) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="st">  </span><span class="kw">group_by</span>(cdc_report_dt) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">cumulative_cases =</span> <span class="kw">max</span>(case_id))</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)
+</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">save</span>(covid_us_cases_df, <span class="dt">file =</span> <span class="st">&quot;covid_us_cases_df.rda&quot;</span>)</span></code></pre></div>
 
 </body>
 </html>
