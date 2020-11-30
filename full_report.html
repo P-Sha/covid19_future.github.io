@@ -441,10 +441,14 @@ div.tocify {
 <div id="data" class="section level3">
 <h3>Data</h3>
 <p>Multiple datasets were used from various shareable online sources for analysis and comparison to COVID-19. Complete list of data-descriptions is provided under the “Datasets” tab.</p>
+<<<<<<< HEAD
+<p>Most of the datasets were available in ready-to-use CSV formats, so we built dataframes using the <code>read_csv</code> function. The SARS-2003 dataset, however, was transformed from a PDF file to an updated “cleaner” CSV version. Furthermore, since up-to-date data is important in analysis of prior pandemic trends, data scraping from <a href="data.cdc.gov">the CDC website</a> for updated COVID-19 data was used. Data scraping was done using JSON APIs with the <code>GET</code> function from the <code>httr</code> package, along with the <code>fromJSON()</code> function from the <code>jsonlite</code> package.</p>
+=======
 <p><brk><brk><brk></p>
 <p>Most of the datasets were available in a ready to use CSV format, with some cleaning and tidying requirements. Sars-2003 data was transformed from a pdf file to an updated “cleaner” CSV version. Data for COVID-19 in Chicago required filtering the peak timeframe (up until the completion of this report, December 4th 2020), by weeks. This combined dataframe was then compared to the available Spanish flu record of 7 weeks.</p>
 <p><brk><brk><brk></p>
 <p>Also, the data with R0 and other statistical comparisons between the four pandemics was extracted by scraping <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext">thelancet.com</a>. Information on R0 for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show r0 by disease-type graphically.</p>
+>>>>>>> 2d7c327976684fe92390f1f2664250693778feb2
 </div>
 <div id="exploratory-analysis" class="section level3">
 <h3>Exploratory Analysis</h3>
@@ -545,7 +549,7 @@ subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)</code></pre>
 <p>The graphs show similar curves in terms of shape, with maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. By tracing over the bars, one could find the exact death-count for the given week.</p>
 <p>Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we could analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail.</p>
 <p>(Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)</p>
-<p>*Sars, Spanish flu, H1N1, Influenza, covid analysis</p>
+<p>*Sars, Spanish Flu, H1N1, Influenza B, COVID-19 Analysis</p>
 </div>
 <div id="additional-analysis-if-you-undertake-formal-statistical-analyses-describe-these-in-detail---maybe" class="section level3">
 <h3>Additional analysis: If you undertake formal statistical analyses, describe these in detail - maybe?</h3>
