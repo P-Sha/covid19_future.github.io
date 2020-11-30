@@ -395,7 +395,7 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
 <div id="covid-19" class="section level3">
 <h3>COVID-19</h3>
 <p><strong><em>US</em></strong></p>
-<pre class="r"><code>covid_us_cases = read.csv(&quot;./data/case_daily_trends_united_states.csv&quot;, skip = 3) %&gt;% 
+<pre class="r"><code>covid_us_cases = read_csv(&quot;./data/case_daily_trends_united_states.csv&quot;, skip = 3) %&gt;% 
   janitor::clean_names() %&gt;% 
   select(-x7_day_moving_avg) %&gt;% 
   mutate(
@@ -407,9 +407,14 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
   arrange(pandemic_duration) %&gt;% 
   mutate(
     covid_cumulative_cases = CUMULATIVE_SUM(covid_new_cases)
-  )
-
-covid_us_deaths = read.csv(&quot;./data/death_daily_trends_united_states.csv&quot;, skip = 3) %&gt;%
+  )</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Date = col_character(),
+##   `New Cases` = col_double(),
+##   `7-Day Moving Avg` = col_double()
+## )</code></pre>
+<pre class="r"><code>covid_us_deaths = read.csv(&quot;./data/death_daily_trends_united_states.csv&quot;, skip = 3) %&gt;%
   janitor::clean_names() %&gt;% 
   select(-x7_day_moving_avg) %&gt;%
   mutate(
@@ -423,7 +428,7 @@ covid_us_deaths = read.csv(&quot;./data/death_daily_trends_united_states.csv&quo
     covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)
   )</code></pre>
 <p><strong><em>Global</em></strong></p>
-<pre class="r"><code>covid_global = read.csv(&quot;./data/covid19_global.csv&quot;) %&gt;% 
+<pre class="r"><code>covid_global = read_csv(&quot;./data/covid19_global.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
   select(-country_code, -who_region, covid_new_cases = new_cases, covid_cumulative_cases = cumulative_cases, covid_new_deaths = new_deaths, covid_cumulative_deaths = cumulative_deaths) %&gt;% 
   mutate(
@@ -433,6 +438,17 @@ covid_us_deaths = read.csv(&quot;./data/death_daily_trends_united_states.csv&quo
   ) %&gt;% 
   group_by(pandemic_duration) %&gt;% 
   summarize(across(covid_new_cases:covid_cumulative_deaths, sum))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Date_reported = col_character(),
+##   Country_code = col_character(),
+##   Country = col_character(),
+##   WHO_region = col_character(),
+##   New_cases = col_double(),
+##   Cumulative_cases = col_double(),
+##   New_deaths = col_double(),
+##   Cumulative_deaths = col_double()
+## )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 </div>
 <div id="sars" class="section level3">
