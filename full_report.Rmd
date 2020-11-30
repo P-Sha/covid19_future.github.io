@@ -58,11 +58,11 @@ The idea for the project was encouraged by the articles ["How the pandemic might
 
 #### _Initial_
 
-The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics.
+The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics. Evaluation of time-series was the primary focus of the project, intially.
 
 #### _Additional_
 
-Over the course of the project...
+What might the basic reproductive rates had been in the past pandemics? Basic reproductive rate, or "r0" for short, is a measure that describes the ability of a pathogen to spread in a population. It is the average of secondary infections caused by an infectious individual; which we thought is a critical element in pandemics analyses.  
 
 [How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?]
 
@@ -70,9 +70,21 @@ Over the course of the project...
 
 Multiple datasets were used from various shareable online sources for analysis and comparison to COVID-19. Complete list of data-descriptions is provided under the "Datasets" tab. 
 
+<<<<<<< HEAD
 Most of the datasets were available in ready-to-use CSV formats, so we built dataframes using the `read_csv` function. The SARS-2003 dataset, however, was transformed from a PDF file to an updated "cleaner" CSV version. Furthermore, since up-to-date data is important in analysis of prior pandemic trends, data scraping from [the CDC website](data.cdc.gov) for updated COVID-19 data was used. Data scraping was done using JSON APIs with the `GET` function from the `httr` package, along with the `fromJSON()` function from the `jsonlite` package.
+=======
+<brk><brk><brk>
+
+  Although most of the datasets were available in ready to use CSV format, sars-2003 data was transformed from a pdf file to an updated "cleaner" CSV version. 
+  
+<brk><brk><brk>
+
+  Also, the data with R0 and other statistical comparisons between the four pandemics was extracted by scraping [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext). Information on R0 for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show r0 by disease-type graphically.
+>>>>>>> 2d7c327976684fe92390f1f2664250693778feb2
 
 ### Exploratory Analysis
+
+
 
 (Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)
 
