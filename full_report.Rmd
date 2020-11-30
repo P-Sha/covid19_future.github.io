@@ -69,13 +69,14 @@ Over the course of the project...
 ### Data
 
 Multiple datasets were used from various shareable online sources for analysis and comparison to COVID-19. Complete list of data-descriptions is provided under the "Datasets" tab. 
-  Although most of the datasets were available in ready to use CSV format, sars-2003 data was transformed from a pdf file to an updated "cleaner" CSV version.
+
+Most of the datasets were available in ready-to-use CSV formats, so we built dataframes using the `read_csv` function. The SARS-2003 dataset, however, was transformed from a PDF file to an updated "cleaner" CSV version. Furthermore, since up-to-date data is important in analysis of prior pandemic trends, data scraping from [the CDC website](data.cdc.gov) for updated COVID-19 data was used. Data scraping was done using JSON APIs with the `GET` function from the `httr` package, along with the `fromJSON()` function from the `jsonlite` package.
 
 ### Exploratory Analysis
 
 (Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)
 
-*Sars, Spanish flu, H1N1, Influenza, covid analysis
+*Sars, Spanish Flu, H1N1, Influenza B, COVID-19 Analysis
 
 ### Additional analysis: If you undertake formal statistical analyses, describe these in detail - maybe?
 
