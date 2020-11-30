@@ -10,6 +10,7 @@ library(ggplot2)
 library(dygraphs)
 library(rvest)
 library(httr)
+library(janitor)
 ```
 
 Spanish flu vs covid19 in Chicago (7 weeks mortality, at peak)
@@ -107,14 +108,14 @@ Basic Reproductive rate
 
 ```{r}
 data_url = "https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext"
-reproductive_rate_html = read_html(data_url)   # read html from that link
+reproductive_rate_html = read_html(data_url)
 
 table_r0 =
   reproductive_rate_html %>% 
   html_nodes(css = "table") %>%  
   first() %>%
   html_table() %>% 
-  janitor::clean_names() %>%
+  make_clean_names() %>% 
   select(-6) %>% 
   filter(x == "Transmissibility, R0" | x == "Incubation period, days" | x == "Interval between symptom onset and maximum infectivity, days" | x == "Proportion with mild illness") %>% 
   rename(
@@ -143,5 +144,3 @@ table_r0 =
 
 table_r0
 ```
-
-

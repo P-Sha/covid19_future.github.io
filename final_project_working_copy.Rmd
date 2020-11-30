@@ -132,7 +132,7 @@ covid_us_deaths = read.csv("./data/death_daily_trends_united_states.csv", skip =
 ***Global***
 
 ```{r}
-covid_global = read.csv("./data/covid19_global.csv") %>% 
+covid_global = read_csv("./data/covid19_global.csv") %>% 
   janitor::clean_names() %>% 
   select(-country_code, -who_region, covid_new_cases = new_cases, covid_cumulative_cases = cumulative_cases, covid_new_deaths = new_deaths, covid_cumulative_deaths = cumulative_deaths) %>% 
   mutate(
