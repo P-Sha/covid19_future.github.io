@@ -26,6 +26,13 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -434,13 +441,117 @@ div.tocify {
 <div id="data" class="section level3">
 <h3>Data</h3>
 <p>Multiple datasets were used from various shareable online sources for analysis and comparison to COVID-19. Complete list of data-descriptions is provided under the “Datasets” tab.</p>
+<<<<<<< HEAD
 <p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Most of the datasets were available in ready-to-use CSV formats, so we built dataframes using the <code>read_csv</code> function. The SARS-2003 dataset, however, was transformed from a PDF file to an updated “cleaner” CSV version. Furthermore, since up-to-date data is important in analysis of prior pandemic trends, data scraping from <a href="data.cdc.gov">the CDC website</a> for updated COVID-19 data was used. Data scraping was done using JSON APIs with the <code>GET</code> function from the <code>httr</code> package, along with the <code>fromJSON()</code> function from the <code>jsonlite</code> package. ======= <brk><brk><brk></p>
 <p>Although most of the datasets were available in ready to use CSV format, sars-2003 data was transformed from a pdf file to an updated “cleaner” CSV version.</p>
+=======
+<<<<<<< HEAD
+<p>Most of the datasets were available in ready-to-use CSV formats, so we built dataframes using the <code>read_csv</code> function. The SARS-2003 dataset, however, was transformed from a PDF file to an updated “cleaner” CSV version. Furthermore, since up-to-date data is important in analysis of prior pandemic trends, data scraping from <a href="data.cdc.gov">the CDC website</a> for updated COVID-19 data was used. Data scraping was done using JSON APIs with the <code>GET</code> function from the <code>httr</code> package, along with the <code>fromJSON()</code> function from the <code>jsonlite</code> package.</p>
+=======
+<p><brk><brk><brk></p>
+<p>Most of the datasets were available in a ready to use CSV format, with some cleaning and tidying requirements. Sars-2003 data was transformed from a pdf file to an updated “cleaner” CSV version. Data for COVID-19 in Chicago required filtering the peak timeframe (up until the completion of this report, December 4th 2020), by weeks. This combined dataframe was then compared to the available Spanish flu record of 7 weeks.</p>
+>>>>>>> 4f2e85ae831934696a8efdafb653f03cb2f3b89b
 <p><brk><brk><brk></p>
 <p>Also, the data with R0 and other statistical comparisons between the four pandemics was extracted by scraping <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext">thelancet.com</a>. Information on R0 for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show r0 by disease-type graphically. &gt;&gt;&gt;&gt;&gt;&gt;&gt; 2d7c327976684fe92390f1f2664250693778feb2</p>
 </div>
 <div id="exploratory-analysis" class="section level3">
 <h3>Exploratory Analysis</h3>
+<p>Given the rapidly changing dynamics on a daily basis of the current Coronavirus, the analysis of COVID-19 would understandably need an ongoing update as well for a complete and thorough comparisons. Nevertheless, the comparisons did provide some understanding on how pandemics shape out in general, and helped relieve some anxiety and uncertainty regarding them. Hopefully, it will do the same for our readers.</p>
+<p><brk><brk><brk></p>
+<p>We started our analysis by comparing the first pandemic of the 20th century, named Spanish flu, which has its descendant virus remaining till today as <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6187799/">influenza virus</a>. Although the first historically documented pandemic was the Plague of 430 B.C., not much of the recorded data is available for pandemics prior to the 20th century. Recently, efforts have been made to understand the disease history by studying remnants of human remains such as the teeth. Paleontologists and scientists have identified the DNA of the bacteria that caused the <a href="https://www.washingtonpost.com/health/ancient-teeth-show-history-of-epidemics-is-much-older-than-we-thought/2020/07/24/4f18ed94-b641-11ea-a8da-693df3d7674a_story.html">Black Death pandemic over 5,000 years ago</a>.<br />
+<brk><brk><brk></p>
+<p>Spanish flu was a viral infection just as covid-19, which lasted from early 1918 to spring of 1920. With the data available, or lack of, we were able to compare its impact in Chicago. Data was recorded at the peak of the outbreak, for 7 weeks. For parallel comparison, data was extracted for peak 7 weeks as well for covid-19, from the City of Chicago databank.</p>
+<pre class="r"><code># Spanish flu versus COVID-19
+
+## Spanish flu data
+
+spanish_rawdf = read.csv(&quot;./data/spanish_flu_chicago.csv&quot;) 
+
+save(spanish_rawdf, file = &quot;spanish_rawdf.rda&quot;)
+
+spanish_df = 
+  spanish_rawdf %&gt;% 
+  janitor::clean_names() %&gt;% 
+  group_by(week) %&gt;% 
+  summarize(mortality = n())
+
+plot_1 =
+spanish_df %&gt;% 
+   plot_ly(
+    x = ~week, y = ~mortality, color = ~mortality, type = &quot;bar&quot;) %&gt;% 
+   layout(title = &quot;Spanish Flu&quot;)
+
+## Covid-19 Chicago data
+
+covid19_chicago_rawdf =  read.csv(&quot;./data/covid19_chicago.csv&quot;) 
+
+save(covid19_chicago_rawdf, file = &quot;covid19_chicago_rawdf.rda&quot;)
+
+covid19_chicago =
+  covid19_chicago_rawdf %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(deaths_total != 0) %&gt;% 
+  mutate(
+    date = as.Date(date, &quot;%m/%d/%y&quot;)
+  ) 
+  
+ row1 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-04-07&quot;) &amp; date &lt;= as.Date(&quot;2020-04-13&quot;)) %&gt;% 
+     summarize(
+       week = 1,
+       mortality = sum(deaths_total))
+ 
+ row2 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-04-14&quot;) &amp; date &lt;= as.Date(&quot;2020-04-20&quot;)) %&gt;% 
+     summarize(
+       week = 2,
+        mortality = sum(deaths_total))
+ 
+ row3 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-04-21&quot;) &amp; date &lt;= as.Date(&quot;2020-04-27&quot;)) %&gt;% 
+     summarize(
+       week = 3,
+        mortality = sum(deaths_total))
+ 
+ row4 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-04-28&quot;) &amp; date &lt;= as.Date(&quot;2020-05-04&quot;)) %&gt;% 
+     summarize(
+       week = 4,
+        mortality = sum(deaths_total))
+ 
+ row5 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-05-05&quot;) &amp; date &lt;= as.Date(&quot;2020-05-11&quot;)) %&gt;% 
+     summarize(
+       week = 5,
+        mortality = sum(deaths_total))
+ 
+ row6 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-05-12&quot;) &amp; date &lt;= as.Date(&quot;2020-05-18&quot;)) %&gt;% 
+     summarize(
+       week = 6,
+        mortality = sum(deaths_total))
+ 
+ row7 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-05-19&quot;) &amp; date &lt;= as.Date(&quot;2020-05-25&quot;)) %&gt;% 
+     summarize(
+       week = 7,
+        mortality = sum(deaths_total))
+ 
+ covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
+ 
+plot_2 = 
+  covid19_chicago_df %&gt;% 
+  plot_ly(
+    x = ~week, y = ~ mortality, color = ~ mortality, type = &quot;bar&quot;) %&gt;% 
+  layout(title = &quot;Spanish Flu (left) vs COVID-19: Peak 7 weeks (Chicago)&quot;)
+
+# Comparison-plot
+
+subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)</code></pre>
+<div id="htmlwidget-994be76231dc979eb366" style="width:90%;height:345.6px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-994be76231dc979eb366">{"x":{"data":[{"x":[1,2,3,4,5,6,7],"y":[439,1035,2166,2157,1270,629,338],"type":"bar","marker":{"colorbar":{"title":"mortality","ticklen":2},"cmin":338,"cmax":2166,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333334","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[439,1035,2166,2157,1270,629,338],"line":{"colorbar":{"title":"","ticklen":2},"cmin":338,"cmax":2166,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333334","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[439,1035,2166,2157,1270,629,338]}},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,7],"y":[338,2166],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"mortality","ticklen":2,"len":0.333333333333333,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":338,"cmax":2166,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333334","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[338,2166],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,3,4,5,6,7],"y":[216,251,294,320,322,286,206],"type":"bar","marker":{"colorbar":{"title":"mortality","ticklen":2},"cmin":206,"cmax":322,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333332","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[216,251,294,320,322,286,206],"line":{"colorbar":{"title":"","ticklen":2},"cmin":206,"cmax":322,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333332","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[216,251,294,320,322,286,206]}},"xaxis":"x2","yaxis":"y","frame":null},{"x":[1,7],"y":[206,322],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"mortality","ticklen":2,"len":0.333333333333333,"lenmode":"fraction","y":0.666666666666667,"yanchor":"top"},"cmin":206,"cmax":322,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333332","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[206,322],"line":{"color":"rgba(214,39,40,1)"}},"xaxis":"x2","yaxis":"y","frame":null}],"layout":{"xaxis":{"domain":[0,0.48],"automargin":true,"title":"week","anchor":"y"},"xaxis2":{"domain":[0.52,1],"automargin":true,"title":"week","anchor":"y"},"yaxis":{"domain":[0,1],"automargin":true,"title":"mortality","anchor":"x"},"annotations":[],"shapes":[],"images":[],"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Spanish Flu (left) vs COVID-19: Peak 7 weeks (Chicago)","hovermode":"closest","showlegend":true,"legend":{"yanchor":"top","y":0.333333333333333}},"attrs":{"26d8cec1f77":{"x":{},"y":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"26d8255a5e80":{"x":{},"y":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"source":"A","config":{"showSendToCloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>The graphs show similar curves in terms of shape, with maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. By tracing over the bars, one could find the exact death-count for the given week.</p>
+<p>Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we could analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail.</p>
 <p>(Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)</p>
 <p>*Sars, Spanish Flu, H1N1, Influenza B, COVID-19 Analysis</p>
 </div>
