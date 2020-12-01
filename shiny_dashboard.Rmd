@@ -1,9 +1,8 @@
 ---
-title: "Shiny Dashboard"
+title: "Comparing Pandemics"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
-    vertical_layout: fill
     source_code: embed
 runtime: shiny
 ---
@@ -122,14 +121,25 @@ disease_pal = function(disease){
 Column {.sidebar}
 -----------------------------------------------------------------------
 ```{r shiny_inputs}
-disease_choices = big_test2 %>% pull(disease) %>% unique()
+
+# disease_choices = big_test2 %>% pull(disease) %>% unique()
+# # 
+# selectInput(
+#   "disease_choice1",
+#   h3("Map 1 Pandemic:"),
+#   choices = disease_choices,
+#   selected = "covid"
+# )
 # 
-selectInput(
-  "disease_choice",
-  h3("Pandemic:"),
-  choices = disease_choices,
-  selected = "covid"
-)
+# selectInput(
+#   "disease_choice2",
+#   h3("Map 2 Pandemic:"),
+#   choices = disease_choices,
+#   selected = "covid"
+# )
+
+
+
 
 # sliderInput(
 #   "price_range",
@@ -145,103 +155,113 @@ selectInput(
 # )
 ```
 
-Row {data-height=750}
+Row {data-height=700}
 -------------------------------------
-### covid Map
+
+### Map 1
 ```{r}
-
-lables = paste0("<strong>Country: </strong>",
-                  pan_countries_map$name,
-                  "<br><strong># of cases: </strong>",
-                  pan_countries_map$input[["disease_choice"]])
-
-renderLeaflet({
-    big_test2 %>%
-    filter(disease == input[["disease_choice"]]) %>%
-    select(name, cum_cases) %>%
-    sp::merge(x = countries, by = "name", all.x = TRUE) %>%
-    leaflet() %>%
-    addTiles() %>%
-    addPolygons(fillColor = ~disease_pal(input[["disease_choice"]])(cum_cases),
-    weight = 1.5,
-    opacity = 1,
-    color = "white",
-    dashArray = "3",
-    fillOpacity = 0.7,
-    highlight = highlightOptions(
-      weight = 5,
-      color = "#666",
-      dashArray = "",
-      fillOpacity = 0.7,
-      bringToFront = TRUE),
-    popup = lables) %>%
-    addLegend(
-      "bottomright",
-      pal = disease_pal(input[["disease_choice"]]),
-      values = ~cum_cases,
-      title = "Quantile",
-      opacity = 1
-    )
-})
-
+# lables = paste0("<strong>Country: </strong>",
+#                   ~name,
+#                   "<br><strong># of cases: </strong>",
+#                   ~cum_cases)
+# 
+# renderLeaflet({
+#     big_test2 %>%
+#     filter(disease == input[["disease_choice1"]]) %>%
+#     select(name, cum_cases) %>%
+#     sp::merge(x = countries, by = "name", all.x = TRUE) %>%
+#     leaflet() %>%
+#     setView(lng = -10, lat = 20, zoom = 01) %>%
+#     addTiles() %>%
+#     addPolygons(fillColor = ~disease_pal(input[["disease_choice1"]])(cum_cases),
+#     weight = 1.5,
+#     opacity = 1,
+#     color = "white",
+#     dashArray = "3",
+#     fillOpacity = 0.7,
+#     highlight = highlightOptions(
+#       weight = 5,
+#       color = "#666",
+#       dashArray = "",
+#       fillOpacity = 0.7,
+#       bringToFront = TRUE),
+#     popup = lables) %>%
+#     addLegend(
+#       "bottomright",
+#       pal = disease_pal(input[["disease_choice1"]]),
+#       values = ~cum_cases,
+#       title = "Quantile",
+#       opacity = 1
+#     )
+# })
 ```
 
-## sars map
+### Map 2
 ```{r}
-lables = paste0("<strong>Country: </strong>",
-                  pan_countries_map$name,
-                  "<br><strong># of cases: </strong>",
-                  pan_countries_map$input[["disease_choice"]])
-
-renderLeaflet({
-    big_test2 %>%
-    filter(disease == input[["disease_choice"]]) %>%
-    select(name, cum_cases) %>%
-    sp::merge(x = countries, by = "name", all.x = TRUE) %>%
-    leaflet() %>%
-    addTiles() %>%
-    addPolygons(fillColor = ~disease_pal(input[["disease_choice"]])(cum_cases),
-    weight = 1.5,
-    opacity = 1,
-    color = "white",
-    dashArray = "3",
-    fillOpacity = 0.7,
-    highlight = highlightOptions(
-      weight = 5,
-      color = "#666",
-      dashArray = "",
-      fillOpacity = 0.7,
-      bringToFront = TRUE),
-    popup = lables) %>%
-    addLegend(
-      "bottomright",
-      pal = disease_pal(input[["disease_choice"]]),
-      values = ~cum_cases,
-      title = "Quantile",
-      opacity = 1
-    )
-})
+# lables = paste0("<strong>Country: </strong>",
+#                   ~name,
+#                   "<br><strong># of cases: </strong>",
+#                   ~cum_cases)
+# 
+# renderLeaflet({
+#     big_test2 %>%
+#     filter(disease == input[["disease_choice2"]]) %>%
+#     select(name, cum_cases) %>%
+#     sp::merge(x = countries, by = "name", all.x = TRUE) %>%
+#     leaflet() %>%
+#     setView(lng = -10, lat = 20, zoom = 01) %>%
+#     addTiles() %>%
+#     addPolygons(fillColor = ~disease_pal(input[["disease_choice2"]])(cum_cases),
+#     weight = 1.5,
+#     opacity = 1,
+#     color = "white",
+#     dashArray = "3",
+#     fillOpacity = 0.7,
+#     highlight = highlightOptions(
+#       weight = 5,
+#       color = "#666",
+#       dashArray = "",
+#       fillOpacity = 0.7,
+#       bringToFront = TRUE),
+#     popup = lables) %>%
+#     addLegend(
+#       "bottomright",
+#       pal = disease_pal(input[["disease_choice2"]]),
+#       values = ~cum_cases,
+#       title = "Quantile",
+#       opacity = 1
+#     )
+# })
 ```
 
-Row {data-height=350}
+Row {data-height=300}
 -------------------------------------
 ```{r}
-renderPlotly({
-  big_test2 %>%
-    filter(disease == input[["disease_choice"]]) %>%
-    mutate(name = fct_reorder(name, cum_cases),
-           rank = rank(desc(cum_cases))) %>%
-    filter(rank <= 15) %>% 
-    plot_ly(
-      x = ~cum_cases,
-      y = ~name,
-      type = "bar",
-      colors = ~cum_cases)
-})
+# renderPlotly({
+#   big_test2 %>%
+#     filter(disease == input[["disease_choice1"]]) %>%
+#     mutate(name = fct_reorder(name, cum_cases),
+#            rank = rank(desc(cum_cases))) %>%
+#     filter(rank <= 15) %>% 
+#     plot_ly(
+#       x = ~cum_cases,
+#       y = ~name,
+#       type = "bar",
+#       colors = ~cum_cases)
+# })
 ```
 
 ```{r}
-renderPrint(
-  input[["disease_choice"]]
-)
+# renderPlotly({
+#   big_test2 %>%
+#     filter(disease == input[["disease_choice2"]]) %>%
+#     mutate(name = fct_reorder(name, cum_cases),
+#            rank = rank(desc(cum_cases))) %>%
+#     filter(rank <= 15) %>% 
+#     plot_ly(
+#       x = ~cum_cases,
+#       y = ~name,
+#       type = "bar",
+#       colors = ~cum_cases)
+# })
 ```
