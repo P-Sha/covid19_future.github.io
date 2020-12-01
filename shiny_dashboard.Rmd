@@ -23,30 +23,10 @@ library(shiny)
 
 ```{r create_df, include=FALSE}
 
-# covid_world = read_csv("./data/covid19_global.csv") %>% 
-#   janitor::clean_names() %>% 
-#   group_by(country_code) %>% 
-#   summarize(
-#     cum_cases = max(cumulative_cases)
-#   ) 
-#
-# 
-# covid_world = read_csv("./data/covid19_global.csv") %>% 
-#   janitor::clean_names() %>% 
-#   group_by(country_code) %>% 
-#   summarize(
-#     cum_cases = max(cumulative_cases)
-#   ) 
-#
-# ebola_world = read.csv("./data/ebola_data_db_format.csv") %>%
-#   janitor::clean_names() %>%
-#   group_by(country) %>%
-#   summarize(
-#     ebola_cases = max(value)
-#   )
-# 
-# head(ebola_world)
-#
+####### Country polygons
+
+countries <- geojson_read("./data/countries.geo.json", what = "sp")
+
 
 ## H1N1 data 4/24/09 to 7/6/09
 
@@ -62,24 +42,10 @@ h1n1_df = read_csv("./data/h1n1_data.csv") %>%
     name = str_replace(name, "Hong Kong Special Administrative Region", "Hong Kong"),
     name = str_replace(name, "Viet Nam", "Vietnam")
   )
-# 
-#
-# lat_long = read_csv("./data/world_country_and_usa_states_latitude_and_longitude_values.csv") %>% 
-#   select(country_code, latitude, longitude, country)
-# 
-# 
-# test = left_join(covid_world, lat_long, by = "country_code") %>% 
-#   drop_na()
-
-
-
-####### Country polygons test
-
-countries <- geojson_read("./data/countries.geo.json", what = "sp")
 
 
 # Covid Data
-ctest = read_csv("./data/covid19_global.csv") %>% 
+covid_df = read_csv("./data/covid19_global.csv") %>% 
   janitor::clean_names() %>% 
   group_by(country) %>% 
   summarize(
@@ -106,6 +72,7 @@ ctest = read_csv("./data/covid19_global.csv") %>%
   ) %>% 
   select(name, covid)
 
+
 #SARS Data
 sars_df = 
   read_csv("./data/sars_2003_complete_dataset_clean.csv") %>% 
@@ -125,12 +92,11 @@ sars_df =
   ) %>% 
   select(name, sars)
 
-#quant_10 = ctest %>% pull(covid) %>% quantile(probs = seq(0,1,.1)) %>% as.vector() %>% round()
 
-big_test = full_join(ctest, sars_df, by = "name") %>% 
+big_test = full_join(covid_df, sars_df, by = "name") %>% 
   full_join(h1n1_df, by = "name") 
 
-big_test2 = full_join(ctest, sars_df, by = "name") %>% 
+big_test2 = full_join(covid_df, sars_df, by = "name") %>% 
   full_join(h1n1_df, by = "name") %>% 
   pivot_longer(cols = -name, 
                names_to = "disease",
@@ -139,24 +105,31 @@ big_test2 = full_join(ctest, sars_df, by = "name") %>%
 
 pan_countries_map = sp::merge(x = countries, y = big_test, by = "name", all.x = TRUE)
 
-covid_countries_map = sp::merge(x = countries, y = ctest, by = "name", all.x = TRUE)
-sars_countries_map = sp::merge(x = countries, y = sars_df, by = "name", all.x = TRUE)
-h1n1_countries_map = sp::merge(x = countries, y = h1n1_df, by = "name", all.x = TRUE)
+disease_pal = function(disease){
+  if(disease == "covid" || disease == "h1n1") {
+    pal = colorBin(palette = "YlOrRd", bins = c(1, 100, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, Inf), na.color = "#808080")
+  }
+  
+  if(disease == "sars") {
+    pal = colorBin(palette = "YlOrRd", bins = c(1, 10, 100, 500, 1000, 5000, Inf), na.color = "#808080")
+  }
 
-pal = colorBin(palette = "YlOrRd", bins = c(1, 100, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, Inf), na.color = "#808080")
+  pal 
+}
+
 ```
 
 Column {.sidebar}
 -----------------------------------------------------------------------
 ```{r shiny_inputs}
-# disease_choices = names(big_test)[-1]
+disease_choices = big_test2 %>% pull(disease) %>% unique()
 # 
-# selectInput(
-#   "disease_choice",
-#   h3("Pandemic:"),
-#   choices = disease_choices,
-#   selected = "covid"
-# )
+selectInput(
+  "disease_choice",
+  h3("Pandemic:"),
+  choices = disease_choices,
+  selected = "covid"
+)
 
 # sliderInput(
 #   "price_range",
@@ -177,94 +150,98 @@ Row {data-height=750}
 ### covid Map
 ```{r}
 
-# lables = paste0("<strong>Country: </strong>", 
-#                   covid_countries_map$name, 
-#                   "<br><strong># of cases: </strong>", 
-#                   covid_countries_map$input[["disease_choice"]])
-# 
-# renderLeaflet({
-#     big_test2 %>%
-#     filter(disease == input[["disease_choice"]]) %>% 
-#     select(name, cum_cases) %>% 
-#     sp::merge(x = countries, by = "name", all.x = TRUE) %>% 
-#     leaflet() %>%
-#     addTiles() %>%
-#     addPolygons(fillColor = ~pal(cum_cases),
-#     weight = 1.5,
-#     opacity = 1,
-#     color = "white",
-#     dashArray = "3",
-#     fillOpacity = 0.7,
-#     highlight = highlightOptions(
-#       weight = 5,
-#       color = "#666",
-#       dashArray = "",
-#       fillOpacity = 0.7,
-#       bringToFront = TRUE),
-#     popup = lables) %>% 
-#     addLegend(
-#       "bottomright",
-#       pal = pal,
-#       values = ~cum_cases,
-#       title = "Quantile",
-#       opacity = 1
-#     )
-# })
+lables = paste0("<strong>Country: </strong>",
+                  pan_countries_map$name,
+                  "<br><strong># of cases: </strong>",
+                  pan_countries_map$input[["disease_choice"]])
+
+renderLeaflet({
+    big_test2 %>%
+    filter(disease == input[["disease_choice"]]) %>%
+    select(name, cum_cases) %>%
+    sp::merge(x = countries, by = "name", all.x = TRUE) %>%
+    leaflet() %>%
+    addTiles() %>%
+    addPolygons(fillColor = ~disease_pal(input[["disease_choice"]])(cum_cases),
+    weight = 1.5,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE),
+    popup = lables) %>%
+    addLegend(
+      "bottomright",
+      pal = disease_pal(input[["disease_choice"]]),
+      values = ~cum_cases,
+      title = "Quantile",
+      opacity = 1
+    )
+})
 
 ```
 
 ## sars map
 ```{r}
-# 
-# #### leaflet with colored countries
-# lables = paste0("<strong>Country: </strong>", 
-#                   pan_countries_map$name, 
-#                   "<br><strong># of cases: </strong>", 
-#                   pan_countries_map$sars)
-# 
-# pan_countries_map %>% 
-#   leaflet() %>%
-#   addTiles() %>%
-#   addPolygons(fillColor = ~pal(sars),
-#   weight = 1.5,
-#   opacity = 1,
-#   color = "white",
-#   dashArray = "3",
-#   fillOpacity = 0.7,
-#   highlight = highlightOptions(
-#     weight = 5,
-#     color = "#666",
-#     dashArray = "",
-#     fillOpacity = 0.7,
-#     bringToFront = TRUE),
-#   popup = lables) %>% 
-#   addLegend(
-#     "bottomright", 
-#     pal = pal,
-#     values = ~sars,
-#     title = "Quantile",
-#     opacity = 1
-#   )
+lables = paste0("<strong>Country: </strong>",
+                  pan_countries_map$name,
+                  "<br><strong># of cases: </strong>",
+                  pan_countries_map$input[["disease_choice"]])
 
+renderLeaflet({
+    big_test2 %>%
+    filter(disease == input[["disease_choice"]]) %>%
+    select(name, cum_cases) %>%
+    sp::merge(x = countries, by = "name", all.x = TRUE) %>%
+    leaflet() %>%
+    addTiles() %>%
+    addPolygons(fillColor = ~disease_pal(input[["disease_choice"]])(cum_cases),
+    weight = 1.5,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE),
+    popup = lables) %>%
+    addLegend(
+      "bottomright",
+      pal = disease_pal(input[["disease_choice"]]),
+      values = ~cum_cases,
+      title = "Quantile",
+      opacity = 1
+    )
+})
 ```
 
 Row {data-height=350}
 -------------------------------------
 ```{r}
-# renderPlotly({
-#   big_test2 %>% 
-#     filter(disease == input[["disease_choice"]]) %>% 
-#     mutate(name = fct_reorder(name, cum_cases)) %>%
-#     plot_ly(
-#       x = ~cum_cases,
-#       y = ~name,
-#       type = "bar",
-#       colors = ~cum_cases)
-# })
+renderPlotly({
+  big_test2 %>%
+    filter(disease == input[["disease_choice"]]) %>%
+    mutate(name = fct_reorder(name, cum_cases),
+           rank = rank(desc(cum_cases))) %>%
+    filter(rank <= 15) %>% 
+    plot_ly(
+      x = ~cum_cases,
+      y = ~name,
+      type = "bar",
+      colors = ~cum_cases)
+})
 ```
 
 ```{r}
-# renderPrint(
-#   input[["disease_choice"]]
-# )
+renderPrint(
+  input[["disease_choice"]]
+)
 ```
