@@ -321,6 +321,7 @@ $(document).ready(function () {
 <h2>Read and tidy</h2>
 <div id="h1n1" class="section level3">
 <h3>H1N1</h3>
+<p><strong><em>Kaggle</em></strong></p>
 <pre class="r"><code>h1n1_df = read.csv(&quot;./data/h1n1_data.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
   select(-link) %&gt;% 
@@ -329,10 +330,22 @@ $(document).ready(function () {
     pandemic_interval = &quot;2009/04/24&quot; %--% date,
     pandemic_duration = as.duration(pandemic_interval) / ddays(1)
   ) %&gt;% 
-  arrange(pandemic_duration) %&gt;% 
-  rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths)
-
-save(h1n1_df, file = &quot;h1n1_df.rda&quot;)
+ rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths) %&gt;% 
+  arrange(pandemic_duration)
+  
+h1n1_global = 
+  h1n1_df %&gt;%   
+  group_by(pandemic_duration) %&gt;% 
+  summarize(
+    h1n1_cumulative_cases = sum(h1n1_cumulative_cases, na.rm = TRUE),
+    h1n1_cumulative_deaths = sum(h1n1_cumulative_deaths, na.rm = TRUE)
+  ) %&gt;% 
+  mutate(
+    h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
+    h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
+  )</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>save(h1n1_global, file = &quot;h1n1_global.rda&quot;)
 
 h1n1_us = 
   h1n1_df %&gt;% 
@@ -341,6 +354,43 @@ h1n1_us =
     h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
     h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
   )</code></pre>
+<p><strong><em>WHO</em></strong></p>
+<pre class="r"><code>##US data
+h1n1_us_who = readxl::read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(start_date:end_date, h1n1_new_cases = a_h1n1_pdm09) %&gt;% 
+  mutate(
+    start_date = as.Date(start_date),
+    end_date = as.Date(end_date),
+    pandemic_interval = &quot;2009/04/06&quot; %--% end_date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %&gt;% 
+    filter(pandemic_duration &gt;= 0) %&gt;% 
+  mutate(
+    h1n1_new_cases = as.numeric(h1n1_new_cases),
+    h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
+  )
+
+##global data
+h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;, skip = 3) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(country, sdate, edate, h1n1_new_cases = ah1n12009) %&gt;% 
+  mutate(
+    sdate = as.Date(sdate, &quot;%m/%d/%y&quot;),
+    edate = as.Date(edate, &quot;%m/%d/%y&quot;),
+    pandemic_interval = &quot;2009/04/06&quot; %--% edate,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %&gt;% 
+    filter(pandemic_duration &gt;= 0) %&gt;% 
+  arrange(pandemic_duration) %&gt;% 
+  group_by(pandemic_duration) %&gt;% 
+  summarize(
+    h1n1_new_cases = sum(h1n1_new_cases, na.rm = TRUE)
+  ) %&gt;% 
+  mutate(
+    h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
+  )</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 </div>
 <div id="covid-19" class="section level3">
 <h3>COVID-19</h3>
@@ -377,7 +427,6 @@ h1n1_us =
   mutate(
     covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)
   )</code></pre>
-<<<<<<< HEAD
 <p><strong><em>Global</em></strong></p>
 <pre class="r"><code>covid_global = read_csv(&quot;./data/covid19_global.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -415,40 +464,61 @@ h1n1_us =
     sars_new_cases = sars_cumulative_cases - lag(sars_cumulative_cases),
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )</code></pre>
-=======
->>>>>>> a43f3cd7f84d6b7f85c2e437837d8f2f1a499927
 </div>
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
 <div id="us-h1n1" class="section level3">
 <h3>US H1N1</h3>
+<div id="kaggle-cases" class="section level4">
+<h4>Kaggle cases</h4>
 <p><strong><em>New cases</em></strong></p>
-<pre class="r"><code>h1n1_us %&gt;% 
+<pre class="r"><code>h1n1_us %&gt;%
   ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p><strong><em>Cumulative cases</em></strong></p>
-<pre class="r"><code> h1n1_us %&gt;% 
+<pre class="r"><code> h1n1_us %&gt;%
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="who-cases" class="section level4">
+<h4>WHO cases</h4>
+<p><strong><em>New cases</em></strong></p>
+<pre class="r"><code>h1n1_us_who %&gt;%
+  ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><strong><em>Cumulative cases</em></strong></p>
+<pre class="r"><code> h1n1_us_who %&gt;%
+  ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="deaths" class="section level4">
+<h4>Deaths</h4>
 <p><strong><em>New deaths</em></strong></p>
-<pre class="r"><code> h1n1_us %&gt;% 
+<pre class="r"><code> h1n1_us %&gt;% ##kaggle data
   ggplot(aes(x = pandemic_duration, y = h1n1_new_deaths)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p><strong><em>Cumulative deaths</em></strong></p>
-<pre class="r"><code>h1n1_us %&gt;% 
+<pre class="r"><code>h1n1_us %&gt;% ##kaggle data
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_deaths)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
 </div>
 <div id="us-covid-19" class="section level3">
 <h3>US COVID-19</h3>
@@ -457,83 +527,293 @@ h1n1_us =
   ggplot(aes(x = pandemic_duration, y = covid_new_cases)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p><strong><em>Cumulative cases</em></strong></p>
 <pre class="r"><code>covid_us_cases %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p><strong><em>New deaths</em></strong></p>
 <pre class="r"><code>covid_us_deaths %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_new_deaths)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p><strong><em>Cumulative deaths</em></strong></p>
 <pre class="r"><code>covid_us_deaths %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_deaths)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 </div>
-<div id="merge-us-h1n1-and-covid-19-data" class="section level3">
-<h3>Merge US H1N1 and COVID-19 data</h3>
-<pre class="r"><code>us_cases =
-  full_join(h1n1_us, covid_us_cases, by = &quot;pandemic_duration&quot;) %&gt;% 
-  select(-date.x, -country, -pandemic_interval.x, -date.y, -pandemic_interval.y)
+<div id="us-sars" class="section level3">
+<h3>US SARS</h3>
+<p><strong><em>New cases</em></strong></p>
+<pre class="r"><code>sars_us %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = sars_new_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><strong><em>Cumulative cases</em></strong></p>
+<pre class="r"><code> sars_us %&gt;%
+  ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><strong><em>New deaths</em></strong></p>
+<pre class="r"><code>sars_us %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = sars_new_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><strong><em>Cumulative deaths</em></strong></p>
+<pre class="r"><code>sars_us %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = sars_cumulative_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+<div id="merge-us-cases" class="section level3">
+<h3>Merge US cases</h3>
+<pre class="r"><code>##using WHO cases
+us_cases =
+  left_join(covid_us_cases, h1n1_us_who, by = &quot;pandemic_duration&quot;)
 
-us_df =
-  full_join(us_cases, covid_us_deaths, by = &quot;pandemic_duration&quot;) %&gt;% 
-  select(-date, -pandemic_interval) %&gt;% 
-  relocate(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases, covid_new_cases, covid_cumulative_cases, h1n1_new_deaths, h1n1_cumulative_deaths, covid_new_deaths, covid_cumulative_deaths) %&gt;% 
-  arrange(pandemic_duration) %&gt;% 
+us_cases =
+  full_join(us_cases, sars_us, by = &quot;pandemic_duration&quot;) %&gt;% 
+  select(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases, covid_new_cases, covid_cumulative_cases, sars_new_cases, sars_cumulative_cases) %&gt;% 
+    arrange(pandemic_duration) %&gt;% 
   pivot_longer(
-    h1n1_new_cases:covid_cumulative_deaths,
+    h1n1_new_cases:sars_cumulative_cases,
     names_to = &quot;class&quot;,
     values_to = &quot;n&quot;
   ) %&gt;% 
   separate(class, into = c(&quot;disease&quot;, &quot;trend&quot;), sep = &quot;_&quot;, extra = &quot;merge&quot;)</code></pre>
-<p><strong><em>New cases</em></strong></p>
-<pre class="r"><code>us_df %&gt;% 
+<p><strong><em>US New cases</em></strong></p>
+<pre class="r"><code>##linear
+us_cases %&gt;% 
   filter(trend == &quot;new_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
   geom_smooth(se = FALSE)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 242 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 242 rows containing missing values (geom_point).</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p><strong><em>Cumulative cases</em></strong></p>
-<pre class="r"><code>us_df %&gt;% 
+<pre><code>## Warning: Removed 448 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 448 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<pre class="r"><code>##log-transformed
+us_cases %&gt;% 
+  filter(trend == &quot;new_cases&quot;) %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+<pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 523 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 460 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><strong><em>US Cumulative cases</em></strong></p>
+<pre class="r"><code>##linear
+us_cases %&gt;% 
   filter(trend == &quot;cumulative_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
   geom_smooth(se = FALSE)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 241 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 241 rows containing missing values (geom_point).</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre><code>## Warning: Removed 447 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 447 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<pre class="r"><code>##log-transformed
+us_cases %&gt;% 
+  filter(trend == &quot;cumulative_cases&quot;) %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 447 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 447 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+</div>
+<div id="merge-us-deaths" class="section level3">
+<h3>Merge US deaths</h3>
+<pre class="r"><code>us_deaths = ##using Kaggle deaths
+  full_join(h1n1_us, covid_us_deaths, by = &quot;pandemic_duration&quot;)
+
+us_deaths =
+  full_join(us_deaths, sars_us) %&gt;% 
+  select(pandemic_duration, h1n1_new_deaths, h1n1_cumulative_deaths, covid_new_deaths, covid_cumulative_deaths, sars_new_deaths, sars_cumulative_deaths) %&gt;% 
+  arrange(pandemic_duration) %&gt;% 
+  pivot_longer(
+    h1n1_new_deaths:sars_cumulative_deaths,
+    names_to = &quot;class&quot;,
+    values_to = &quot;n&quot;
+  ) %&gt;% 
+  separate(class, into = c(&quot;disease&quot;, &quot;trend&quot;), sep = &quot;_&quot;, extra = &quot;merge&quot;)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;pandemic_duration&quot;)</code></pre>
 <p><strong><em>New deaths</em></strong></p>
-<pre class="r"><code>us_df %&gt;% 
+<pre class="r"><code>##linear
+us_deaths %&gt;% 
   filter(trend == &quot;new_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
   geom_smooth(se = FALSE)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 242 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 242 rows containing missing values (geom_point).</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre><code>## Warning: Removed 722 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 722 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<pre class="r"><code>##log-transformed
+us_deaths %&gt;% 
+  filter(trend == &quot;new_deaths&quot;) %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+<pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 886 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 723 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p><strong><em>Cumulative deaths</em></strong></p>
-<pre class="r"><code>us_df %&gt;% 
+<pre class="r"><code>##linear
+us_deaths %&gt;% 
   filter(trend == &quot;cumulative_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
   geom_smooth(se = FALSE)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 241 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 241 rows containing missing values (geom_point).</code></pre>
-<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre><code>## Warning: Removed 720 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 720 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<pre class="r"><code>#log-transformed
+us_deaths %&gt;% 
+  filter(trend == &quot;cumulative_deaths&quot;) %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous y-axis
+
+## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 856 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 720 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+</div>
+<div id="global-h1n1" class="section level3">
+<h3>Global H1N1</h3>
+<p><strong><em>New cases</em></strong></p>
+<pre class="r"><code>h1n1_global_who %&gt;%
+  ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><strong><em>Cumulative cases</em></strong></p>
+<pre class="r"><code> h1n1_global_who %&gt;%
+  ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+</div>
+<div id="global-covid" class="section level3">
+<h3>Global COVID</h3>
+<p><strong><em>New cases</em></strong></p>
+<pre class="r"><code>covid_global %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = covid_new_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p><strong><em>Cumulative cases</em></strong></p>
+<pre class="r"><code>covid_global %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p><strong><em>New deaths</em></strong></p>
+<pre class="r"><code>covid_global %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = covid_new_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p><strong><em>Cumulative deaths</em></strong></p>
+<pre class="r"><code>covid_global %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = covid_cumulative_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+</div>
+<div id="merge-global-cases" class="section level3">
+<h3>Merge global cases</h3>
+<pre class="r"><code>##using WHO cases
+global_cases =
+  full_join(covid_global, h1n1_global_who, by = &quot;pandemic_duration&quot;) %&gt;% 
+  select(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases, covid_new_cases, covid_cumulative_cases) %&gt;% 
+  arrange(pandemic_duration) %&gt;% 
+  pivot_longer(
+    h1n1_new_cases:covid_cumulative_cases,
+    names_to = &quot;class&quot;,
+    values_to = &quot;n&quot;
+  ) %&gt;% 
+  separate(class, into = c(&quot;disease&quot;, &quot;trend&quot;), sep = &quot;_&quot;, extra = &quot;merge&quot;)</code></pre>
+<p><strong><em>Global new cases</em></strong></p>
+<pre class="r"><code>##linear
+global_cases %&gt;% 
+  filter(trend == &quot;new_cases&quot;) %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 304 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 304 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<pre class="r"><code>##log-transformed
+global_cases %&gt;% 
+  filter(trend == &quot;new_cases&quot;) %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous y-axis
+
+## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 313 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 304 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p><strong><em>Global cumulative cases</em></strong></p>
+<pre class="r"><code>##linear
+global_cases %&gt;% 
+  filter(trend == &quot;cumulative_cases&quot;) %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 304 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 304 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<pre class="r"><code>##log-transformed
+global_cases %&gt;% 
+  filter(trend == &quot;cumulative_cases&quot;) %&gt;% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous y-axis
+
+## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 305 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 304 rows containing missing values (geom_point).</code></pre>
+<p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
 </div>
 </div>
 
