@@ -83,6 +83,10 @@ Most of the datasets were available in ready-to-use CSV formats, requiring some 
   
 <brk><brk><brk>
 
+After the preliminary steps were taken to get the datasets in working forms, all the data files were then stored in `.rda` compressed format for easy access and reproducibility across the site.
+
+<brk><brk><brk>
+
 Data for `Shiny Dashboard` ...
 
 
@@ -189,7 +193,24 @@ subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 
 The graphs show similar curves in terms of shape, with the peak of maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. Tracing the bars displays total mortality for a given week.  
 
-Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we were able to analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail.  
+Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we were able to analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail. 
+
+```{r}
+# SARS 2003 global cumulative cases 
+
+load("./sars_df.rda")
+
+sars_df %>%
+  ggplot(aes(x = date, y = deaths_cum, color = country)) +
+  geom_line() +
+  xlab("month") +
+  ylab("cumulative deaths") +
+  ggtitle("SARS 2003 cumulative deaths by country")
+```
+
+As the graph displays, SARS was a worldwide pandemic, with majority of death toll in eastern part of the world such as China and Hong Kong. A fast-spreading albeit short-lived pandemic, it was contained within 5 months for the most part. According to the [CDC](htts://www.cdc.gov/sars/about/fs-sars.html), the first reported case was in February of 2003 in Asia. It did not spread as widely in the western countries, or much at all in the U.S.
+
+
 
 
 

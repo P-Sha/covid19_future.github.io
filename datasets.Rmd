@@ -1,5 +1,5 @@
 ---
-title: "Data Sources and Description"
+title: "Sources and Descriptions"
 output: html_document
 ---
 
