@@ -21,6 +21,7 @@ library(httr)
 library(readxl)
 library(tidyquant)
 library(patchwork)
+library(scales)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -336,10 +337,144 @@ h1n1_us_cumulative_cases_plot =
 
 Given the rapidity and severity of this outbreak, official case and death counts are known to grossly underestimate disease burden during this pandemic.
 
+#### COVID-19
+
+In the context of the previously mentioned viral respiratory outbreaks, the extent of the COVID-19 pandemic has been impressive. COVID-19 case counts, both globally and in the United States, dwarf the scale of the prior viral respiratory outbreaks in recent memory.
+
+```{r}
+load("./global_cases.rda")
+
+##linear
+global_new_cases_linear_plot =
+global_cases %>% 
+  filter(trend == "new_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    title = "New cases, global",
+    x = "Pandemic Duration, days",
+    y = "n",
+    caption = "Linear plot"
+  )
+
+global_cumulative_cases_linear_plot =
+global_cases %>% 
+  filter(trend == "cumulative_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    title = "Cumulative cases, global",
+    x = "Pandemic Duration, days",
+    y = "n",
+    caption = "Linear plot"
+  )
+
+global_new_cases_linear_plot + global_cumulative_cases_linear_plot
+```
+
+Given the orders of magnitude difference in incidence of COVID-19 compared with SARS and H1N1, a log-transformed visualization allows for more instructive comparison.
+
+```{r}
+##log-transformed
+global_new_cases_log_plot =
+global_cases %>% 
+  filter(trend == "new_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
+  labs(
+    title = "New cases, global",
+    x = "Pandemic Duration, days",
+    y = "n",
+    caption = "Log-transformed plot"
+  )
+
+global_cumulative_cases_log_plot =
+global_cases %>% 
+  filter(trend == "cumulative_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
+  labs(
+    title = "Cumulative cases, global",
+    x = "Pandemic Duration, days",
+    y = "n",
+    caption = "Log-transformed plot"
+  )
+
+global_new_cases_log_plot + global_cumulative_cases_log_plot
+```
+
+Similar discrepancies in overall mortality are appreciated on the global scale. Mortality data for H1N1 are unfortunately limited more significantly than case counts, however inspection of the log-transformed scales suggest a higher burden than reported, as has been [previously modeled](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(12)70121-4/fulltext).
+
+```{r}
+load("./global_deaths.rda")
+
+global_new_deaths_linear_plot = 
+global_deaths %>% 
+  filter(trend == "new_deaths") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    title = "New deaths, global",
+    x = "Pandemic Duration, days",
+    y = "n",
+    caption = "Linear plot"
+  )
+
+global_cumulative_deaths_linear_plot = 
+global_deaths %>% 
+  filter(trend == "cumulative_deaths") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    title = "Cumulative deaths, global",
+    x = "Pandemic Duration, days",
+    y = "n",
+    caption = "Linear plot"
+  )
+
+global_new_deaths_log_plot =
+global_deaths %>% 
+  filter(trend == "new_deaths") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
+  labs(
+    title = "New deaths, global",
+    x = "Pandemic Duration, days",
+    y = "n",
+    caption = "Log-transformed plot"
+  )
+
+global_cumulative_deaths_log_plot =
+global_deaths %>% 
+  filter(trend == "cumulative_deaths") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
+    labs(
+    title = "Cumulative deaths, global",
+    x = "Pandemic Duration, days",
+    y = "n",
+    caption = "Log-transformed plot"
+  )
+
+global_new_deaths_linear_plot + global_cumulative_deaths_linear_plot
+
+global_new_deaths_log_plot + global_cumulative_deaths_log_plot
+```
+
 
 (Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)
-
-*Sars, Spanish Flu, H1N1, Influenza B, COVID-19 Analysis
 
 ### Additional analysis: If you undertake formal statistical analyses, describe these in detail - maybe?
 

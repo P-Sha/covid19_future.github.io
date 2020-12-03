@@ -73,6 +73,8 @@ h1n1_us_who = readxl::read_excel("./data/USA_FluNetInteractiveReport.xlsx", skip
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
   )
 
+save(h1n1_us_who, file = "h1n1_us_who.rda")
+
 ##global data
 h1n1_global_who = read.csv("./data/global_FluNetInteractiveReport.csv", skip = 3) %>% 
   janitor::clean_names() %>% 
@@ -92,6 +94,8 @@ h1n1_global_who = read.csv("./data/global_FluNetInteractiveReport.csv", skip = 3
   mutate(
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
   )
+
+save(h1n1_global_who, file = "h1n1_global_who.rda")
 ```
 
 
