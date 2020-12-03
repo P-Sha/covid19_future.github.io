@@ -2682,6 +2682,7 @@ library(leaflet)
 library(geojsonio)
 library(rsconnect)
 library(shiny)
+library(httr)
 
 # deployApp('./shiny_dashboard.Rmd')
 ```
@@ -2771,7 +2772,7 @@ global_pan_df = rbind(covid_df, sars_df, h1n1_df) %>%
   
 
 disease_pal = function(disease){
-
+  
   if (disease == "covid") {
     pal = colorBin(palette = "YlOrRd", bins = c(1, 100, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, Inf), na.color = "#808080")
   }
@@ -2791,7 +2792,7 @@ disease_pal = function(disease){
 Column {.sidebar}
 -----------------------------------------------------------------------
 ```{r shiny_inputs}
-# 
+
 # disease_choices = global_pan_df %>% pull(disease) %>% unique()
 # 
 # selectInput(
@@ -2998,6 +2999,8 @@ Row {data-height=350}
 #              yaxis = list(title = "Country"))
 # })
 ```
+
+
 </code></pre>
 </div>
 <script type="text/javascript">

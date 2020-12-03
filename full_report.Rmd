@@ -20,6 +20,7 @@ library(rvest)
 library(httr)
 library(readxl)
 library(tidyquant)
+library(patchwork)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -191,7 +192,7 @@ plot_2 =
 subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 ```
 
-The graphs show similar curves in terms of shape, with the peak of maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. Tracing the bars displays total mortality for a given week.  
+The graphs show similar parabolic curves, with the peak of maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. Tracing the bars displays total mortality for a given week.  
 
 Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we were able to analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail. 
 
@@ -205,10 +206,41 @@ sars_df %>%
   geom_line() +
   xlab("month") +
   ylab("cumulative deaths") +
-  ggtitle("SARS 2003 cumulative deaths by country")
+  ggtitle("SARS 2003 cumulative deaths by country") +
+  theme(legend.position = "bottom",
+        legend.text = element_text(size = 8))
 ```
 
-As the graph displays, SARS was a worldwide pandemic, with majority of death toll in eastern part of the world such as China and Hong Kong. A fast-spreading albeit short-lived pandemic, it was contained within 5 months for the most part. According to the [CDC](htts://www.cdc.gov/sars/about/fs-sars.html), the first reported case was in February of 2003 in Asia. It did not spread as widely in the western countries, or much at all in the U.S.
+As the graph displays, SARS was a global pandemic, with majority of death toll in eastern part of the world such as China and Hong Kong. A fast-spreading albeit short-lived pandemic, it was contained within 5 months for the most part. According to the [CDC](htts://www.cdc.gov/sars/about/fs-sars.html), the first reported case was in February of 2003 in Asia. 
+
+In contrast to COVID-19, SARS did not spread as widely in the western countries, or much at all in the U.S.
+
+```{r}
+sars_cum_global =
+  sars_global %>% 
+  ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
+  geom_point(alpha = .5, color = "blue") +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  xlab("SARS duration (Days)") +
+  ylab("cumulative cases") +
+  ggtitle("Global Cumulative Cases: SARS 2003 versus COVID-19")
+ 
+covid_cum_global =
+  covid_global %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
+  geom_point(alpha = .2, color = "blue") +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  xlab("COVID-19 duration (Days)") +
+  ylab("")  
+
+sars_cum_global + covid_cum_global
+```
+
+Distinct difference in the scale of cumulative cases is evident in the two graphs, along with the rise in cases for a given duration of time. SARS, although spiked steeply early on, tapered off within a few months. COVID-19 meanwhile stayed at an exponential growth for the first 300 days of onset.
+
+In 2009, a strain of swine flu virus caused worldwide pandemic, called H1N1.   
+
+
 
 
 

@@ -142,6 +142,8 @@ covid_global = read_csv("./data/covid19_global.csv") %>%
   ) %>% 
   group_by(pandemic_duration) %>% 
   summarize(across(covid_new_cases:covid_cumulative_deaths, sum))
+
+save(covid_global, file = "covid_global.rda")
 ```
 
 
@@ -177,6 +179,9 @@ sars_global = read.csv("./data/sars_2003_complete_dataset_clean.csv") %>%
     sars_new_cases = sars_cumulative_cases - lag(sars_cumulative_cases),
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )
+
+save(sars_us, file = "sars_us.rda")
+save(sars_global, file = "sars_global.rda")
 ```
 
 ## Visualization

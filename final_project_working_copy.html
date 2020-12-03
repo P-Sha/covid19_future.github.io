@@ -280,9 +280,6 @@ $(document).ready(function () {
         <li>
   <a href="full_report.html">Full Report</a>
 </li>
-<li>
-  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Dashboard</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Datasets
@@ -294,9 +291,12 @@ $(document).ready(function () {
       <a href="datasets.html">Sources and Descriptions</a>
     </li>
     <li>
-      <a href="data_cleaning.html">Clean and tidy</a>
+      <a href="data_cleaning.html">Clean and tidy process</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Comparisons Dashboard (interactive)</a>
 </li>
 <li>
   <a href="pandemics_timeline.html">Pandemics Timeline</a>
@@ -456,6 +456,7 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
 ##   Cumulative_deaths = col_double()
 ## )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>save(covid_global, file = &quot;covid_global.rda&quot;)</code></pre>
 </div>
 <div id="sars" class="section level3">
 <h3>SARS</h3>
@@ -489,6 +490,8 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>save(sars_us, file = &quot;sars_us.rda&quot;)
+save(sars_global, file = &quot;sars_global.rda&quot;)</code></pre>
 </div>
 </div>
 <div id="visualization" class="section level2">
