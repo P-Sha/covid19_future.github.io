@@ -242,8 +242,36 @@ In 2009, a strain of swine flu virus caused worldwide pandemic, called H1N1.
 
 
 
+```{r}
+load("./sars_global.rda")
 
+sars_global %>% 
+  ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = "SARS: cumulative cases, global",
+    x = "Pandemic Duration, days",
+    y = "n"
+  )
+```
 
+Here we see the cumulative global case burden over the duration of the outbreak in 2003. SARS was a relatively lethal virus with a high case fatality rate compared with other viral respiratory pathogens. Below, we illustrate the global cumulative mortality burden over the duration of the pandemic.
+
+```{r}
+
+sars_global %>% 
+  ggplot(aes(x = pandemic_duration, y = sars_cumulative_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+      labs(
+    title = "SARS: cumulative deaths, global",
+    x = "Pandemic Duration, days",
+    y = "n"
+  )
+```
+
+Here, we see the case fatality rate of SARS was nearly 10% of documented cases.
 
 
 
