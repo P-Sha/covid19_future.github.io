@@ -427,10 +427,6 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
   mutate(
     covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)
   )</code></pre>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 4f2e85ae831934696a8efdafb653f03cb2f3b89b
 <p><strong><em>Global</em></strong></p>
 <pre class="r"><code>covid_global = read_csv(&quot;./data/covid19_global.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -468,11 +464,6 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
     sars_new_cases = sars_cumulative_cases - lag(sars_cumulative_cases),
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )</code></pre>
-<<<<<<< HEAD
-=======
-=======
->>>>>>> a43f3cd7f84d6b7f85c2e437837d8f2f1a499927
->>>>>>> 4f2e85ae831934696a8efdafb653f03cb2f3b89b
 </div>
 </div>
 <div id="visualization" class="section level2">

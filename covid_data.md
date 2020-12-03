@@ -9,7 +9,7 @@ COVID-19 Data
 covid_us_deaths_df = 
   GET("https://data.cdc.gov/resource/r8kw-7aab.json", query = list("$limit" = 10000)) %>% 
   content("text") %>% 
-  jsonlite::fromJSON() %>% 
+  fromJSON() %>% 
   as_tibble() %>% 
   janitor::clean_names() %>% 
   mutate(data_as_of = as.Date(data_as_of),
@@ -22,23 +22,51 @@ save(covid_us_deaths_df, file = "covid_us_deaths_df.rda")
 
 #### Cases
 
-``` r
-covid_us_cases_df = 
-  GET("https://data.cdc.gov/resource/vbim-akqf.json", query = list("$limit" = 1000)) %>% 
-  content("text") %>% 
-  jsonlite::fromJSON() %>% 
-  as_tibble() %>% 
-  janitor::clean_names() %>% 
-  mutate(cdc_report_dt = as.Date(cdc_report_dt)) %>% 
-  arrange(cdc_report_dt) %>% 
-  mutate(case_id = row_number()) %>% 
-  relocate(case_id) %>% 
-  group_by(cdc_report_dt) %>% 
-  summarize(cumulative_cases = max(case_id))
+\#\#\#\`\`\`{r us cases} get\_all\_cases = function(url) {
+
+all\_cases = vector(“list”, length = 0)
+
+loop\_index = 1 chunk\_size = 99999 DO\_NEXT = TRUE
+
+while (DO\_NEXT) { message(“Getting data, page”, loop\_index)
+
+# all\_cases\[\[loop\_index\]\] =
+
+# GET(url,
+
+# query = list(`$order` = “cdc\_report\_dt”,
+
+# `$limit` = chunk\_size,
+
+# `$offset` = as.integer((loop\_index - 1) \* chunk\_size)
+
+``` 
+                   )
+      ) %>%
+  content("text") %>%
+  fromJSON() %>%
+  as_tibble()
 ```
 
-    ## `summarise()` ungrouping output (override with `.groups` argument)
+# DO\_NEXT = dim(all\_cases\[\[loop\_index\]\])\[1\] == chunk\_size
 
-``` r
-save(covid_us_cases_df, file = "covid_us_cases_df.rda")
-```
+# loop\_index = loop\_index + 1
+
+}
+
+all\_cases
+
+}
+
+url = “<https://data.cdc.gov/resource/vbim-akqf.json>”
+
+covid\_us\_cases\_df = get\_all\_cases(url) %\>% bind\_rows() %\>%
+mutate(cdc\_report\_dt = as.Date(cdc\_report\_dt)) %\>%
+arrange(cdc\_report\_dt) %\>% mutate(case\_id = row\_number()) %\>%
+relocate(case\_id) %\>% group\_by(cdc\_report\_dt) %\>%
+summarize(cumulative\_cases = max(case\_id))
+
+save(covid\_us\_cases\_df, file = “covid\_us\_cases\_df.rda”)
+
+covid\_us\_cases\_df %\>% ggplot(aes(x = cdc\_report\_dt, y =
+cumulative\_cases)) + geom\_point() \#\#\#\`\`\`

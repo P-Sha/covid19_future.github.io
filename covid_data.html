@@ -606,7 +606,7 @@ body {
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>covid_us_deaths_df =<span class="st"> </span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="st">  </span><span class="kw">GET</span>(<span class="st">&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;</span>, <span class="dt">query =</span> <span class="kw">list</span>(<span class="st">&quot;$limit&quot;</span> =<span class="st"> </span><span class="dv">10000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="st">  </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="st">  </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="st">  </span><span class="kw">fromJSON</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1-5"><a href="#cb1-5"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1-6"><a href="#cb1-6"></a><span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1-7"><a href="#cb1-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data_as_of =</span> <span class="kw">as.Date</span>(data_as_of),</span>
@@ -616,21 +616,30 @@ body {
 <span id="cb1-11"><a href="#cb1-11"></a></span>
 <span id="cb1-12"><a href="#cb1-12"></a><span class="kw">save</span>(covid_us_deaths_df, <span class="dt">file =</span> <span class="st">&quot;covid_us_deaths_df.rda&quot;</span>)</span></code></pre></div>
 <h4 id="cases">Cases</h4>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>covid_us_cases_df =<span class="st"> </span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span><span class="kw">GET</span>(<span class="st">&quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;</span>, <span class="dt">query =</span> <span class="kw">list</span>(<span class="st">&quot;$limit&quot;</span> =<span class="st"> </span><span class="dv">1000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="st">  </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="st">  </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cdc_report_dt =</span> <span class="kw">as.Date</span>(cdc_report_dt)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="st">  </span><span class="kw">arrange</span>(cdc_report_dt) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">case_id =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="st">  </span><span class="kw">relocate</span>(case_id) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="st">  </span><span class="kw">group_by</span>(cdc_report_dt) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">cumulative_cases =</span> <span class="kw">max</span>(case_id))</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)
+<p>###```{r us cases} get_all_cases = function(url) {</p>
+<p>all_cases = vector(“list”, length = 0)</p>
+<p>loop_index = 1 chunk_size = 99999 DO_NEXT = TRUE</p>
+<p>while (DO_NEXT) { message(“Getting data, page”, loop_index)</p>
+<h1 id="all_casesloop_index-">all_cases[[loop_index]] =</h1>
+<h1 id="geturl">GET(url,</h1>
+<h1 id="query--listorder--cdc_report_dt">query = list(<code>$order</code> = “cdc_report_dt”,</h1>
+<h1 id="limit--chunk_size"><code>$limit</code> = chunk_size,</h1>
+<h1 id="offset--asintegerloop_index---1--chunk_size"><code>$offset</code> = as.integer((loop_index - 1) * chunk_size)</h1>
+<pre><code>                   )
+      ) %&gt;%
+  content(&quot;text&quot;) %&gt;%
+  fromJSON() %&gt;%
+  as_tibble()
 </code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">save</span>(covid_us_cases_df, <span class="dt">file =</span> <span class="st">&quot;covid_us_cases_df.rda&quot;</span>)</span></code></pre></div>
+<h1 id="do_next--dimall_casesloop_index1--chunk_size">DO_NEXT = dim(all_cases[[loop_index]])[1] == chunk_size</h1>
+<h1 id="loop_index--loop_index--1">loop_index = loop_index + 1</h1>
+<p>}</p>
+<p>all_cases</p>
+<p>}</p>
+<p>url = “<a href="https://data.cdc.gov/resource/vbim-akqf.json">https://data.cdc.gov/resource/vbim-akqf.json</a>”</p>
+<p>covid_us_cases_df = get_all_cases(url) %&gt;% bind_rows() %&gt;% mutate(cdc_report_dt = as.Date(cdc_report_dt)) %&gt;% arrange(cdc_report_dt) %&gt;% mutate(case_id = row_number()) %&gt;% relocate(case_id) %&gt;% group_by(cdc_report_dt) %&gt;% summarize(cumulative_cases = max(case_id))</p>
+<p>save(covid_us_cases_df, file = “covid_us_cases_df.rda”)</p>
+<p>covid_us_cases_df %&gt;% ggplot(aes(x = cdc_report_dt, y = cumulative_cases)) + geom_point() ###```</p>
 
 </body>
 </html>
