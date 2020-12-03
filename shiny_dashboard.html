@@ -2627,30 +2627,16 @@ window.FlexDashboardComponents.push({
 
 </div>
 </div>
-<<<<<<< HEAD
-<div id="section-row" class="section level2" data-height="700">
-<h2>Row</h2>
-<div id="section-map-1" class="section level3">
-<h3>Map 1</h3>
-<div class="knitr-options" data-fig-width="576" data-fig-height="460">
-
-</div>
-</div>
-<div id="section-map-2" class="section level3">
-<h3>Map 2</h3>
-=======
 <div id="section-row" class="section level2" data-height="650">
 <h2>Row</h2>
 <div class="knitr-options" data-fig-width="576" data-fig-height="460">
 
 </div>
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <div class="knitr-options" data-fig-width="576" data-fig-height="460">
 
 </div>
 </div>
-</div>
-<div id="section-row-1" class="section level2" data-height="300">
+<div id="section-row-1" class="section level2" data-height="350">
 <h2>Row</h2>
 <div class="knitr-options" data-fig-width="576" data-fig-height="460">
 
@@ -2725,11 +2711,7 @@ h1n1_df = read_csv("./data/h1n1_data.csv") %>%
   )
 
 
-<<<<<<< HEAD
-# Covid Data
-=======
 # Covid Data 1/10/20 to 9/9/20
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 covid_df = read_csv("./data/covid19_global.csv") %>% 
   janitor::clean_names() %>% 
   group_by(country) %>% 
@@ -2760,12 +2742,7 @@ covid_df = read_csv("./data/covid19_global.csv") %>%
   mutate(disease = "covid")
 
 
-<<<<<<< HEAD
-
-#SARS Data
-=======
 #SARS Data 3/17/2003 to 7/11/2003
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 sars_df = 
   read_csv("./data/sars_2003_complete_dataset_clean.csv") %>% 
   janitor::clean_names() %>% 
@@ -2783,23 +2760,9 @@ sars_df =
     name = str_replace(name, "Republic of Korea", "South Korea"),
     name = str_replace(name, "United States", "United States of America")
   ) %>% 
-<<<<<<< HEAD
-  select(name, sars)
-
-
-big_test = full_join(covid_df, sars_df, by = "name") %>% 
-  full_join(h1n1_df, by = "name") 
-
-big_test2 = full_join(covid_df, sars_df, by = "name") %>% 
-  full_join(h1n1_df, by = "name") %>% 
-  pivot_longer(cols = -name, 
-               names_to = "disease",
-               values_to = "cum_cases")
-=======
   select(name, cum_cases, cum_deaths) %>% 
   mutate(disease = "sars")
 
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 
 global_pan_df = rbind(covid_df, sars_df, h1n1_df) %>%
   mutate(case_fatality_rate = cum_deaths/cum_cases * 100,
@@ -2808,17 +2771,8 @@ global_pan_df = rbind(covid_df, sars_df, h1n1_df) %>%
   
 
 disease_pal = function(disease){
-  if(disease == "covid") {
-    pal = colorBin(palette = "YlOrRd", bins = c(1, 100, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, Inf), na.color = "#808080")
-  }
-  
-  if(disease == "sars") {
-    pal = colorBin(palette = "YlOrRd", bins = c(1, 10, 100, 500, 1000, 5000, Inf), na.color = "#808080")
-  }
 
-<<<<<<< HEAD
-disease_pal = function(disease){
-  if (disease == "covid" || disease == "h1n1") {
+  if (disease == "covid") {
     pal = colorBin(palette = "YlOrRd", bins = c(1, 100, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, Inf), na.color = "#808080")
   }
   
@@ -2826,49 +2780,17 @@ disease_pal = function(disease){
     pal = colorBin(palette = "YlOrRd", bins = c(1, 10, 100, 500, 1000, 5000, Inf), na.color = "#808080")
   }
 
-=======
-  if(disease == "h1n1"){
+  if (disease == "h1n1") {
     pal = colorBin(palette = "YlOrRd", bins = c(1, 10, 100, 500, 1000, 5000, 10000, 20000, Inf), na.color = "#808080")
   }
   
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
   pal 
 }
-
 ```
 
 Column {.sidebar}
 -----------------------------------------------------------------------
 ```{r shiny_inputs}
-<<<<<<< HEAD
-
-# disease_choices = big_test2 %>% pull(disease) %>% unique()
-# # 
-# selectInput(
-#   "disease_choice1",
-#   h3("Map 1 Pandemic:"),
-#   choices = disease_choices,
-#   selected = "covid"
-# )
-# 
-# selectInput(
-#   "disease_choice2",
-#   h3("Map 2 Pandemic:"),
-#   choices = disease_choices,
-#   selected = "covid"
-# )
-
-
-
-
-# sliderInput(
-#   "price_range",
-#   h3("Price Range"),
-#   100, 1000, 
-#   value = c(100, 400))
-
-# room_choices = nyc_airbnb %>% pull(room_type) %>% unique()
-=======
 # 
 # disease_choices = global_pan_df %>% pull(disease) %>% unique()
 # 
@@ -2888,7 +2810,6 @@ Column {.sidebar}
 # 
 # compare_choices = global_pan_df %>% select(-name, -disease) %>% names()
 # 
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 # radioButtons(
 #   "compare_choice",
 #   h3("Pick Parameter to Compare"),
@@ -2899,23 +2820,6 @@ Column {.sidebar}
 
 ```
 
-<<<<<<< HEAD
-Row {data-height=700}
--------------------------------------
-
-### Map 1
-```{r}
-# lables = paste0("<strong>Country: </strong>",
-#                   ~name,
-#                   "<br><strong># of cases: </strong>",
-#                   ~cum_cases)
-# 
-# renderLeaflet({
-#     big_test2 %>%
-#     filter(disease == input[["disease_choice1"]]) %>%
-#     select(name, cum_cases) %>%
-#     sp::merge(x = countries, by = "name", all.x = TRUE) %>%
-=======
 Row {data-height=650}
 -------------------------------------
 
@@ -2927,7 +2831,6 @@ Row {data-height=650}
 #     sp::merge(x = countries, by = "name", all.x = TRUE)
 # 
 #     sp_df %>%
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 #     leaflet() %>%
 #     setView(lng = -10, lat = 20, zoom = 01) %>%
 #     addTiles() %>%
@@ -2943,9 +2846,6 @@ Row {data-height=650}
 #       dashArray = "",
 #       fillOpacity = 0.7,
 #       bringToFront = TRUE),
-<<<<<<< HEAD
-#     popup = lables) %>%
-=======
 #     popup = paste0("<strong>Country: </strong>",
 #                   sp_df$name,
 #                   "<br><strong># of cases: </strong>",
@@ -2954,7 +2854,6 @@ Row {data-height=650}
 #                   sp_df$cum_deaths,
 #                   "<br><strong>Case-fatality rate: </strong>",
 #                   sp_df$case_fatality_rate, "%")) %>%
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 #     addLegend(
 #       "bottomright",
 #       pal = disease_pal(input[["disease_choice1"]]),
@@ -2965,20 +2864,6 @@ Row {data-height=650}
 # })
 ```
 
-<<<<<<< HEAD
-### Map 2
-```{r}
-# lables = paste0("<strong>Country: </strong>",
-#                   ~name,
-#                   "<br><strong># of cases: </strong>",
-#                   ~cum_cases)
-# 
-# renderLeaflet({
-#     big_test2 %>%
-#     filter(disease == input[["disease_choice2"]]) %>%
-#     select(name, cum_cases) %>%
-#     sp::merge(x = countries, by = "name", all.x = TRUE) %>%
-=======
 ```{r}
 # renderLeaflet({
 #     sp_df = global_pan_df %>%
@@ -2987,7 +2872,6 @@ Row {data-height=650}
 #     sp::merge(x = countries, by = "name", all.x = TRUE)
 # 
 #     sp_df %>%
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 #     leaflet() %>%
 #     setView(lng = -10, lat = 20, zoom = 01) %>%
 #     addTiles() %>%
@@ -3003,9 +2887,6 @@ Row {data-height=650}
 #       dashArray = "",
 #       fillOpacity = 0.7,
 #       bringToFront = TRUE),
-<<<<<<< HEAD
-#     popup = lables) %>%
-=======
 #     popup = paste0("<strong>Country: </strong>",
 #                   sp_df$name,
 #                   "<br><strong># of cases: </strong>",
@@ -3014,32 +2895,20 @@ Row {data-height=650}
 #                   sp_df$cum_deaths,
 #                   "<br><strong>Case-fatality rate: </strong>",
 #                   sp_df$case_fatality_rate, "%")) %>%
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 #     addLegend(
 #       "bottomright",
 #       pal = disease_pal(input[["disease_choice2"]]),
 #       values = ~cum_cases,
-<<<<<<< HEAD
-#       title = "Quantile",
-=======
 #       title = "# Cases",
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 #       opacity = 1
 #     )
 # })
 ```
 
-Row {data-height=300}
+Row {data-height=350}
 -------------------------------------
 ```{r}
 # renderPlotly({
-<<<<<<< HEAD
-#   big_test2 %>%
-#     filter(disease == input[["disease_choice1"]]) %>%
-#     mutate(name = fct_reorder(name, cum_cases),
-#            rank = rank(desc(cum_cases))) %>%
-#     filter(rank <= 15) %>% 
-=======
 # 
 #   if(input[["disease_choice1"]] == "covid"){
 #     sel_dis = "COVID-19 (1/10/20-9/9/20)"
@@ -3074,7 +2943,6 @@ Row {data-height=300}
 #     mutate(rank = rank(desc(compare_df[2])),
 #            name = fct_reorder(name, desc(rank))) %>%
 #     filter(rank <= 15) %>%
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 #     plot_ly(
 #       x = .x,
 #       y = ~name,
@@ -3087,18 +2955,6 @@ Row {data-height=300}
 
 ```{r}
 # renderPlotly({
-<<<<<<< HEAD
-#   big_test2 %>%
-#     filter(disease == input[["disease_choice2"]]) %>%
-#     mutate(name = fct_reorder(name, cum_cases),
-#            rank = rank(desc(cum_cases))) %>%
-#     filter(rank <= 15) %>% 
-#     plot_ly(
-#       x = ~cum_cases,
-#       y = ~name,
-#       type = "bar",
-#       colors = ~cum_cases)
-=======
 # 
 #   if(input[["disease_choice2"]] == "covid"){
 #     sel_dis = "COVID-19 (1/10/20-9/9/20)"
@@ -3140,7 +2996,6 @@ Row {data-height=300}
 #       layout(title = sel_title,
 #              xaxis = list(title = " "),
 #              yaxis = list(title = "Country"))
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 # })
 ```
 </code></pre>

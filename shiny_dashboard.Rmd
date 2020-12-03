@@ -104,11 +104,8 @@ global_pan_df = rbind(covid_df, sars_df, h1n1_df) %>%
   
 
 disease_pal = function(disease){
-<<<<<<< HEAD
-  if (disease == "covid" || disease == "h1n1") {
-=======
-  if(disease == "covid") {
->>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
+
+  if (disease == "covid") {
     pal = colorBin(palette = "YlOrRd", bins = c(1, 100, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, Inf), na.color = "#808080")
   }
   
@@ -116,13 +113,12 @@ disease_pal = function(disease){
     pal = colorBin(palette = "YlOrRd", bins = c(1, 10, 100, 500, 1000, 5000, Inf), na.color = "#808080")
   }
 
-  if(disease == "h1n1"){
+  if (disease == "h1n1") {
     pal = colorBin(palette = "YlOrRd", bins = c(1, 10, 100, 500, 1000, 5000, 10000, 20000, Inf), na.color = "#808080")
   }
   
   pal 
 }
-
 ```
 
 Column {.sidebar}
