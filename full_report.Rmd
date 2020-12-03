@@ -479,10 +479,8 @@ global_new_deaths_log_plot + global_cumulative_deaths_log_plot
 ### Additional analysis: If you undertake formal statistical analyses, describe these in detail - maybe?
 
 ### Discussion
-Discuss results.
-What were your findings? Are they what you expect? What insights into the data can you make?
 
-
+Comparison of the current COVID-19 pandemic with prior viral respiratory pathogen outbreaks reveal the severity of the current outbreak in terms of both global and US-specific incident cases and mortality burden.
 
 ***
 Authors: _Jared Klug_ | _David Nemirovsky_ | _Matthew Lawlor_ | _Purnima Sharma_ 
