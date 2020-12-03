@@ -503,6 +503,7 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+<<<<<<< HEAD
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 <div id="who-cases" class="section level4">
@@ -512,13 +513,19 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
   ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+=======
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p><strong><em>Cumulative cases</em></strong></p>
 <pre class="r"><code> h1n1_us_who %&gt;%
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
   geom_point(alpha = .5) +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
@@ -579,7 +586,11 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
 <pre class="r"><code> sars_us %&gt;%
   ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
   geom_point(alpha = .5) +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p><strong><em>New deaths</em></strong></p>
 <pre class="r"><code>sars_us %&gt;% 
@@ -617,7 +628,17 @@ us_cases %&gt;%
   filter(trend == &quot;new_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  labs(
+    title = &quot;New cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Linear plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Removed 448 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 <pre class="r"><code>##log-transformed
@@ -625,8 +646,19 @@ us_cases %&gt;%
   filter(trend == &quot;new_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
+  labs(
+    title = &quot;New cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Log-transformed plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
 <pre><code>## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
 <pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
@@ -639,7 +671,17 @@ us_cases %&gt;%
   filter(trend == &quot;cumulative_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  labs(
+    title = &quot;Cumulative cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Linear plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Removed 447 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <pre class="r"><code>##log-transformed
@@ -647,8 +689,19 @@ us_cases %&gt;%
   filter(trend == &quot;cumulative_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
+  labs(
+    title = &quot;Cumulative cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Log-transformed plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Removed 447 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 </div>
@@ -674,7 +727,17 @@ us_deaths %&gt;%
   filter(trend == &quot;new_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  labs(
+    title = &quot;New deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Linear plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Removed 722 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <pre class="r"><code>##log-transformed
@@ -682,8 +745,19 @@ us_deaths %&gt;%
   filter(trend == &quot;new_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
+  labs(
+    title = &quot;New deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Log-transformed plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
 <pre><code>## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
 <pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
@@ -696,7 +770,17 @@ us_deaths %&gt;%
   filter(trend == &quot;cumulative_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  labs(
+    title = &quot;Cumulative deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Linear plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Removed 720 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 <pre class="r"><code>#log-transformed
@@ -704,8 +788,19 @@ us_deaths %&gt;%
   filter(trend == &quot;cumulative_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
+  labs(
+    title = &quot;Cumulative deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Log-transformed plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Transformation introduced infinite values in continuous y-axis
 
 ## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
@@ -805,7 +900,17 @@ global_cases %&gt;%
   filter(trend == &quot;new_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  labs(
+    title = &quot;New cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Linear plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Removed 557 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
 <pre class="r"><code>##log-transformed
@@ -813,8 +918,19 @@ global_cases %&gt;%
   filter(trend == &quot;new_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
+  labs(
+    title = &quot;New cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Log-transformed plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
 <pre><code>## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
 <pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
@@ -827,7 +943,13 @@ global_cases %&gt;%
   filter(trend == &quot;cumulative_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    title = &quot;Cumulative cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Linear plot&quot;
+  )</code></pre>
 <pre><code>## Warning: Removed 556 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
 <pre class="r"><code>##log-transformed
@@ -836,7 +958,13 @@ global_cases %&gt;%
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
-  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
+  labs(
+    title = &quot;Cumulative cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Log-transformed plot&quot;
+  )</code></pre>
 <pre><code>## Warning: Transformation introduced infinite values in continuous y-axis
 
 ## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
@@ -865,7 +993,17 @@ global_deaths %&gt;%
   filter(trend == &quot;new_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  labs(
+    title = &quot;New deaths, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Linear plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Removed 482 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
 <pre class="r"><code>##log-transformed
@@ -873,8 +1011,19 @@ global_deaths %&gt;%
   filter(trend == &quot;new_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
+<<<<<<< HEAD
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+=======
+  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
+  labs(
+    title = &quot;New deaths, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Log-transformed plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
 <pre><code>## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
 <pre><code>## Warning in self$trans$transform(x): NaNs produced</code></pre>
@@ -887,7 +1036,13 @@ global_deaths %&gt;%
   filter(trend == &quot;cumulative_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    title = &quot;Cumulative deaths, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Linear plot&quot;
+  )</code></pre>
 <pre><code>## Warning: Removed 480 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
 <pre class="r"><code>#log-transformed
@@ -896,7 +1051,17 @@ global_deaths %&gt;%
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
+<<<<<<< HEAD
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x)))</code></pre>
+=======
+  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
+    labs(
+    title = &quot;Cumulative deaths, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;,
+    caption = &quot;Log-transformed plot&quot;
+  )</code></pre>
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 <pre><code>## Warning: Transformation introduced infinite values in continuous y-axis
 
 ## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>

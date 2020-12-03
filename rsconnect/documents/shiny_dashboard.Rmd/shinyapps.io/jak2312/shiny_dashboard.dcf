@@ -5,6 +5,6 @@ account: jak2312
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3307976
-bundleId: 3928333
+bundleId: 3935693
 url: https://jak2312.shinyapps.io/shiny_dashboard/
-when: 1606841101.07454
+when: 1606956132.45032

@@ -109,6 +109,7 @@ subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 
 Basic Reproductive rate
 
+<<<<<<< HEAD
 ```{r}
 data_url = "https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext"
 reproductive_rate_html = read_html(data_url)
@@ -129,6 +130,10 @@ table_r0 =
   ) %>% 
   mutate(x = replace(x, x == "Transmissibility, R0", "Basic Reproductive rate, R0")) %>% 
   as_tibble() 
+=======
+```{r basic reproductive rate}
+load("./table_r0.rda")
+>>>>>>> acf445eac4270689a2b1d7409a17bb44d874e5f3
 
 table_r0 %>%
   filter(x == "Basic Reproductive rate, R0") %>%            
@@ -141,9 +146,6 @@ table_r0 %>%
     x = ~pandemic, y = ~r0, color = ~r0, type = "bar", ymin = 0) %>% 
   layout(title = "Basic Reproductive rate", showlegend = FALSE)
   
-table_r0 =
-  table_r0 %>% 
+table_r0 %>% 
   knitr::kable()
-
-table_r0
 ```

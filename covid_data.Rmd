@@ -8,6 +8,7 @@ library(tidyverse)
 library(rvest)
 library(httr)
 library(purrr)
+library(jsonlite)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -34,7 +35,7 @@ scale_fill_discrete = scale_fill_viridis_d
 covid_us_deaths_df = 
   GET("https://data.cdc.gov/resource/r8kw-7aab.json", query = list("$limit" = 10000)) %>% 
   content("text") %>% 
-  jsonlite::fromJSON() %>% 
+  fromJSON() %>% 
   as_tibble() %>% 
   janitor::clean_names() %>% 
   mutate(data_as_of = as.Date(data_as_of),
@@ -47,13 +48,42 @@ save(covid_us_deaths_df, file = "covid_us_deaths_df.rda")
 
 #### Cases
 
-```{r us cases}
+###```{r us cases}
+get_all_cases = function(url) {
+  
+  all_cases = vector("list", length = 0)
+  
+  loop_index = 1
+  chunk_size = 99999
+  DO_NEXT = TRUE
+  
+  while (DO_NEXT) {
+    message("Getting data, page ", loop_index)
+    
+#    all_cases[[loop_index]] = 
+#      GET(url,
+#         query = list(`$order` = "cdc_report_dt",
+#                       `$limit` = chunk_size,
+#                       `$offset` = as.integer((loop_index - 1) * chunk_size)
+                       )
+          ) %>%
+      content("text") %>%
+      fromJSON() %>%
+      as_tibble()
+    
+#    DO_NEXT = dim(all_cases[[loop_index]])[1] == chunk_size
+#    loop_index = loop_index + 1
+  }
+  
+  all_cases
+  
+}
+
+url = "https://data.cdc.gov/resource/vbim-akqf.json"
+
 covid_us_cases_df = 
-  GET("https://data.cdc.gov/resource/vbim-akqf.json", query = list("$limit" = 1000)) %>% 
-  content("text") %>% 
-  jsonlite::fromJSON() %>% 
-  as_tibble() %>% 
-  janitor::clean_names() %>% 
+  get_all_cases(url) %>%
+  bind_rows() %>% 
   mutate(cdc_report_dt = as.Date(cdc_report_dt)) %>% 
   arrange(cdc_report_dt) %>% 
   mutate(case_id = row_number()) %>% 
@@ -62,5 +92,8 @@ covid_us_cases_df =
   summarize(cumulative_cases = max(case_id))
 
 save(covid_us_cases_df, file = "covid_us_cases_df.rda")
-```
 
+covid_us_cases_df %>% 
+  ggplot(aes(x = cdc_report_dt, y = cumulative_cases)) +
+  geom_point()
+###```
