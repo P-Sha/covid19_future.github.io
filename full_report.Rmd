@@ -70,17 +70,17 @@ What might the basic reproductive rates had been in the past pandemics? Basic re
 
 Multiple datasets were used from various shareable online sources for analysis and comparison to COVID-19. Complete list of data-descriptions is provided under the "Datasets" tab. 
 
-<<<<<<< HEAD
-Most of the datasets were available in ready-to-use CSV formats, so we built dataframes using the `read_csv` function. The SARS-2003 dataset, however, was transformed from a PDF file to an updated "cleaner" CSV version. Furthermore, since up-to-date data is important in analysis of prior pandemic trends, data scraping from [the CDC website](data.cdc.gov) for updated COVID-19 data was used. Data scraping was done using JSON APIs with the `GET` function from the `httr` package, along with the `fromJSON()` function from the `jsonlite` package.
-=======
+
+Most of the datasets were available in ready-to-use CSV formats, requiring some basic manipulations to get them in a readable and tidy format. Since up-to-date data is important in analysis of prior pandemic trends, data scraping from [the CDC website](data.cdc.gov) for updated COVID-19 data was used. Data scraping was done using JSON APIs with the `GET` function from the `httr` package, along with the `fromJSON()` function from the `jsonlite` package.
+
 <brk><brk><brk>
 
-  Most of the datasets were available in a ready to use CSV format, with some cleaning and tidying requirements. Sars-2003 data was transformed from a pdf file to an updated "cleaner" CSV version. Data for COVID-19 in Chicago required filtering the peak timeframe (up until the completion of this report, December 4th 2020), by weeks. This combined dataframe was then compared to the available Spanish flu record of 7 weeks.   
+   Data for COVID-19 in Chicago required filtering the peak timeframe, up until the completion of this report (December 4th 2020), by weeks. This combined dataframe was then compared to the available Spanish flu record of 7 weeks.   
   
 <brk><brk><brk>
 
   Also, the data with R0 and other statistical comparisons between the four pandemics was extracted by scraping [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext). Information on R0 for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show r0 by disease-type graphically.
->>>>>>> 2d7c327976684fe92390f1f2664250693778feb2
+
 
 ### Exploratory Analysis
 
@@ -183,12 +183,9 @@ plot_2 =
 subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 ```
 
-The graphs show similar curves in terms of shape, with maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. By tracing over the bars, one could find the exact death-count for the given week.  
+The graphs show similar curves in terms of shape, with the peak of maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. Tracing the bars displays total mortality for a given week.  
 
-Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we could analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail.  
-
-
-
+Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we were able to analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail.  
 
 
 

@@ -118,7 +118,7 @@ table_r0 =
   html_nodes(css = "table") %>%  
   first() %>%
   html_table() %>% 
-  make_clean_names() %>% 
+  clean_names() %>% 
   select(-6) %>% 
   filter(x == "Transmissibility, R0" | x == "Incubation period, days" | x == "Interval between symptom onset and maximum infectivity, days" | x == "Proportion with mild illness") %>% 
   rename(
@@ -139,7 +139,7 @@ table_r0 %>%
     ) %>% 
   plot_ly(
     x = ~pandemic, y = ~r0, color = ~r0, type = "bar", ymin = 0) %>% 
-  layout(title = "Comparing Reproductive rates", showlegend = FALSE)
+  layout(title = "Basic Reproductive rate", showlegend = FALSE)
   
 table_r0 =
   table_r0 %>% 

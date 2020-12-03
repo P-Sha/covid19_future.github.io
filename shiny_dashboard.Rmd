@@ -105,11 +105,11 @@ big_test2 = full_join(covid_df, sars_df, by = "name") %>%
 pan_countries_map = sp::merge(x = countries, y = big_test, by = "name", all.x = TRUE)
 
 disease_pal = function(disease){
-  if(disease == "covid" || disease == "h1n1") {
+  if (disease == "covid" || disease == "h1n1") {
     pal = colorBin(palette = "YlOrRd", bins = c(1, 100, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, Inf), na.color = "#808080")
   }
   
-  if(disease == "sars") {
+  if (disease == "sars") {
     pal = colorBin(palette = "YlOrRd", bins = c(1, 10, 100, 500, 1000, 5000, Inf), na.color = "#808080")
   }
 

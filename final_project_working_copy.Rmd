@@ -198,7 +198,7 @@ h1n1_us %>%
  h1n1_us %>%
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 #### WHO cases
@@ -216,7 +216,7 @@ h1n1_us_who %>%
  h1n1_us_who %>%
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 #### Deaths
@@ -290,7 +290,7 @@ sars_us %>%
  sars_us %>%
   ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ***New deaths***
@@ -338,7 +338,7 @@ us_cases %>%
   filter(trend == "new_cases") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ```{r}
@@ -347,7 +347,7 @@ us_cases %>%
   filter(trend == "new_cases") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
 ```
 
@@ -359,7 +359,7 @@ us_cases %>%
   filter(trend == "cumulative_cases") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ```{r}
@@ -368,7 +368,7 @@ us_cases %>%
   filter(trend == "cumulative_cases") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
 ```
 
@@ -398,7 +398,7 @@ us_deaths %>%
   filter(trend == "new_deaths") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ```{r}
@@ -407,7 +407,7 @@ us_deaths %>%
   filter(trend == "new_deaths") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
 ```
 
@@ -419,7 +419,7 @@ us_deaths %>%
   filter(trend == "cumulative_deaths") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ```{r}
@@ -428,7 +428,7 @@ us_deaths %>%
   filter(trend == "cumulative_deaths") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
 ```
 
@@ -447,7 +447,7 @@ h1n1_global_who %>%
  h1n1_global_who %>%
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ### Global COVID
@@ -551,7 +551,7 @@ global_cases %>%
   filter(trend == "new_cases") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ```{r}
@@ -560,7 +560,7 @@ global_cases %>%
   filter(trend == "new_cases") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
 ```
 
@@ -611,7 +611,7 @@ global_deaths %>%
   filter(trend == "new_deaths") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1)
+  geom_ma(ma_fun = SMA, n = 7, size = 1)
 ```
 
 ```{r}
@@ -620,7 +620,7 @@ global_deaths %>%
   filter(trend == "new_deaths") %>% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
 ```
 
