@@ -2805,7 +2805,7 @@ Column {.sidebar}
 #   "disease_choice2",
 #   h3("Map 2 Pandemic:"),
 #   choices = disease_choices,
-#   selected = "covid"
+#   selected = "h1n1"
 # )
 # 
 # compare_choices = global_pan_df %>% select(-name, -disease) %>% names()
@@ -2909,7 +2909,7 @@ Row {data-height=350}
 -------------------------------------
 ```{r}
 # renderPlotly({
-#   
+# 
 #   if(input[["disease_choice1"]] == "covid"){
 #     sel_dis = "COVID-19 (1/10/20-9/9/20)"
 #   }
@@ -2919,7 +2919,7 @@ Row {data-height=350}
 #   if(input[["disease_choice1"]] == "h1n1"){
 #     sel_dis = "H1N1 (4/24/09-7/6/09)"
 #   }
-#   
+# 
 # 
 #   if(input[["compare_choice"]] == "cum_cases"){
 #     .x = ~cum_cases
@@ -2946,7 +2946,7 @@ Row {data-height=350}
 #     plot_ly(
 #       x = .x,
 #       y = ~name,
-#       type = "bar") %>% 
+#       type = "bar") %>%
 #       layout(title = sel_title,
 #              xaxis = list(title = " "),
 #              yaxis = list(title = "Country"))
@@ -2965,7 +2965,7 @@ Row {data-height=350}
 #   if(input[["disease_choice2"]] == "h1n1"){
 #     sel_dis = "H1N1 (4/24/09-7/6/09)"
 #   }
-#   
+# 
 # 
 #   if(input[["compare_choice"]] == "cum_cases"){
 #     .x = ~cum_cases
@@ -2979,7 +2979,7 @@ Row {data-height=350}
 #     .x = ~case_fatality_rate
 #     sel_title = str_c(sel_dis, "Case-Fatality Rate (%)", sep = " ")
 #   }
-#   
+# 
 #   compare_df = global_pan_df %>%
 #     filter(disease == input[["disease_choice2"]],
 #            name %in% countries$name) %>%
@@ -2992,7 +2992,7 @@ Row {data-height=350}
 #     plot_ly(
 #       x = .x,
 #       y = ~name,
-#       type = "bar") %>% 
+#       type = "bar") %>%
 #       layout(title = sel_title,
 #              xaxis = list(title = " "),
 #              yaxis = list(title = "Country"))
