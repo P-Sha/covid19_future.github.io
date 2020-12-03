@@ -20,6 +20,7 @@ library(rvest)
 library(httr)
 library(readxl)
 library(tidyquant)
+library(patchwork)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -44,7 +45,7 @@ As of the beginning of November 2020, the total deaths due to COVID-19 surpassed
 
 #### _Motivation_
 
-Given the scale of this pandemic, this project was inspired by the idea to try and make some sense of it by comparing it to prior pandemics. Wth uncertainty and anxiety accompanying it, and no definitive known direction to its future, we were interested in exploring how the previous similar pandemics, caused by similar pathogens, turned out over time.       
+Given the scale of this pandemic, the project was inspired by the idea of trying to understand its direction by comparing it to prior pandemics. With uncertainty and anxiety accompanying it, and no definitive foreseeable future, we were interested in exploring how the previous similar pandemics, caused by similar pathogens, turned out over time.       
 
 #### _Goals_
 
@@ -70,17 +71,25 @@ What might the basic reproductive rates had been in the past pandemics? Basic re
 
 Multiple datasets were used from various shareable online sources for analysis and comparison to COVID-19. Complete list of data-descriptions is provided under the "Datasets" tab. 
 
-<<<<<<< HEAD
-Most of the datasets were available in ready-to-use CSV formats, so we built dataframes using the `read_csv` function. The SARS-2003 dataset, however, was transformed from a PDF file to an updated "cleaner" CSV version. Furthermore, since up-to-date data is important in analysis of prior pandemic trends, data scraping from [the CDC website](data.cdc.gov) for updated COVID-19 data was used. Data scraping was done using JSON APIs with the `GET` function from the `httr` package, along with the `fromJSON()` function from the `jsonlite` package.
-=======
+
+Most of the datasets were available in ready-to-use CSV formats, requiring some basic manipulations to get them in a readable and tidy format. Since up-to-date data is important in analysis of prior pandemic trends, data scraping from [the CDC website](data.cdc.gov) for updated COVID-19 data was used. Data scraping was done using JSON APIs with the `GET` function from the `httr` package, along with the `fromJSON()` function from the `jsonlite` package.
+
 <brk><brk><brk>
 
-  Most of the datasets were available in a ready to use CSV format, with some cleaning and tidying requirements. Sars-2003 data was transformed from a pdf file to an updated "cleaner" CSV version. Data for COVID-19 in Chicago required filtering the peak timeframe (up until the completion of this report, December 4th 2020), by weeks. This combined dataframe was then compared to the available Spanish flu record of 7 weeks.   
+   Data for COVID-19 in Chicago required filtering the peak timeframe, up until the completion of this report (December 4th 2020), by weeks. This combined dataframe was then compared to the available Spanish flu record of 7 weeks.   
   
 <brk><brk><brk>
 
-  Also, the data with R0 and other statistical comparisons between the four pandemics was extracted by scraping [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext). Information on R0 for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show r0 by disease-type graphically.
->>>>>>> 2d7c327976684fe92390f1f2664250693778feb2
+  Also, the data with R0 and other statistical comparisons between the four pandemics was extracted by scraping [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext). Scraped data first had to be saved as a dataframe in order to make it compatible with the rest of the website. Information on R0 for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show r0 by disease-type graphically. 
+  
+<brk><brk><brk>
+
+After the preliminary steps were taken to get the datasets in working forms, all the data files were then stored in `.rda` compressed format for easy access and reproducibility across the site.
+
+<brk><brk><brk>
+
+Data for `Shiny Dashboard` ...
+
 
 ### Exploratory Analysis
 
@@ -183,11 +192,86 @@ plot_2 =
 subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 ```
 
-The graphs show similar curves in terms of shape, with maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. By tracing over the bars, one could find the exact death-count for the given week.  
+The graphs show similar parabolic curves, with the peak of maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. Tracing the bars displays total mortality for a given week.  
 
-Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we could analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail.  
+Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we were able to analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail. 
+
+```{r}
+# SARS 2003 global cumulative cases 
+
+load("./sars_df.rda")
+
+sars_df %>%
+  ggplot(aes(x = date, y = deaths_cum, color = country)) +
+  geom_line() +
+  xlab("month") +
+  ylab("cumulative deaths") +
+  ggtitle("SARS 2003 cumulative deaths by country") +
+  theme(legend.position = "bottom",
+        legend.text = element_text(size = 8))
+```
+
+As the graph displays, SARS was a global pandemic, with majority of death toll in eastern part of the world such as China and Hong Kong. A fast-spreading albeit short-lived pandemic, it was contained within 5 months for the most part. According to the [CDC](htts://www.cdc.gov/sars/about/fs-sars.html), the first reported case was in February of 2003 in Asia. 
+
+In contrast to COVID-19, SARS did not spread as widely in the western countries, or much at all in the U.S.
+
+```{r}
+sars_cum_global =
+  sars_global %>% 
+  ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
+  geom_point(alpha = .5, color = "blue") +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  xlab("SARS duration (Days)") +
+  ylab("cumulative cases") +
+  ggtitle("Global Cumulative Cases: SARS 2003 versus COVID-19")
+ 
+covid_cum_global =
+  covid_global %>% 
+  ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
+  geom_point(alpha = .2, color = "blue") +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  xlab("COVID-19 duration (Days)") +
+  ylab("")  
+
+sars_cum_global + covid_cum_global
+```
+
+Distinct difference in the scale of cumulative cases is evident in the two graphs, along with the rise in cases for a given duration of time. SARS, although spiked steeply early on, tapered off within a few months. COVID-19 meanwhile stayed at an exponential growth for the first 300 days of onset.
+
+In 2009, a strain of swine flu virus caused worldwide pandemic, called H1N1.   
 
 
+
+```{r}
+load("./sars_global.rda")
+
+sars_global %>% 
+  ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = "SARS: cumulative cases, global",
+    x = "Pandemic Duration, days",
+    y = "n"
+  )
+```
+
+Here we see the cumulative global case burden over the duration of the outbreak in 2003. SARS was a relatively lethal virus with a high case fatality rate compared with other viral respiratory pathogens. Below, we illustrate the global cumulative mortality burden over the duration of the pandemic.
+
+```{r}
+
+sars_global %>% 
+  ggplot(aes(x = pandemic_duration, y = sars_cumulative_deaths)) +
+  geom_point(alpha = .5) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+      labs(
+    title = "SARS: cumulative deaths, global",
+    x = "Pandemic Duration, days",
+    y = "n"
+  )
+```
+
+Here, we see the case fatality rate of SARS was nearly 10% of documented cases.
 
 
 

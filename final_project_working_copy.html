@@ -26,6 +26,15 @@
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
+
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -280,20 +289,26 @@ $(document).ready(function () {
         <li>
   <a href="full_report.html">Full Report</a>
 </li>
-<li>
-  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Dashboard</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Datasets
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="datasets.html">Sources and Descriptions</a>
+    </li>
+    <li>
+      <a href="data_cleaning.html">Clean and tidy process</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="datasets.html">Datasets</a>
+  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Comparisons Dashboard (interactive)</a>
 </li>
 <li>
   <a href="pandemics_timeline.html">Pandemics Timeline</a>
-</li>
-<li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
-    <span class="fa fa-envelope fa-lg"></span>
-     
-  </a>
 </li>
 <li>
   <a href="https://github.com/P-Sha/covid19_future.github.io">
@@ -450,6 +465,7 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
 ##   Cumulative_deaths = col_double()
 ## )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>save(covid_global, file = &quot;covid_global.rda&quot;)</code></pre>
 </div>
 <div id="sars" class="section level3">
 <h3>SARS</h3>
@@ -464,6 +480,8 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
     sars_new_cases = sars_cumulative_cases - lag(sars_cumulative_cases),
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )
+
+save(sars_us, file = &quot;sars_us.rda&quot;)
 
 sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -482,10 +500,13 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
     sars_new_cases = sars_cumulative_cases - lag(sars_cumulative_cases),
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )</code></pre>
-<<<<<<< HEAD
-=======
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
->>>>>>> b42b4a77527dc23bf9fcee8c058e2491ddf155f9
+<<<<<<< HEAD
+<pre class="r"><code>save(sars_us, file = &quot;sars_us.rda&quot;)
+save(sars_global, file = &quot;sars_global.rda&quot;)</code></pre>
+=======
+<pre class="r"><code>save(sars_global, file = &quot;sars_global.rda&quot;)</code></pre>
+>>>>>>> dcdc61d632e0dce51c97ead6672171c860623967
 </div>
 </div>
 <div id="visualization" class="section level2">
@@ -505,7 +526,7 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
 <pre class="r"><code> h1n1_us %&gt;%
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 <div id="who-cases" class="section level4">
@@ -514,14 +535,24 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
 <pre class="r"><code>h1n1_us_who %&gt;%
   ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;H1N1: new cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p><strong><em>Cumulative cases</em></strong></p>
 <pre class="r"><code> h1n1_us_who %&gt;%
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    title = &quot;H1N1: Cumulative cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
@@ -531,14 +562,24 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
 <pre class="r"><code> h1n1_us %&gt;% ##kaggle data
   ggplot(aes(x = pandemic_duration, y = h1n1_new_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;H1N1: New deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p><strong><em>Cumulative deaths</em></strong></p>
 <pre class="r"><code>h1n1_us %&gt;% ##kaggle data
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;H1N1: Cumulative deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 </div>
@@ -548,25 +589,45 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
 <pre class="r"><code>covid_us_cases %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_new_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;COVID-19: new cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p><strong><em>Cumulative cases</em></strong></p>
 <pre class="r"><code>covid_us_cases %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;COVID-19: cumulative cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p><strong><em>New deaths</em></strong></p>
 <pre class="r"><code>covid_us_deaths %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_new_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;COVID-19: new deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p><strong><em>Cumulative deaths</em></strong></p>
 <pre class="r"><code>covid_us_deaths %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;COVID-19: cumulative deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 </div>
 <div id="us-sars" class="section level3">
@@ -575,27 +636,47 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
 <pre class="r"><code>sars_us %&gt;% 
   ggplot(aes(x = pandemic_duration, y = sars_new_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;SARS: new cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p><strong><em>Cumulative cases</em></strong></p>
 <pre class="r"><code> sars_us %&gt;%
   ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;SARS: cumulative cases, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p><strong><em>New deaths</em></strong></p>
 <pre class="r"><code>sars_us %&gt;% 
   ggplot(aes(x = pandemic_duration, y = sars_new_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;SARS: new deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><strong><em>Cumulative deaths</em></strong></p>
 <pre class="r"><code>sars_us %&gt;% 
   ggplot(aes(x = pandemic_duration, y = sars_cumulative_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;SARS: cumulative deaths, United States&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 <div id="merge-us-cases" class="section level3">
@@ -701,7 +782,7 @@ us_deaths %&gt;%
   filter(trend == &quot;new_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
     title = &quot;New deaths, United States&quot;,
     x = &quot;Pandemic Duration, days&quot;,
@@ -715,7 +796,7 @@ us_deaths %&gt;%
   filter(trend == &quot;new_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
   labs(
     title = &quot;New deaths, United States&quot;,
@@ -735,7 +816,7 @@ us_deaths %&gt;%
   filter(trend == &quot;cumulative_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
     title = &quot;Cumulative deaths, United States&quot;,
     x = &quot;Pandemic Duration, days&quot;,
@@ -749,7 +830,7 @@ us_deaths %&gt;%
   filter(trend == &quot;cumulative_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
   labs(
     title = &quot;Cumulative deaths, United States&quot;,
@@ -769,13 +850,23 @@ us_deaths %&gt;%
 <pre class="r"><code>h1n1_global_who %&gt;%
   ggplot(aes(x = pandemic_duration, y = h1n1_new_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    title = &quot;H1N1: new cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <p><strong><em>Cumulative cases</em></strong></p>
 <pre class="r"><code> h1n1_global_who %&gt;%
   ggplot(aes(x = pandemic_duration, y = h1n1_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n =7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    title = &quot;H1N1: cumulative cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 </div>
 <div id="global-covid" class="section level3">
@@ -784,25 +875,45 @@ us_deaths %&gt;%
 <pre class="r"><code>covid_global %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_new_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+      labs(
+    title = &quot;COVID-19: new cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 <p><strong><em>Cumulative cases</em></strong></p>
 <pre class="r"><code>covid_global %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+      labs(
+    title = &quot;COVID-19: cumulative cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
 <p><strong><em>New deaths</em></strong></p>
 <pre class="r"><code>covid_global %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_new_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+        labs(
+    title = &quot;COVID-19: new deaths, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
 <p><strong><em>Cumulative deaths</em></strong></p>
 <pre class="r"><code>covid_global %&gt;% 
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+        labs(
+    title = &quot;COVID-19: cumulative cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
 </div>
 <div id="global-sars" class="section level3">
@@ -811,27 +922,47 @@ us_deaths %&gt;%
 <pre class="r"><code>sars_global %&gt;% 
   ggplot(aes(x = pandemic_duration, y = sars_new_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+        labs(
+    title = &quot;SARS: new cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
 <p><strong><em>Cumulative cases</em></strong></p>
 <pre class="r"><code>sars_global %&gt;% 
   ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+    labs(
+    title = &quot;SARS: cumulative cases, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 <p><strong><em>New deaths</em></strong></p>
 <pre class="r"><code>sars_global %&gt;% 
   ggplot(aes(x = pandemic_duration, y = sars_new_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+        labs(
+    title = &quot;SARS: new deaths, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 <p><strong><em>Cumulative deaths</em></strong></p>
 <pre class="r"><code>sars_global %&gt;% 
   ggplot(aes(x = pandemic_duration, y = sars_cumulative_deaths)) +
   geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1)</code></pre>
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+        labs(
+    title = &quot;SARS: cumulative deaths, global&quot;,
+    x = &quot;Pandemic Duration, days&quot;,
+    y = &quot;n&quot;
+  )</code></pre>
 <p><img src="final_project_working_copy_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
 </div>
 <div id="merge-global-cases" class="section level3">
@@ -856,7 +987,7 @@ global_cases %&gt;%
   filter(trend == &quot;new_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
     title = &quot;New cases, global&quot;,
     x = &quot;Pandemic Duration, days&quot;,
@@ -870,7 +1001,7 @@ global_cases %&gt;%
   filter(trend == &quot;new_cases&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
   labs(
     title = &quot;New cases, global&quot;,
@@ -940,7 +1071,7 @@ global_deaths %&gt;%
   filter(trend == &quot;new_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
     title = &quot;New deaths, global&quot;,
     x = &quot;Pandemic Duration, days&quot;,
@@ -954,7 +1085,7 @@ global_deaths %&gt;%
   filter(trend == &quot;new_deaths&quot;) %&gt;% 
   ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
   geom_point() +
-  geom_ma(ma_fun = SMA, n =7, size = 1) +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
   labs(
     title = &quot;New deaths, global&quot;,

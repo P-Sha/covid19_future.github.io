@@ -35,6 +35,8 @@ sars_df =
   mutate(deaths_cum = cumsum(number_of_deaths))
 
 save(sars_df, file = "sars_df.rda")
+
+
 ```
 
 prelim plots:

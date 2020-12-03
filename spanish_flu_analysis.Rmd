@@ -106,7 +106,6 @@ subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 ```
 
 
-
 Basic Reproductive rate
 
 ```{r basic reproductive rate}
@@ -121,7 +120,7 @@ table_r0 %>%
     ) %>% 
   plot_ly(
     x = ~pandemic, y = ~r0, color = ~r0, type = "bar", ymin = 0) %>% 
-  layout(title = "Comparing Reproductive rates", showlegend = FALSE)
+  layout(title = "Basic Reproductive rate", showlegend = FALSE)
   
 table_r0 %>% 
   knitr::kable()

@@ -5,14 +5,16 @@ navbar:
   right:
     - text: "Full Report"
       href: full_report.html
-    - text: "Dashboard"
-      href: https://jak2312.shinyapps.io/shiny_dashboard/
     - text: "Datasets"
-      href: datasets.html
+      menu:
+      - text: "Sources and Descriptions"
+        href: datasets.html
+      - text: "Clean and tidy process"
+        href: data_cleaning.html  
+    - text: "Comparisons Dashboard (interactive)"
+      href: https://jak2312.shinyapps.io/shiny_dashboard/
     - text: "Pandemics Timeline"
       href: pandemics_timeline.html
-    - icon: fa-envelope fa-lg
-      href: mailto:<you@youremail.com>
     - icon: fa-github fa-lg
       href: https://github.com/P-Sha/covid19_future.github.io
 output:

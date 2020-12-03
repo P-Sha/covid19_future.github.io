@@ -1,5 +1,5 @@
 ---
-title: "Data Sources"
+title: "Sources and Descriptions"
 output: html_document
 ---
 
@@ -21,42 +21,33 @@ Data for the project was collected from the following online resources:
 Description: Data contains information on 8034 mortality cases, with "Unique Point Identifier (fid)", case type as pneumonia (1) or flu/unknown(0), point-location of each death(x(m) and y(m)), and week when death was recorded (as of 9/28/1918), for all the cases. Data recorded was for 7 weeks, which was during the [peak of the disease](cdc.gov/flu/pandemic-resources/1918-commemoration/three-waves.htm). 
 
 
-2. SARS 2003 (Global): [WHO.int/csr/sars/](https://www.who.int/csr/sars/country/country2003_08_15.pdf?ua=1)
+2. SARS 2003 (Global): [WHO.int/csr/sars/](https://www.who.int/health-topics/severe-acute-respiratory-syndrome#tab=tab_1)
 
-Description: Data contains `r sars_df %>% nrow()` rows of areas (a country or countries grouped by regions), and `r sars_df %>% ncol()` columns of cumulative cases by sex and their total, median age, by status of cases (hospitalized, recovered, daily deaths, and case-fatality ratios), number of imported cases, occupationally exposed cases (health care workers), and dates of first probable and last probable case. 
-
-Case fatality recorded was based on cases with known outcome, irrespective of immediate cause of death.
+Description: Data contains `r sars_df %>% nrow()` rows of daily activity, and `r sars_df %>% ncol()` columns of date as of March 17 2003, cumulative number of cases, number of deaths, number recovered and countries for a given date.
 
 
 3. H1N1 + Influenza B: [apps.who.int/flumart](https://apps.who.int/flumart/Default?ReportNo=12)
 
-Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak,  with “no report” for in many countries. Our dataset for H1N1 contained `r h1n1_df %>% nrow()` rows and `r h1n1_df %>% ncol()` columns. Our dataset for Inlfuenza B contained `r influenza_df %>% nrow()` rows and `r influenza_df %>% ncol()` columns.
+Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak,  with “no report” for many countries. Our dataset for H1N1 contained `r h1n1_df %>% nrow()` rows and `r h1n1_df %>% ncol()` columns. Our dataset for Inlfuenza B contained `r influenza_df %>% nrow()` rows and `r influenza_df %>% ncol()` columns.
 
 
 4. COVID-19 (Global): [covid19.who.int/table](https://covid19.who.int/table)
 
-<<<<<<< HEAD
-Description: This data by World Health Organization provides information on total cumulative cases, newly reported cases in last 24hrs, total deaths and deaths in last 24 hrs, and method of transmission (community, cluster, sporadic or no cases) for a country or a region.
-=======
-Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak,  with “no report” for in many countries. Our dataset for H1N1 contained `r #h1n1_df %>% nrow()` rows and `r #h1n1_df %>% ncol()` columns. Our dataset for Inlfuenza B contained `r #influenza_df %>% nrow()` rows and `r #influenza_df %>% ncol()` columns.
->>>>>>> 06f901dc67d43f450b4ef89cb27989c8688aae54
+Description: This data by World Health Organization provides information on total cumulative cases of COVID-19, newly reported cases in last 24hrs, total deaths and deaths in last 24 hrs, and method of transmission (community, cluster, sporadic or no cases) for a country or a region.
 
 
-5. COVID-19 Deaths (USA): [data.cdc.gov](https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Week-Ending-D/r8kw-7aab)
+5. COVID-19 (USA): [data.cdc.gov](https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Week-Ending-D/r8kw-7aab)
 
 Description: This dataset contains weekly death counts attributed to COVID-19. It is comprised of `r covid_us_deaths_df %>% nrow()` rows and `r covid_us_deaths_df %>% ncol()` columns. The variables of interest are week start, week end, state, and number of COVID-19 deaths.
 
 
 6. COVID-19 (Chicago): [data.cityofchicago.org](https://data.cityofchicago.org/Health-Human-Services/COVID-19-Daily-Cases-Deaths-and-Hospitalizations/naz8-j4nc/data)
 
-<<<<<<< HEAD
-Description: This data by World Health Organization provides information on total cumulative cases, newly reported cases in last 24hrs, total deaths and deaths in last 24 hrs, and method of transmission (community, cluster, sporadic or no cases) for a country or a region.
+Description: Data includes `r covid19_chicago_rawdf %>% nrow()` rows of dates and `r covid19_chicago_rawdf %>% ncol()` columns, date starting from 3/1/ 2020 to 11/22/2020. Data is collected for total cases, total deaths and total hospitalizations for each day, and stratified by age groups, sex, and ethnicity  for all the cases, deaths and hospitalizations.
 
-7. R0 and other statistics: [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext)
+
+7. R0 and other statistical summaries: [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext)
 
 Description: This is an article with multiple tables, table 1 with information on Basic Reproductive Rates of various prior pandemics and Covid-19. Data-scraping is used to extract the relevant table and information on it.
 
 
-=======
-Description: Data includes `r covid19_chicago_rawdf %>% nrow()` rows of dates and `r covid19_chicago_rawdf %>% ncol()` columns, date starting from 3/1/ 2020 to 11/22/2020. Data is collected for total cases, total deaths and total hospitalizations for each day, and stratified by age groups, sex, and ethnicity  for all the cases, deaths and hospitalizations.
->>>>>>> c84248a76cd73d5e3b8e8298ec7e6ac612c09ed0

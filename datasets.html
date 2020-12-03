@@ -11,7 +11,7 @@
 
 
 
-<title>Data Sources</title>
+<title>Sources and Descriptions</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -279,20 +279,26 @@ $(document).ready(function () {
         <li>
   <a href="full_report.html">Full Report</a>
 </li>
-<li>
-  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Dashboard</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Datasets
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="datasets.html">Sources and Descriptions</a>
+    </li>
+    <li>
+      <a href="data_cleaning.html">Clean and tidy process</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="datasets.html">Datasets</a>
+  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Comparisons Dashboard (interactive)</a>
 </li>
 <li>
   <a href="pandemics_timeline.html">Pandemics Timeline</a>
-</li>
-<li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
-    <span class="fa fa-envelope fa-lg"></span>
-     
-  </a>
 </li>
 <li>
   <a href="https://github.com/P-Sha/covid19_future.github.io">
@@ -309,7 +315,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Data Sources</h1>
+<h1 class="title toc-ignore">Sources and Descriptions</h1>
 
 </div>
 
@@ -320,31 +326,29 @@ $(document).ready(function () {
 </ol>
 <p>Description: Data contains information on 8034 mortality cases, with “Unique Point Identifier (fid)”, case type as pneumonia (1) or flu/unknown(0), point-location of each death(x(m) and y(m)), and week when death was recorded (as of 9/28/1918), for all the cases. Data recorded was for 7 weeks, which was during the <a href="cdc.gov/flu/pandemic-resources/1918-commemoration/three-waves.htm">peak of the disease</a>.</p>
 <ol start="2" style="list-style-type: decimal">
-<li>SARS 2003 (Global): <a href="https://www.who.int/csr/sars/country/country2003_08_15.pdf?ua=1">WHO.int/csr/sars/</a></li>
+<li>SARS 2003 (Global): <a href="https://www.who.int/health-topics/severe-acute-respiratory-syndrome#tab=tab_1">WHO.int/csr/sars/</a></li>
 </ol>
-<p>Description: Data contains 2538 rows of areas (a country or countries grouped by regions), and 5 columns of cumulative cases by sex and their total, median age, by status of cases (hospitalized, recovered, daily deaths, and case-fatality ratios), number of imported cases, occupationally exposed cases (health care workers), and dates of first probable and last probable case.</p>
-<p>Case fatality recorded was based on cases with known outcome, irrespective of immediate cause of death.</p>
+<p>Description: Data contains 2538 rows of daily activity, and 5 columns of date as of March 17 2003, cumulative number of cases, number of deaths, number recovered and countries for a given date.</p>
 <ol start="3" style="list-style-type: decimal">
 <li>H1N1 + Influenza B: <a href="https://apps.who.int/flumart/Default?ReportNo=12">apps.who.int/flumart</a></li>
 </ol>
-<p>Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak, with “no report” for in many countries. Our dataset for H1N1 contained 2490 rows and 6 columns. Our dataset for Inlfuenza B contained 617 rows and 6 columns.</p>
+<p>Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak, with “no report” for many countries. Our dataset for H1N1 contained 2490 rows and 6 columns. Our dataset for Inlfuenza B contained 617 rows and 6 columns.</p>
 <ol start="4" style="list-style-type: decimal">
 <li>COVID-19 (Global): <a href="https://covid19.who.int/table">covid19.who.int/table</a></li>
 </ol>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Description: This data by World Health Organization provides information on total cumulative cases, newly reported cases in last 24hrs, total deaths and deaths in last 24 hrs, and method of transmission (community, cluster, sporadic or no cases) for a country or a region. ======= Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak, with “no report” for in many countries. Our dataset for H1N1 contained rows and columns. Our dataset for Inlfuenza B contained rows and columns. &gt;&gt;&gt;&gt;&gt;&gt;&gt; 06f901dc67d43f450b4ef89cb27989c8688aae54</p>
+<p>Description: This data by World Health Organization provides information on total cumulative cases of COVID-19, newly reported cases in last 24hrs, total deaths and deaths in last 24 hrs, and method of transmission (community, cluster, sporadic or no cases) for a country or a region.</p>
 <ol start="5" style="list-style-type: decimal">
-<li>COVID-19 Deaths (USA): <a href="https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Week-Ending-D/r8kw-7aab">data.cdc.gov</a></li>
+<li>COVID-19 (USA): <a href="https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Week-Ending-D/r8kw-7aab">data.cdc.gov</a></li>
 </ol>
 <p>Description: This dataset contains weekly death counts attributed to COVID-19. It is comprised of 2376 rows and 12 columns. The variables of interest are week start, week end, state, and number of COVID-19 deaths.</p>
 <ol start="6" style="list-style-type: decimal">
 <li>COVID-19 (Chicago): <a href="https://data.cityofchicago.org/Health-Human-Services/COVID-19-Daily-Cases-Deaths-and-Hospitalizations/naz8-j4nc/data">data.cityofchicago.org</a></li>
 </ol>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Description: This data by World Health Organization provides information on total cumulative cases, newly reported cases in last 24hrs, total deaths and deaths in last 24 hrs, and method of transmission (community, cluster, sporadic or no cases) for a country or a region.</p>
+<p>Description: Data includes 267 rows of dates and 58 columns, date starting from 3/1/ 2020 to 11/22/2020. Data is collected for total cases, total deaths and total hospitalizations for each day, and stratified by age groups, sex, and ethnicity for all the cases, deaths and hospitalizations.</p>
 <ol start="7" style="list-style-type: decimal">
-<li>R0 and other statistics: <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext">thelancet.com</a></li>
+<li>R0 and other statistical summaries: <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext">thelancet.com</a></li>
 </ol>
 <p>Description: This is an article with multiple tables, table 1 with information on Basic Reproductive Rates of various prior pandemics and Covid-19. Data-scraping is used to extract the relevant table and information on it.</p>
-<p>======= Description: Data includes 267 rows of dates and 58 columns, date starting from 3/1/ 2020 to 11/22/2020. Data is collected for total cases, total deaths and total hospitalizations for each day, and stratified by age groups, sex, and ethnicity for all the cases, deaths and hospitalizations. &gt;&gt;&gt;&gt;&gt;&gt;&gt; c84248a76cd73d5e3b8e8298ec7e6ac612c09ed0</p>
 
 
 
