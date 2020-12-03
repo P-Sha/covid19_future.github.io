@@ -44,7 +44,7 @@ As of the beginning of November 2020, the total deaths due to COVID-19 surpassed
 
 #### _Motivation_
 
-Given the scale of this pandemic, this project was inspired by the idea to try and make some sense of it by comparing it to prior pandemics. Wth uncertainty and anxiety accompanying it, and no definitive known direction to its future, we were interested in exploring how the previous similar pandemics, caused by similar pathogens, turned out over time.       
+Given the scale of this pandemic, the project was inspired by the idea of trying to understand its direction by comparing it to prior pandemics. With uncertainty and anxiety accompanying it, and no definitive foreseeable future, we were interested in exploring how the previous similar pandemics, caused by similar pathogens, turned out over time.       
 
 #### _Goals_
 
@@ -79,7 +79,11 @@ Most of the datasets were available in ready-to-use CSV formats, requiring some 
   
 <brk><brk><brk>
 
-  Also, the data with R0 and other statistical comparisons between the four pandemics was extracted by scraping [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext). Information on R0 for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show r0 by disease-type graphically.
+  Also, the data with R0 and other statistical comparisons between the four pandemics was extracted by scraping [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext). Scraped data first had to be saved as a dataframe in order to make it compatible with the rest of the website. Information on R0 for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show r0 by disease-type graphically. 
+  
+<brk><brk><brk>
+
+Data for `Shiny Dashboard` ...
 
 
 ### Exploratory Analysis
@@ -186,6 +190,8 @@ subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 The graphs show similar curves in terms of shape, with the peak of maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. Tracing the bars displays total mortality for a given week.  
 
 Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we were able to analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail.  
+
+
 
 
 
