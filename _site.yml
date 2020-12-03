@@ -11,8 +11,6 @@ navbar:
       href: datasets.html
     - text: "Pandemics Timeline"
       href: pandemics_timeline.html
-    - icon: fa-envelope fa-lg
-      href: mailto:<you@youremail.com>
     - icon: fa-github fa-lg
       href: https://github.com/P-Sha/covid19_future.github.io
 output:
