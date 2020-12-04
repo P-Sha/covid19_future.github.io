@@ -22,6 +22,13 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -320,7 +327,346 @@ $(document).ready(function () {
 </div>
 
 
+<div id="chicago-spanish-flu-data" class="section level2">
+<h2><strong>Chicago Spanish Flu Data</strong></h2>
+<div id="spanish-flu-in-chicago-7-week-mortality-at-peak" class="section level4">
+<h4>Spanish Flu in Chicago (7-week mortality, at peak)</h4>
+<pre class="r"><code>spanish_rawdf = read.csv(&quot;./data/spanish_flu_chicago.csv&quot;) 
 
+save(spanish_rawdf, file = &quot;spanish_rawdf.rda&quot;)
+
+spanish_df = 
+  spanish_rawdf %&gt;% 
+  clean_names() %&gt;% 
+  group_by(week) %&gt;% 
+  summarize(mortality = n())
+
+save(spanish_df, file = &quot;spanish_df.rda&quot;)
+
+plot_span_flu =
+spanish_df %&gt;% 
+   plot_ly(
+    x = ~week, y = ~mortality, color = ~mortality, type = &quot;bar&quot;) %&gt;% 
+   layout(title = &quot;Spanish Flu&quot;) %&gt;% 
+  htmlwidgets::saveWidget(&quot;full_report.html&quot;)</code></pre>
+</div>
+</div>
+<div id="sars-cov-1-data" class="section level2">
+<h2><strong>SARS-CoV-1 Data</strong></h2>
+<div id="sars-cov-1-global-and-u.s.-data-from-kaggle" class="section level4">
+<h4>SARS-CoV-1 Global and U.S. Data (from Kaggle)</h4>
+<pre class="r"><code>sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) %&gt;% 
+  clean_names() %&gt;% 
+  mutate(
+    date = as.Date(date),
+    pandemic_interval = &quot;2003/03/17&quot; %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %&gt;% 
+    select(pandemic_duration, sars_cumulative_cases = cumulative_number_of_case_s, sars_cumulative_deaths = number_of_deaths) %&gt;% 
+  group_by(pandemic_duration) %&gt;% 
+  summarize(
+    sars_cumulative_cases = sum(sars_cumulative_cases),
+    sars_cumulative_deaths = sum(sars_cumulative_deaths)
+  ) %&gt;% 
+  mutate(
+    sars_new_cases = sars_cumulative_cases - lag(sars_cumulative_cases),
+    sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
+  )
+
+save(sars_global, file = &quot;sars_global.rda&quot;)
+
+sars_us = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) %&gt;% 
+  clean_names() %&gt;% 
+  select(-number_recovered, sars_cumulative_cases = cumulative_number_of_case_s, sars_cumulative_deaths = number_of_deaths) %&gt;%
+  filter(country == &quot;United States&quot;) %&gt;%
+  mutate(
+    date = as.Date(date),
+    pandemic_interval = &quot;2003/03/17&quot; %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1),
+    sars_new_cases = sars_cumulative_cases - lag(sars_cumulative_cases),
+    sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
+  )
+
+save(sars_us, file = &quot;sars_us.rda&quot;)</code></pre>
+</div>
+</div>
+<div id="h1n1-data" class="section level2">
+<h2><strong>H1N1 Data</strong></h2>
+<div id="h1n1-global-and-u.s.-case-data-from-kaggle" class="section level4">
+<h4>H1N1 Global and U.S. Case Data (from Kaggle):</h4>
+<pre class="r"><code>h1n1_kaggle = 
+  read.csv(&quot;./data/h1n1_data.csv&quot;) %&gt;% 
+  clean_names() %&gt;% 
+  select(-link) %&gt;% 
+  mutate(
+    date = as.Date(date, &quot;%m/%d/%y&quot;),
+    pandemic_interval = &quot;2009/04/24&quot; %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %&gt;% 
+ rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths) %&gt;% 
+  arrange(pandemic_duration)
+
+h1n1_global_deaths = 
+  h1n1_kaggle %&gt;%   
+  group_by(pandemic_duration) %&gt;% 
+  summarize(
+    h1n1_cumulative_cases = sum(h1n1_cumulative_cases, na.rm = TRUE),
+    h1n1_cumulative_deaths = sum(h1n1_cumulative_deaths, na.rm = TRUE)
+  ) %&gt;% 
+  mutate(
+    h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
+    h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
+  )
+
+save(h1n1_global_deaths, file = &quot;h1n1_global_deaths.rda&quot;)
+
+h1n1_us_deaths = 
+  h1n1_kaggle %&gt;% 
+  filter(country == &quot;United States of America&quot;) %&gt;% 
+  mutate(
+    h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
+    h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
+  )
+
+save(h1n1_us_deaths, file = &quot;h1n1_us_deaths.rda&quot;)</code></pre>
+</div>
+<div id="h1n1-global-and-u.s.-case-data-from-who" class="section level4">
+<h4>H1N1 Global and U.S. Case Data (from WHO):</h4>
+<pre class="r"><code>h1n1_global_cases = 
+  read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;, skip = 3) %&gt;% 
+  clean_names() %&gt;% 
+  select(country, sdate, edate, h1n1_new_cases = ah1n12009) %&gt;% 
+  mutate(
+    sdate = as.Date(sdate, &quot;%m/%d/%y&quot;),
+    edate = as.Date(edate, &quot;%m/%d/%y&quot;),
+    pandemic_interval = &quot;2009/04/06&quot; %--% edate,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %&gt;% 
+    filter(pandemic_duration &gt;= 0) %&gt;% 
+  arrange(pandemic_duration) %&gt;% 
+  group_by(pandemic_duration) %&gt;% 
+  summarize(
+    h1n1_new_cases = sum(h1n1_new_cases, na.rm = TRUE)
+  ) %&gt;% 
+  mutate(
+    h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
+  )
+
+save(h1n1_global_cases, file = &quot;h1n1_global_cases.rda&quot;)
+
+h1n1_us_cases = read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
+  clean_names() %&gt;% 
+  select(start_date:end_date, h1n1_new_cases = a_h1n1_pdm09) %&gt;% 
+  mutate(
+    start_date = as.Date(start_date),
+    end_date = as.Date(end_date),
+    pandemic_interval = &quot;2009/04/06&quot; %--% end_date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %&gt;% 
+    filter(pandemic_duration &gt;= 0) %&gt;% 
+  mutate(
+    h1n1_new_cases = as.numeric(h1n1_new_cases),
+    h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
+  )
+
+save(h1n1_us_cases, file = &quot;h1n1_us_cases.rda&quot;)</code></pre>
+</div>
+</div>
+<div id="influenza-b-data" class="section level2">
+<h2><strong>Influenza B Data</strong></h2>
+<div id="influenza-b-global-and-u.s.-data-from-who" class="section level4">
+<h4>Influenza B Global and U.S. Data (from WHO)</h4>
+<pre class="r"><code>influenza_global_cases = 
+  read_csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;, skip = 3) %&gt;% 
+  clean_names() %&gt;% 
+  select(country, sdate, edate, influenza_b_new_cases = inf_b) %&gt;% 
+  mutate(
+    sdate = as.Date(sdate, &quot;%m/%d/%y&quot;),
+    edate = as.Date(edate, &quot;%m/%d/%y&quot;),
+    pandemic_interval = &quot;2009/04/06&quot; %--% edate,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %&gt;% 
+    filter(pandemic_duration &gt;= 0) %&gt;% 
+  arrange(pandemic_duration) %&gt;% 
+  group_by(pandemic_duration) %&gt;% 
+  summarize(
+    influenza_b_new_cases = sum(influenza_b_new_cases, na.rm = TRUE)
+  ) %&gt;% 
+  mutate(
+    influenza_b_cumulative_cases = CUMULATIVE_SUM(influenza_b_new_cases)
+  )
+
+save(influenza_global_cases, file = &quot;influenza_global_cases.rda&quot;)
+
+influenza_us_cases = 
+  read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(start_date:end_date, b_total) %&gt;% 
+  mutate(start_date = as.Date(start_date),
+         end_date = as.Date(end_date),
+         pandemic_interval = &quot;2009/04/06&quot; %--% end_date, 
+         pandemic_duration = as.duration(pandemic_interval) / ddays(1)) %&gt;% 
+  drop_na() %&gt;% 
+  filter(pandemic_duration &gt;= 0) %&gt;% 
+  mutate(
+    influenza_new_cases = as.numeric(b_total),
+    influenza_cumulative_cases = CUMULATIVE_SUM(influenza_new_cases)
+  )
+
+save(influenza_us_cases, file = &quot;influenza_us_cases.rda&quot;)</code></pre>
+</div>
+</div>
+<div id="covid-19-data" class="section level2">
+<h2><strong>COVID-19 Data</strong></h2>
+<div id="covid-19-global-data-from-who" class="section level4">
+<h4>COVID-19 Global Data (from WHO)</h4>
+<pre class="r"><code>covid_global = read_csv(&quot;./data/covid19_global.csv&quot;) %&gt;% 
+  clean_names() %&gt;% 
+  select(-country_code, -who_region, covid_new_cases = new_cases, covid_cumulative_cases = cumulative_cases, covid_new_deaths = new_deaths, covid_cumulative_deaths = cumulative_deaths) %&gt;% 
+  mutate(
+    date = as.Date(date_reported, &quot;%m/%d/%Y&quot;),
+    pandemic_interval = &quot;2020/01/03&quot; %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %&gt;% 
+  group_by(pandemic_duration) %&gt;% 
+  summarize(across(covid_new_cases:covid_cumulative_deaths, sum))
+
+save(covid_global, file = &quot;covid_global.rda&quot;)</code></pre>
+</div>
+<div id="covid-19-u.s.-data-from-cdc" class="section level4">
+<h4>COVID-19 U.S. Data (from CDC)</h4>
+</div>
+<div id="covid-19-chicago-data-from-kaggle" class="section level4">
+<h4>COVID-19 Chicago Data (from Kaggle)</h4>
+<pre class="r"><code>covid19_chicago_rawdf =  read.csv(&quot;./data/covid19_chicago.csv&quot;) 
+
+save(covid19_chicago_rawdf, file = &quot;covid19_chicago_rawdf.rda&quot;)
+
+covid19_chicago =
+  covid19_chicago_rawdf %&gt;% 
+  clean_names() %&gt;% 
+  filter(deaths_total != 0) %&gt;% 
+  mutate(
+    date = as.Date(date, &quot;%m/%d/%y&quot;)
+  ) 
+  
+ row1 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-04-07&quot;) &amp; date &lt;= as.Date(&quot;2020-04-13&quot;)) %&gt;% 
+     summarize(
+       week = 1,
+       mortality = sum(deaths_total))
+ 
+ row2 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-04-14&quot;) &amp; date &lt;= as.Date(&quot;2020-04-20&quot;)) %&gt;% 
+     summarize(
+       week = 2,
+        mortality = sum(deaths_total))
+ 
+ row3 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-04-21&quot;) &amp; date &lt;= as.Date(&quot;2020-04-27&quot;)) %&gt;% 
+     summarize(
+       week = 3,
+        mortality = sum(deaths_total))
+ 
+ row4 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-04-28&quot;) &amp; date &lt;= as.Date(&quot;2020-05-04&quot;)) %&gt;% 
+     summarize(
+       week = 4,
+        mortality = sum(deaths_total))
+ 
+ row5 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-05-05&quot;) &amp; date &lt;= as.Date(&quot;2020-05-11&quot;)) %&gt;% 
+     summarize(
+       week = 5,
+        mortality = sum(deaths_total))
+ 
+ row6 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-05-12&quot;) &amp; date &lt;= as.Date(&quot;2020-05-18&quot;)) %&gt;% 
+     summarize(
+       week = 6,
+        mortality = sum(deaths_total))
+ 
+ row7 = covid19_chicago %&gt;%  
+     filter(date &gt;= as.Date(&quot;2020-05-19&quot;) &amp; date &lt;= as.Date(&quot;2020-05-25&quot;)) %&gt;% 
+     summarize(
+       week = 7,
+        mortality = sum(deaths_total))
+ 
+covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
+
+save(covid19_chicago_df, file = &quot;covid19_chicago_df.rda&quot;)
+
+plot_covid_chicago = 
+  covid19_chicago_df %&gt;% 
+  plot_ly(
+    x = ~week, y = ~ mortality, color = ~ mortality, type = &quot;bar&quot;) %&gt;% 
+  layout(title = &quot;Spanish Flu (left) vs COVID-19: Peak 7 weeks comparison (Chicago)&quot;)
+
+# Comparison plot
+
+# Error here: subplot(plot_span_flu, plot_covid_chicago, shareX = TRUE,  shareY = TRUE)</code></pre>
+</div>
+</div>
+<div id="basic-reproductive-rate" class="section level2">
+<h2><strong>Basic Reproductive rate</strong></h2>
+<pre class="r"><code>load(&quot;./table_r0.rda&quot;)
+
+table_r0 %&gt;%
+  filter(x == &quot;Basic Reproductive rate, R0&quot;) %&gt;%            
+   pivot_longer(    
+    covid_19:h1n1_2009,
+    names_to = &quot;pandemic&quot;,
+    values_to = &quot;r0&quot;
+    ) %&gt;% 
+  plot_ly(
+    x = ~pandemic, y = ~r0, color = ~r0, type = &quot;bar&quot;, ymin = 0) %&gt;% 
+  layout(title = &quot;Basic Reproductive rate&quot;, showlegend = FALSE)</code></pre>
+<div id="htmlwidget-6fd0a11aa7d89527651d" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6fd0a11aa7d89527651d">{"x":{"visdat":{"8b43b866288":["function () ","plotlyVisDat"]},"cur_data":"8b43b866288","attrs":{"8b43b866288":{"x":{},"y":{},"ymin":0,"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Basic Reproductive rate","showlegend":false,"xaxis":{"domain":[0,1],"automargin":true,"title":"pandemic","type":"category","categoryorder":"array","categoryarray":["covid_19","h1n1_2009","sars_2003","spanish_flu"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"r0","type":"category","categoryorder":"array","categoryarray":["1·7","2·0","2·4","2·5"]},"hovermode":"closest"},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["h1n1_2009"],"y":["1·7"],"type":"bar","name":"1·7","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["spanish_flu"],"y":["2·0"],"type":"bar","name":"2·0","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["sars_2003"],"y":["2·4"],"type":"bar","name":"2·4","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["covid_19"],"y":["2·5"],"type":"bar","name":"2·5","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>table_r0 %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+<th align="left">covid_19</th>
+<th align="left">sars_2003</th>
+<th align="left">spanish_flu</th>
+<th align="left">h1n1_2009</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Basic Reproductive rate, R0</td>
+<td align="left">2·5</td>
+<td align="left">2·4</td>
+<td align="left">2·0</td>
+<td align="left">1·7</td>
+</tr>
+<tr class="even">
+<td align="left">Incubation period, days</td>
+<td align="left">4–12</td>
+<td align="left">2–7</td>
+<td align="left">Unknown</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Interval between symptom onset and maximum infectivity, days</td>
+<td align="left">0</td>
+<td align="left">5–7</td>
+<td align="left">2</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">Proportion with mild illness</td>
+<td align="left">High</td>
+<td align="left">Low</td>
+<td align="left">High</td>
+<td align="left">High</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 
 

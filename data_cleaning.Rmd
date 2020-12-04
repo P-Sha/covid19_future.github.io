@@ -3,5 +3,332 @@ title: "Clean and Tidy datasets"
 output: html_document
 ---
 
+```{r setup, include = FALSE}
+library(tidyverse)
+library(ggplot2)
+library(dygraphs)
+library(readxl)
+library(rvest)
+library(httr)
+library(janitor)
+library(tidyquant)
+library(scales)
+library(plotly)
+```
+
+## **Chicago Spanish Flu Data**
+
+#### Spanish Flu in Chicago (7-week mortality, at peak)
+
+```{r spanish flu data and plot, message = F, warning = F}
+spanish_rawdf = read.csv("./data/spanish_flu_chicago.csv") 
+
+save(spanish_rawdf, file = "spanish_rawdf.rda")
+
+spanish_df = 
+  spanish_rawdf %>% 
+  clean_names() %>% 
+  group_by(week) %>% 
+  summarize(mortality = n())
+
+save(spanish_df, file = "spanish_df.rda")
+
+plot_span_flu =
+spanish_df %>% 
+   plot_ly(
+    x = ~week, y = ~mortality, color = ~mortality, type = "bar") %>% 
+   layout(title = "Spanish Flu") %>% 
+  htmlwidgets::saveWidget("full_report.html")
+```
 
 
+## **SARS-CoV-1 Data**
+
+#### SARS-CoV-1 Global and U.S. Data (from Kaggle) 
+
+```{r sars-cov-1 data + plots, message = F, warning = F}
+sars_global = read.csv("./data/sars_2003_complete_dataset_clean.csv") %>% 
+  clean_names() %>% 
+  mutate(
+    date = as.Date(date),
+    pandemic_interval = "2003/03/17" %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+    select(pandemic_duration, sars_cumulative_cases = cumulative_number_of_case_s, sars_cumulative_deaths = number_of_deaths) %>% 
+  group_by(pandemic_duration) %>% 
+  summarize(
+    sars_cumulative_cases = sum(sars_cumulative_cases),
+    sars_cumulative_deaths = sum(sars_cumulative_deaths)
+  ) %>% 
+  mutate(
+    sars_new_cases = sars_cumulative_cases - lag(sars_cumulative_cases),
+    sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
+  )
+
+save(sars_global, file = "sars_global.rda")
+
+sars_us = read.csv("./data/sars_2003_complete_dataset_clean.csv") %>% 
+  clean_names() %>% 
+  select(-number_recovered, sars_cumulative_cases = cumulative_number_of_case_s, sars_cumulative_deaths = number_of_deaths) %>%
+  filter(country == "United States") %>%
+  mutate(
+    date = as.Date(date),
+    pandemic_interval = "2003/03/17" %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1),
+    sars_new_cases = sars_cumulative_cases - lag(sars_cumulative_cases),
+    sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
+  )
+
+save(sars_us, file = "sars_us.rda")
+```
+
+
+## **H1N1 Data**
+
+#### H1N1 Global and U.S. Case Data (from Kaggle):
+
+```{r h1n1 kaggle data, message = F, warning = F}
+h1n1_kaggle = 
+  read.csv("./data/h1n1_data.csv") %>% 
+  clean_names() %>% 
+  select(-link) %>% 
+  mutate(
+    date = as.Date(date, "%m/%d/%y"),
+    pandemic_interval = "2009/04/24" %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+ rename(h1n1_cumulative_cases = cumulative_no_of_cases, h1n1_cumulative_deaths = cumulative_no_of_deaths) %>% 
+  arrange(pandemic_duration)
+
+h1n1_global_deaths = 
+  h1n1_kaggle %>%   
+  group_by(pandemic_duration) %>% 
+  summarize(
+    h1n1_cumulative_cases = sum(h1n1_cumulative_cases, na.rm = TRUE),
+    h1n1_cumulative_deaths = sum(h1n1_cumulative_deaths, na.rm = TRUE)
+  ) %>% 
+  mutate(
+    h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
+    h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
+  )
+
+save(h1n1_global_deaths, file = "h1n1_global_deaths.rda")
+
+h1n1_us_deaths = 
+  h1n1_kaggle %>% 
+  filter(country == "United States of America") %>% 
+  mutate(
+    h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
+    h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
+  )
+
+save(h1n1_us_deaths, file = "h1n1_us_deaths.rda")
+```
+
+#### H1N1 Global and U.S. Case Data (from WHO):
+
+```{r h1n1 who data, message = F, warning = F}
+h1n1_global_cases = 
+  read.csv("./data/global_FluNetInteractiveReport.csv", skip = 3) %>% 
+  clean_names() %>% 
+  select(country, sdate, edate, h1n1_new_cases = ah1n12009) %>% 
+  mutate(
+    sdate = as.Date(sdate, "%m/%d/%y"),
+    edate = as.Date(edate, "%m/%d/%y"),
+    pandemic_interval = "2009/04/06" %--% edate,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+    filter(pandemic_duration >= 0) %>% 
+  arrange(pandemic_duration) %>% 
+  group_by(pandemic_duration) %>% 
+  summarize(
+    h1n1_new_cases = sum(h1n1_new_cases, na.rm = TRUE)
+  ) %>% 
+  mutate(
+    h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
+  )
+
+save(h1n1_global_cases, file = "h1n1_global_cases.rda")
+
+h1n1_us_cases = read_excel("./data/USA_FluNetInteractiveReport.xlsx", skip = 5) %>% 
+  clean_names() %>% 
+  select(start_date:end_date, h1n1_new_cases = a_h1n1_pdm09) %>% 
+  mutate(
+    start_date = as.Date(start_date),
+    end_date = as.Date(end_date),
+    pandemic_interval = "2009/04/06" %--% end_date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+    filter(pandemic_duration >= 0) %>% 
+  mutate(
+    h1n1_new_cases = as.numeric(h1n1_new_cases),
+    h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
+  )
+
+save(h1n1_us_cases, file = "h1n1_us_cases.rda")
+```
+
+
+## **Influenza B Data**
+
+#### Influenza B Global and U.S. Data (from WHO)
+
+```{r influenza b data + plot, message = F, warning = F}
+influenza_global_cases = 
+  read_csv("./data/global_FluNetInteractiveReport.csv", skip = 3) %>% 
+  clean_names() %>% 
+  select(country, sdate, edate, influenza_b_new_cases = inf_b) %>% 
+  mutate(
+    sdate = as.Date(sdate, "%m/%d/%y"),
+    edate = as.Date(edate, "%m/%d/%y"),
+    pandemic_interval = "2009/04/06" %--% edate,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+    filter(pandemic_duration >= 0) %>% 
+  arrange(pandemic_duration) %>% 
+  group_by(pandemic_duration) %>% 
+  summarize(
+    influenza_b_new_cases = sum(influenza_b_new_cases, na.rm = TRUE)
+  ) %>% 
+  mutate(
+    influenza_b_cumulative_cases = CUMULATIVE_SUM(influenza_b_new_cases)
+  )
+
+save(influenza_global_cases, file = "influenza_global_cases.rda")
+
+influenza_us_cases = 
+  read_excel("./data/USA_FluNetInteractiveReport.xlsx", skip = 5) %>% 
+  janitor::clean_names() %>% 
+  select(start_date:end_date, b_total) %>% 
+  mutate(start_date = as.Date(start_date),
+         end_date = as.Date(end_date),
+         pandemic_interval = "2009/04/06" %--% end_date, 
+         pandemic_duration = as.duration(pandemic_interval) / ddays(1)) %>% 
+  drop_na() %>% 
+  filter(pandemic_duration >= 0) %>% 
+  mutate(
+    influenza_new_cases = as.numeric(b_total),
+    influenza_cumulative_cases = CUMULATIVE_SUM(influenza_new_cases)
+  )
+
+save(influenza_us_cases, file = "influenza_us_cases.rda")
+```
+
+
+## **COVID-19 Data**
+
+#### COVID-19 Global Data (from WHO)
+
+```{r covid global data, message = F, warning = F}
+covid_global = read_csv("./data/covid19_global.csv") %>% 
+  clean_names() %>% 
+  select(-country_code, -who_region, covid_new_cases = new_cases, covid_cumulative_cases = cumulative_cases, covid_new_deaths = new_deaths, covid_cumulative_deaths = cumulative_deaths) %>% 
+  mutate(
+    date = as.Date(date_reported, "%m/%d/%Y"),
+    pandemic_interval = "2020/01/03" %--% date,
+    pandemic_duration = as.duration(pandemic_interval) / ddays(1)
+  ) %>% 
+  group_by(pandemic_duration) %>% 
+  summarize(across(covid_new_cases:covid_cumulative_deaths, sum))
+
+save(covid_global, file = "covid_global.rda")
+```
+
+#### COVID-19 U.S. Data (from CDC)
+
+```{r covid us data}
+
+```
+
+
+#### COVID-19 Chicago Data (from Kaggle)
+
+```{r covid chicago data + plot, message = F, warning = F}
+covid19_chicago_rawdf =  read.csv("./data/covid19_chicago.csv") 
+
+save(covid19_chicago_rawdf, file = "covid19_chicago_rawdf.rda")
+
+covid19_chicago =
+  covid19_chicago_rawdf %>% 
+  clean_names() %>% 
+  filter(deaths_total != 0) %>% 
+  mutate(
+    date = as.Date(date, "%m/%d/%y")
+  ) 
+  
+ row1 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-04-07") & date <= as.Date("2020-04-13")) %>% 
+     summarize(
+       week = 1,
+       mortality = sum(deaths_total))
+ 
+ row2 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-04-14") & date <= as.Date("2020-04-20")) %>% 
+     summarize(
+       week = 2,
+        mortality = sum(deaths_total))
+ 
+ row3 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-04-21") & date <= as.Date("2020-04-27")) %>% 
+     summarize(
+       week = 3,
+        mortality = sum(deaths_total))
+ 
+ row4 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-04-28") & date <= as.Date("2020-05-04")) %>% 
+     summarize(
+       week = 4,
+        mortality = sum(deaths_total))
+ 
+ row5 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-05-05") & date <= as.Date("2020-05-11")) %>% 
+     summarize(
+       week = 5,
+        mortality = sum(deaths_total))
+ 
+ row6 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-05-12") & date <= as.Date("2020-05-18")) %>% 
+     summarize(
+       week = 6,
+        mortality = sum(deaths_total))
+ 
+ row7 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-05-19") & date <= as.Date("2020-05-25")) %>% 
+     summarize(
+       week = 7,
+        mortality = sum(deaths_total))
+ 
+covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
+
+save(covid19_chicago_df, file = "covid19_chicago_df.rda")
+
+plot_covid_chicago = 
+  covid19_chicago_df %>% 
+  plot_ly(
+    x = ~week, y = ~ mortality, color = ~ mortality, type = "bar") %>% 
+  layout(title = "Spanish Flu (left) vs COVID-19: Peak 7 weeks comparison (Chicago)")
+
+# Comparison plot
+
+# Error here: subplot(plot_span_flu, plot_covid_chicago, shareX = TRUE,  shareY = TRUE)
+```
+
+## **Basic Reproductive rate**
+
+```{r basic reproductive rate}
+load("./table_r0.rda")
+
+table_r0 %>%
+  filter(x == "Basic Reproductive rate, R0") %>%            
+   pivot_longer(	
+    covid_19:h1n1_2009,
+    names_to = "pandemic",
+    values_to = "r0"
+    ) %>% 
+  plot_ly(
+    x = ~pandemic, y = ~r0, color = ~r0, type = "bar", ymin = 0) %>% 
+  layout(title = "Basic Reproductive rate", showlegend = FALSE)
+  
+table_r0 %>% 
+  knitr::kable()
+```
