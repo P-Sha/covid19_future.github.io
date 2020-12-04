@@ -48,7 +48,7 @@ save(covid_us_deaths_df, file = "covid_us_deaths_df.rda")
 
 #### Cases
 
-###```{r us cases}
+```{r us cases}
 get_all_cases = function(url) {
   
   all_cases = vector("list", length = 0)
@@ -60,19 +60,19 @@ get_all_cases = function(url) {
   while (DO_NEXT) {
     message("Getting data, page ", loop_index)
     
-#    all_cases[[loop_index]] = 
-#      GET(url,
-#         query = list(`$order` = "cdc_report_dt",
-#                       `$limit` = chunk_size,
-#                       `$offset` = as.integer((loop_index - 1) * chunk_size)
+    all_cases[[loop_index]] = 
+      GET(url,
+         query = list(`$order` = "cdc_report_dt",
+                       `$limit` = chunk_size,
+                       `$offset` = as.integer((loop_index - 1) * chunk_size)
                        )
           ) %>%
       content("text") %>%
       fromJSON() %>%
       as_tibble()
     
-#    DO_NEXT = dim(all_cases[[loop_index]])[1] == chunk_size
-#    loop_index = loop_index + 1
+    DO_NEXT = dim(all_cases[[loop_index]])[1] == chunk_size
+    loop_index = loop_index + 1
   }
   
   all_cases
@@ -91,9 +91,9 @@ covid_us_cases_df =
   group_by(cdc_report_dt) %>% 
   summarize(cumulative_cases = max(case_id))
 
-save(covid_us_cases_df, file = "covid_us_cases_df.rda")
+save(covid_us_cases_df, file = "./covid_us_cases_df.rda")
 
 covid_us_cases_df %>% 
   ggplot(aes(x = cdc_report_dt, y = cumulative_cases)) +
   geom_point()
-###```
+```

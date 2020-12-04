@@ -377,6 +377,8 @@ h1n1_us_who = readxl::read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&q
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
   )
 
+save(h1n1_us_who, file = &quot;h1n1_us_who.rda&quot;)
+
 ##global data
 h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;, skip = 3) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -397,6 +399,7 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
   )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>save(h1n1_global_who, file = &quot;h1n1_global_who.rda&quot;)</code></pre>
 </div>
 <div id="covid-19" class="section level3">
 <h3>COVID-19</h3>
@@ -492,8 +495,12 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<<<<<<< HEAD
 <pre class="r"><code>save(sars_us, file = &quot;sars_us.rda&quot;)
 save(sars_global, file = &quot;sars_global.rda&quot;)</code></pre>
+=======
+<pre class="r"><code>save(sars_global, file = &quot;sars_global.rda&quot;)</code></pre>
+>>>>>>> 5e1d258d8b6db31337a4827f51066877ef96aafb
 </div>
 </div>
 <div id="visualization" class="section level2">
