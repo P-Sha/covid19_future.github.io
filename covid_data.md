@@ -22,51 +22,174 @@ save(covid_us_deaths_df, file = "covid_us_deaths_df.rda")
 
 #### Cases
 
-\#\#\#\`\`\`{r us cases} get\_all\_cases = function(url) {
+``` r
+get_all_cases = function(url) {
+  
+  all_cases = vector("list", length = 0)
+  
+  loop_index = 1
+  chunk_size = 99999
+  DO_NEXT = TRUE
+  
+  while (DO_NEXT) {
+    message("Getting data, page ", loop_index)
+    
+    all_cases[[loop_index]] = 
+      GET(url,
+         query = list(`$order` = "cdc_report_dt",
+                       `$limit` = chunk_size,
+                       `$offset` = as.integer((loop_index - 1) * chunk_size)
+                       )
+          ) %>%
+      content("text") %>%
+      fromJSON() %>%
+      as_tibble()
+    
+    DO_NEXT = dim(all_cases[[loop_index]])[1] == chunk_size
+    loop_index = loop_index + 1
+  }
+  
+  all_cases
+  
+}
 
-all\_cases = vector(“list”, length = 0)
+url = "https://data.cdc.gov/resource/vbim-akqf.json"
 
-loop\_index = 1 chunk\_size = 99999 DO\_NEXT = TRUE
-
-while (DO\_NEXT) { message(“Getting data, page”, loop\_index)
-
-# all\_cases\[\[loop\_index\]\] =
-
-# GET(url,
-
-# query = list(`$order` = “cdc\_report\_dt”,
-
-# `$limit` = chunk\_size,
-
-# `$offset` = as.integer((loop\_index - 1) \* chunk\_size)
-
-``` 
-                   )
-      ) %>%
-  content("text") %>%
-  fromJSON() %>%
-  as_tibble()
+covid_us_cases_df = 
+  get_all_cases(url) %>%
+  bind_rows() %>% 
+  mutate(cdc_report_dt = as.Date(cdc_report_dt)) %>% 
+  arrange(cdc_report_dt) %>% 
+  mutate(case_id = row_number()) %>% 
+  relocate(case_id) %>% 
+  group_by(cdc_report_dt) %>% 
+  summarize(cumulative_cases = max(case_id))
 ```
 
-# DO\_NEXT = dim(all\_cases\[\[loop\_index\]\])\[1\] == chunk\_size
+    ## Getting data, page 1
 
-# loop\_index = loop\_index + 1
+    ## Getting data, page 2
 
-}
+    ## Getting data, page 3
 
-all\_cases
+    ## Getting data, page 4
 
-}
+    ## Getting data, page 5
 
-url = “<https://data.cdc.gov/resource/vbim-akqf.json>”
+    ## Getting data, page 6
 
-covid\_us\_cases\_df = get\_all\_cases(url) %\>% bind\_rows() %\>%
-mutate(cdc\_report\_dt = as.Date(cdc\_report\_dt)) %\>%
-arrange(cdc\_report\_dt) %\>% mutate(case\_id = row\_number()) %\>%
-relocate(case\_id) %\>% group\_by(cdc\_report\_dt) %\>%
-summarize(cumulative\_cases = max(case\_id))
+    ## Getting data, page 7
 
-save(covid\_us\_cases\_df, file = “covid\_us\_cases\_df.rda”)
+    ## Getting data, page 8
 
-covid\_us\_cases\_df %\>% ggplot(aes(x = cdc\_report\_dt, y =
-cumulative\_cases)) + geom\_point() \#\#\#\`\`\`
+    ## Getting data, page 9
+
+    ## Getting data, page 10
+
+    ## Getting data, page 11
+
+    ## Getting data, page 12
+
+    ## Getting data, page 13
+
+    ## Getting data, page 14
+
+    ## Getting data, page 15
+
+    ## Getting data, page 16
+
+    ## Getting data, page 17
+
+    ## Getting data, page 18
+
+    ## Getting data, page 19
+
+    ## Getting data, page 20
+
+    ## Getting data, page 21
+
+    ## Getting data, page 22
+
+    ## Getting data, page 23
+
+    ## Getting data, page 24
+
+    ## Getting data, page 25
+
+    ## Getting data, page 26
+
+    ## Getting data, page 27
+
+    ## Getting data, page 28
+
+    ## Getting data, page 29
+
+    ## Getting data, page 30
+
+    ## Getting data, page 31
+
+    ## Getting data, page 32
+
+    ## Getting data, page 33
+
+    ## Getting data, page 34
+
+    ## Getting data, page 35
+
+    ## Getting data, page 36
+
+    ## Getting data, page 37
+
+    ## Getting data, page 38
+
+    ## Getting data, page 39
+
+    ## Getting data, page 40
+
+    ## Getting data, page 41
+
+    ## Getting data, page 42
+
+    ## Getting data, page 43
+
+    ## Getting data, page 44
+
+    ## Getting data, page 45
+
+    ## Getting data, page 46
+
+    ## Getting data, page 47
+
+    ## Getting data, page 48
+
+    ## Getting data, page 49
+
+    ## Getting data, page 50
+
+    ## Getting data, page 51
+
+    ## Getting data, page 52
+
+    ## Getting data, page 53
+
+    ## Getting data, page 54
+
+    ## Getting data, page 55
+
+    ## Getting data, page 56
+
+    ## Getting data, page 57
+
+    ## Getting data, page 58
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+``` r
+save(covid_us_cases_df, file = "./covid_us_cases_df.rda")
+
+covid_us_cases_df %>% 
+  ggplot(aes(x = cdc_report_dt, y = cumulative_cases)) +
+  geom_point()
+```
+
+<img src="covid_data_files/figure-gfm/us cases-1.png" width="90%" />
