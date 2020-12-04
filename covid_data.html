@@ -616,30 +616,171 @@ body {
 <span id="cb1-11"><a href="#cb1-11"></a></span>
 <span id="cb1-12"><a href="#cb1-12"></a><span class="kw">save</span>(covid_us_deaths_df, <span class="dt">file =</span> <span class="st">&quot;covid_us_deaths_df.rda&quot;</span>)</span></code></pre></div>
 <h4 id="cases">Cases</h4>
-<p>###```{r us cases} get_all_cases = function(url) {</p>
-<p>all_cases = vector(“list”, length = 0)</p>
-<p>loop_index = 1 chunk_size = 99999 DO_NEXT = TRUE</p>
-<p>while (DO_NEXT) { message(“Getting data, page”, loop_index)</p>
-<h1 id="all_casesloop_index-">all_cases[[loop_index]] =</h1>
-<h1 id="geturl">GET(url,</h1>
-<h1 id="query--listorder--cdc_report_dt">query = list(<code>$order</code> = “cdc_report_dt”,</h1>
-<h1 id="limit--chunk_size"><code>$limit</code> = chunk_size,</h1>
-<h1 id="offset--asintegerloop_index---1--chunk_size"><code>$offset</code> = as.integer((loop_index - 1) * chunk_size)</h1>
-<pre><code>                   )
-      ) %&gt;%
-  content(&quot;text&quot;) %&gt;%
-  fromJSON() %&gt;%
-  as_tibble()
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>get_all_cases =<span class="st"> </span><span class="cf">function</span>(url) {</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  </span>
+<span id="cb2-3"><a href="#cb2-3"></a>  all_cases =<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;list&quot;</span>, <span class="dt">length =</span> <span class="dv">0</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  </span>
+<span id="cb2-5"><a href="#cb2-5"></a>  loop_index =<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>  chunk_size =<span class="st"> </span><span class="dv">99999</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>  DO_NEXT =<span class="st"> </span><span class="ot">TRUE</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>  </span>
+<span id="cb2-9"><a href="#cb2-9"></a>  <span class="cf">while</span> (DO_NEXT) {</span>
+<span id="cb2-10"><a href="#cb2-10"></a>    <span class="kw">message</span>(<span class="st">&quot;Getting data, page &quot;</span>, loop_index)</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    </span>
+<span id="cb2-12"><a href="#cb2-12"></a>    all_cases[[loop_index]] =<span class="st"> </span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="st">      </span><span class="kw">GET</span>(url,</span>
+<span id="cb2-14"><a href="#cb2-14"></a>         <span class="dt">query =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">$order</span><span class="st">`</span> =<span class="st"> &quot;cdc_report_dt&quot;</span>,</span>
+<span id="cb2-15"><a href="#cb2-15"></a>                       <span class="st">`</span><span class="dt">$limit</span><span class="st">`</span> =<span class="st"> </span>chunk_size,</span>
+<span id="cb2-16"><a href="#cb2-16"></a>                       <span class="st">`</span><span class="dt">$offset</span><span class="st">`</span> =<span class="st"> </span><span class="kw">as.integer</span>((loop_index <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>chunk_size)</span>
+<span id="cb2-17"><a href="#cb2-17"></a>                       )</span>
+<span id="cb2-18"><a href="#cb2-18"></a>          ) <span class="op">%&gt;%</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="st">      </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="st">      </span><span class="kw">fromJSON</span>() <span class="op">%&gt;%</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="st">      </span><span class="kw">as_tibble</span>()</span>
+<span id="cb2-22"><a href="#cb2-22"></a>    </span>
+<span id="cb2-23"><a href="#cb2-23"></a>    DO_NEXT =<span class="st"> </span><span class="kw">dim</span>(all_cases[[loop_index]])[<span class="dv">1</span>] <span class="op">==</span><span class="st"> </span>chunk_size</span>
+<span id="cb2-24"><a href="#cb2-24"></a>    loop_index =<span class="st"> </span>loop_index <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a>  }</span>
+<span id="cb2-26"><a href="#cb2-26"></a>  </span>
+<span id="cb2-27"><a href="#cb2-27"></a>  all_cases</span>
+<span id="cb2-28"><a href="#cb2-28"></a>  </span>
+<span id="cb2-29"><a href="#cb2-29"></a>}</span>
+<span id="cb2-30"><a href="#cb2-30"></a></span>
+<span id="cb2-31"><a href="#cb2-31"></a>url =<span class="st"> &quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;</span></span>
+<span id="cb2-32"><a href="#cb2-32"></a></span>
+<span id="cb2-33"><a href="#cb2-33"></a>covid_us_cases_df =<span class="st"> </span></span>
+<span id="cb2-34"><a href="#cb2-34"></a><span class="st">  </span><span class="kw">get_all_cases</span>(url) <span class="op">%&gt;%</span></span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="st">  </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cdc_report_dt =</span> <span class="kw">as.Date</span>(cdc_report_dt)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-37"><a href="#cb2-37"></a><span class="st">  </span><span class="kw">arrange</span>(cdc_report_dt) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-38"><a href="#cb2-38"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">case_id =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-39"><a href="#cb2-39"></a><span class="st">  </span><span class="kw">relocate</span>(case_id) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-40"><a href="#cb2-40"></a><span class="st">  </span><span class="kw">group_by</span>(cdc_report_dt) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-41"><a href="#cb2-41"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">cumulative_cases =</span> <span class="kw">max</span>(case_id))</span></code></pre></div>
+<pre><code>## Getting data, page 1
+
+## Getting data, page 2
+
+## Getting data, page 3
+
+## Getting data, page 4
+
+## Getting data, page 5
+
+## Getting data, page 6
+
+## Getting data, page 7
+
+## Getting data, page 8
+
+## Getting data, page 9
+
+## Getting data, page 10
+
+## Getting data, page 11
+
+## Getting data, page 12
+
+## Getting data, page 13
+
+## Getting data, page 14
+
+## Getting data, page 15
+
+## Getting data, page 16
+
+## Getting data, page 17
+
+## Getting data, page 18
+
+## Getting data, page 19
+
+## Getting data, page 20
+
+## Getting data, page 21
+
+## Getting data, page 22
+
+## Getting data, page 23
+
+## Getting data, page 24
+
+## Getting data, page 25
+
+## Getting data, page 26
+
+## Getting data, page 27
+
+## Getting data, page 28
+
+## Getting data, page 29
+
+## Getting data, page 30
+
+## Getting data, page 31
+
+## Getting data, page 32
+
+## Getting data, page 33
+
+## Getting data, page 34
+
+## Getting data, page 35
+
+## Getting data, page 36
+
+## Getting data, page 37
+
+## Getting data, page 38
+
+## Getting data, page 39
+
+## Getting data, page 40
+
+## Getting data, page 41
+
+## Getting data, page 42
+
+## Getting data, page 43
+
+## Getting data, page 44
+
+## Getting data, page 45
+
+## Getting data, page 46
+
+## Getting data, page 47
+
+## Getting data, page 48
+
+## Getting data, page 49
+
+## Getting data, page 50
+
+## Getting data, page 51
+
+## Getting data, page 52
+
+## Getting data, page 53
+
+## Getting data, page 54
+
+## Getting data, page 55
+
+## Getting data, page 56
+
+## Getting data, page 57
+
+## Getting data, page 58
+
+## `summarise()` ungrouping output (override with `.groups` argument)
 </code></pre>
-<h1 id="do_next--dimall_casesloop_index1--chunk_size">DO_NEXT = dim(all_cases[[loop_index]])[1] == chunk_size</h1>
-<h1 id="loop_index--loop_index--1">loop_index = loop_index + 1</h1>
-<p>}</p>
-<p>all_cases</p>
-<p>}</p>
-<p>url = “<a href="https://data.cdc.gov/resource/vbim-akqf.json">https://data.cdc.gov/resource/vbim-akqf.json</a>”</p>
-<p>covid_us_cases_df = get_all_cases(url) %&gt;% bind_rows() %&gt;% mutate(cdc_report_dt = as.Date(cdc_report_dt)) %&gt;% arrange(cdc_report_dt) %&gt;% mutate(case_id = row_number()) %&gt;% relocate(case_id) %&gt;% group_by(cdc_report_dt) %&gt;% summarize(cumulative_cases = max(case_id))</p>
-<p>save(covid_us_cases_df, file = “covid_us_cases_df.rda”)</p>
-<p>covid_us_cases_df %&gt;% ggplot(aes(x = cdc_report_dt, y = cumulative_cases)) + geom_point() ###```</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">save</span>(covid_us_cases_df, <span class="dt">file =</span> <span class="st">&quot;./covid_us_cases_df.rda&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>covid_us_cases_df <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> cdc_report_dt, <span class="dt">y =</span> cumulative_cases)) <span class="op">+</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<img src="data:image/png;base64,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" width="90%" />
 
 </body>
 </html>

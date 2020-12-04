@@ -248,23 +248,7 @@ sars_cum_global + covid_cum_global
 
 Distinct difference in the scale of cumulative cases is evident in the two graphs, along with the rise in cases for a given duration of time. SARS, although spiked steeply early on, tapered off within a few months. COVID-19 meanwhile stayed at an exponential growth for the first 300 days of onset.
 
-<<<<<<< HEAD
 SARS was a relatively lethal virus with a high case fatality rate compared with other viral respiratory pathogens. Below, we illustrate the global cumulative mortality burden over the duration of the pandemic.
-=======
-```{r}
-sars_global %>% 
-  ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
-  geom_point(alpha = .5) +
-  geom_ma(ma_fun = SMA, n = 7, size = 1) +
-    labs(
-    title = "SARS: cumulative cases, global",
-    x = "Pandemic Duration, days",
-    y = "n"
-  )
-```
-
-Here we see the cumulative global case burden over the duration of the outbreak in 2003. SARS was a relatively lethal virus with a high case fatality rate compared with other viral respiratory pathogens. Below, we illustrate the global cumulative mortality burden over the duration of the pandemic.
->>>>>>> 5e1d258d8b6db31337a4827f51066877ef96aafb
 
 ```{r}
 sars_global %>% 
@@ -310,14 +294,8 @@ h1n1_global_cumulative_cases_plot =
     y = "n"
   )
 
-<<<<<<< HEAD
-
-
-(Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)
-=======
 (h1n1_global_new_cases_plot + h1n1_global_cumulative_cases_plot)
 ```
->>>>>>> 5e1d258d8b6db31337a4827f51066877ef96aafb
 
 The initial outbreak came in two waves prior to the development and distribution of an effective vaccine. In the interim history, the novel H1N1 strain has become an endemic influenza illness with global, and as demonstrated here, US cases and deaths reported yearly.
 
@@ -488,6 +466,7 @@ global_new_deaths_log_plot + global_cumulative_deaths_log_plot
 
 (Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)
 
+### to add R0 table (graph??) 
 
 ### Discussion
 

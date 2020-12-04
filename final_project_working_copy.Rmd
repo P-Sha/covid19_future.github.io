@@ -186,10 +186,7 @@ sars_global = read.csv("./data/sars_2003_complete_dataset_clean.csv") %>%
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )
 
-<<<<<<< HEAD
 save(sars_us, file = "sars_us.rda")
-=======
->>>>>>> 5e1d258d8b6db31337a4827f51066877ef96aafb
 save(sars_global, file = "sars_global.rda")
 ```
 
