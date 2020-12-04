@@ -3,5 +3,16 @@ title: "Clean and Tidy datasets"
 output: html_document
 ---
 
+#### This page contains links to the files created to get the datasets into working formats for EDA.
+
+1. [final_project_working_copy](final_project_working_copy.Rmd)
+
+2. [spanish_flu_analysis](spanish_flu_analysis.Rmd)
+
+3. [sars_data](sars_data.Rmd)
+
+4. [influenza_df](influenza_data.Rmd)
+
+5. [covid_data](covid_data.Rmd)
 
 
