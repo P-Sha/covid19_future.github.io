@@ -182,6 +182,60 @@ covid_us_cases_df =
 
     ## Getting data, page 58
 
+    ## Getting data, page 59
+
+    ## Getting data, page 60
+
+    ## Getting data, page 61
+
+    ## Getting data, page 62
+
+    ## Getting data, page 63
+
+    ## Getting data, page 64
+
+    ## Getting data, page 65
+
+    ## Getting data, page 66
+
+    ## Getting data, page 67
+
+    ## Getting data, page 68
+
+    ## Getting data, page 69
+
+    ## Getting data, page 70
+
+    ## Getting data, page 71
+
+    ## Getting data, page 72
+
+    ## Getting data, page 73
+
+    ## Getting data, page 74
+
+    ## Getting data, page 75
+
+    ## Getting data, page 76
+
+    ## Getting data, page 77
+
+    ## Getting data, page 78
+
+    ## Getting data, page 79
+
+    ## Getting data, page 80
+
+    ## Getting data, page 81
+
+    ## Getting data, page 82
+
+    ## Getting data, page 83
+
+    ## Getting data, page 84
+
+    ## Getting data, page 85
+
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
 ``` r
