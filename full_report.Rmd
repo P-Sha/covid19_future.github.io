@@ -89,7 +89,7 @@ After the preliminary steps were taken to get the datasets in working forms, all
 
 <brk><brk><brk>
 
-Data for `Shiny Dashboard` ...
+In order to create a choropleth world map of disease cases, country polygon data was obtained from [this GitHub repo](https://github.com/johan/world.geo.json). The file was read in using function `geojson_read()` from the `geojsonio` package. For COVID-19, H1N1, and SARS, the cumulative cases and cumulative deaths for each country were taken and combined into 1 large dataframe. This dataframe was then merged with the spatial json file matched by country name using `merge()` function from `sp` package.
 
 
 ### Exploratory Analysis

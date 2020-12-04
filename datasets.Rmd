@@ -50,4 +50,6 @@ Description: Data includes `r covid19_chicago_rawdf %>% nrow()` rows of dates an
 
 Description: This is an article with multiple tables, table 1 with information on Basic Reproductive Rates of various prior pandemics and Covid-19. Data-scraping is used to extract the relevant table and information on it.
 
+8. Country Spatial Polygon Data: [GitHub repo](https://github.com/johan/world.geo.json)
 
+Description: This is a json file containing spatial polygon data for 180 countries. Countries are identifiable by name or 3 letter country code.
