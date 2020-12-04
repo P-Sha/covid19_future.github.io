@@ -30,6 +30,8 @@ spanish_df =
   group_by(week) %>% 
   summarize(mortality = n())
 
+save(spanish_df, file = "spanish_df.rda")
+
 plot_1 =
 spanish_df %>% 
    plot_ly(

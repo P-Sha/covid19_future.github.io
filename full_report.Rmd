@@ -231,7 +231,7 @@ sars_cum_global =
   ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
   geom_point(alpha = .5, color = "blue") +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
-  xlab("SARS duration") +
+  xlab("Days: SARS duration") +
   ylab("cumulative cases") +
   ggtitle("Global Cumulative Cases: SARS 2003 versus COVID-19")
  
@@ -240,7 +240,7 @@ covid_cum_global =
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
   geom_point(alpha = .2, color = "blue") +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
-  xlab("COVID-19 duration (Days)") +
+  xlab("COVID-19 duration") +
   ylab("")  
 
 sars_cum_global + covid_cum_global
@@ -278,10 +278,9 @@ h1n1_global_who %>%
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    title = "H1N1: new cases, global",
-    x = "Pandemic Duration, days",
-    y = "n"
-  )
+    x = "Days: New  cases",
+    y = "n") +
+  ggtitle("H1N1: Global")
 
 h1n1_global_cumulative_cases_plot =
  h1n1_global_who %>%
@@ -289,9 +288,8 @@ h1n1_global_cumulative_cases_plot =
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    title = "H1N1: cumulative cases, global",
-    x = "Pandemic Duration, days",
-    y = "n"
+    x = "Cumulative cases",
+    y = ""
   )
 
 (h1n1_global_new_cases_plot + h1n1_global_cumulative_cases_plot)
@@ -306,10 +304,9 @@ h1n1_us_who %>%
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
     labs(
-    title = "H1N1: new cases, United States",
-    x = "Pandemic Duration, days",
-    y = "n"
-  )
+    x = "Days: New cases",
+    y = "n") +
+   ggtitle("H1N1: United States")
 
 h1n1_us_cumulative_cases_plot =
  h1n1_us_who %>%
@@ -317,9 +314,8 @@ h1n1_us_cumulative_cases_plot =
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    title = "H1N1: Cumulative cases, United States",
-    x = "Pandemic Duration, days",
-    y = "n"
+    x = "Cumulative cases",
+    y = ""
   )
 
  (h1n1_us_new_cases_plot + h1n1_us_cumulative_cases_plot)
@@ -342,11 +338,9 @@ global_cases %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    title = "New cases, global",
-    x = "Pandemic Duration, days",
-    y = "n",
-    caption = "Linear plot"
-  )
+    x = "Days: New cases",
+    y = "n") +
+   ggtitle("Comparisons: New cases, Global")
 
 global_cumulative_cases_linear_plot =
 global_cases %>% 
@@ -355,10 +349,9 @@ global_cases %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    title = "Cumulative cases, global",
-    x = "Pandemic Duration, days",
-    y = "n",
-    caption = "Linear plot"
+    x = "Cumulative cases",
+    y = "",
+    caption = "Linear plots"
   )
 
 global_new_cases_linear_plot + global_cumulative_cases_linear_plot
@@ -376,11 +369,9 @@ global_cases %>%
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
   labs(
-    title = "New cases, global",
-    x = "Pandemic Duration, days",
-    y = "n",
-    caption = "Log-transformed plot"
-  )
+    x = "Days: New cases",
+    y = "n") +
+   ggtitle("Comparisons (transformed): New cases, Global")
 
 global_cumulative_cases_log_plot =
 global_cases %>% 
@@ -390,11 +381,11 @@ global_cases %>%
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
   labs(
-    title = "Cumulative cases, global",
-    x = "Pandemic Duration, days",
-    y = "n",
-    caption = "Log-transformed plot"
-  )
+    x = "Cumulative cases",
+    y = "",
+    caption = "Log-transformed plots"
+  ) +
+  theme(legend.position = "hide")
 
 global_new_cases_log_plot + global_cumulative_cases_log_plot
 ```
@@ -411,11 +402,9 @@ global_deaths %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    title = "New deaths, global",
-    x = "Pandemic Duration, days",
-    y = "n",
-    caption = "Linear plot"
-  )
+    x = "Days: New deaths",
+    y = "n") +
+   ggtitle("Comparisons: Deaths, Global")
 
 global_cumulative_deaths_linear_plot = 
 global_deaths %>% 
@@ -424,11 +413,11 @@ global_deaths %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    title = "Cumulative deaths, global",
-    x = "Pandemic Duration, days",
-    y = "n",
-    caption = "Linear plot"
-  )
+    x = "Cumulative deaths",
+    y = "",
+    caption = "Linear plots"
+  ) +
+  theme(legend.position = "hide")
 
 global_new_deaths_log_plot =
 global_deaths %>% 
@@ -438,11 +427,9 @@ global_deaths %>%
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
   labs(
-    title = "New deaths, global",
-    x = "Pandemic Duration, days",
-    y = "n",
-    caption = "Log-transformed plot"
-  )
+    x = "Days: New deaths",
+    y = "n") +
+ ggtitle("Comparisons (transformed): Deaths, Global")
 
 global_cumulative_deaths_log_plot =
 global_deaths %>% 
@@ -452,21 +439,30 @@ global_deaths %>%
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
     labs(
-    title = "Cumulative deaths, global",
-    x = "Pandemic Duration, days",
-    y = "n",
-    caption = "Log-transformed plot"
-  )
+    x = "Cumulative deaths",
+    y = "",
+    caption = "Log-transformed plots"
+    ) +
+   theme(legend.position = "hide")
 
 global_new_deaths_linear_plot + global_cumulative_deaths_linear_plot
 
 global_new_deaths_log_plot + global_cumulative_deaths_log_plot
 ```
 
+#### R0
+
+Any report on pandemics in incomplete without the analysis of the basic Reproductive rate, also called R0 (R naught). Prior to this pandemic, it was probably heard for the first time by many in the movie [Contagion](imdb.com/title/tt1598778/). 
+
+A measure of how many cases a single infected individual can generate in a susceptible population, it helps quantify an outbreak's intensity.
+
+
 
 (Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)
 
-### to add R0 table (graph??) 
+
+
+
 
 ### Discussion
 
