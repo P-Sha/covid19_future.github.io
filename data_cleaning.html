@@ -327,11 +327,20 @@ $(document).ready(function () {
 </div>
 
 
-<<<<<<< HEAD
+<div id="this-page-contains-links-to-the-files-created-to-get-the-datasets-into-working-formats-for-eda." class="section level4">
+<h4>This page contains links to the files created to get the datasets into working formats for EDA.</h4>
+<ol style="list-style-type: decimal">
+<li><p><a href="final_project_working_copy.Rmd">final_project_working_copy</a></p></li>
+<li><p><a href="spanish_flu_analysis.Rmd">spanish_flu_analysis</a></p></li>
+<li><p><a href="sars_data.Rmd">sars_data</a></p></li>
+<li><p><a href="influenza_data.Rmd">influenza_df</a></p></li>
+<li><p><a href="covid_data.Rmd">covid_data</a></p></li>
+</ol>
+</div>
 <div id="chicago-spanish-flu-data" class="section level2">
 <h2><strong>Chicago Spanish Flu Data</strong></h2>
-<div id="spanish-flu-in-chicago-7-week-mortality-at-peak" class="section level4">
-<h4>Spanish Flu in Chicago (7-week mortality, at peak)</h4>
+<div id="spanish-flu-in-chicago-7-week-mortality-at-peak-from-kaggle" class="section level4">
+<h4>Spanish Flu in Chicago (7-week mortality, at peak) (from Kaggle)</h4>
 <pre class="r"><code>spanish_rawdf = read.csv(&quot;./data/spanish_flu_chicago.csv&quot;) 
 
 save(spanish_rawdf, file = &quot;spanish_rawdf.rda&quot;)
@@ -622,8 +631,8 @@ table_r0 %&gt;%
   plot_ly(
     x = ~pandemic, y = ~r0, color = ~r0, type = &quot;bar&quot;, ymin = 0) %&gt;% 
   layout(title = &quot;Basic Reproductive rate&quot;, showlegend = FALSE)</code></pre>
-<div id="htmlwidget-6fd0a11aa7d89527651d" style="width:672px;height:480px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6fd0a11aa7d89527651d">{"x":{"visdat":{"8b43b866288":["function () ","plotlyVisDat"]},"cur_data":"8b43b866288","attrs":{"8b43b866288":{"x":{},"y":{},"ymin":0,"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Basic Reproductive rate","showlegend":false,"xaxis":{"domain":[0,1],"automargin":true,"title":"pandemic","type":"category","categoryorder":"array","categoryarray":["covid_19","h1n1_2009","sars_2003","spanish_flu"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"r0","type":"category","categoryorder":"array","categoryarray":["1·7","2·0","2·4","2·5"]},"hovermode":"closest"},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["h1n1_2009"],"y":["1·7"],"type":"bar","name":"1·7","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["spanish_flu"],"y":["2·0"],"type":"bar","name":"2·0","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["sars_2003"],"y":["2·4"],"type":"bar","name":"2·4","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["covid_19"],"y":["2·5"],"type":"bar","name":"2·5","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-33e1c455dc32f8c01972" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-33e1c455dc32f8c01972">{"x":{"visdat":{"41c876f19da":["function () ","plotlyVisDat"]},"cur_data":"41c876f19da","attrs":{"41c876f19da":{"x":{},"y":{},"ymin":0,"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Basic Reproductive rate","showlegend":false,"xaxis":{"domain":[0,1],"automargin":true,"title":"pandemic","type":"category","categoryorder":"array","categoryarray":["covid_19","h1n1_2009","sars_2003","spanish_flu"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"r0","type":"category","categoryorder":"array","categoryarray":["1·7","2·0","2·4","2·5"]},"hovermode":"closest"},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["h1n1_2009"],"y":["1·7"],"type":"bar","name":"1·7","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["spanish_flu"],"y":["2·0"],"type":"bar","name":"2·0","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["sars_2003"],"y":["2·4"],"type":"bar","name":"2·4","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["covid_19"],"y":["2·5"],"type":"bar","name":"2·5","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>table_r0 %&gt;% 
   knitr::kable()</code></pre>
 <table>
@@ -667,17 +676,6 @@ table_r0 %&gt;%
 </tr>
 </tbody>
 </table>
-=======
-<div id="this-page-contains-links-to-the-files-created-to-get-the-datasets-into-working-formats-for-eda." class="section level4">
-<h4>This page contains links to the files created to get the datasets into working formats for EDA.</h4>
-<ol style="list-style-type: decimal">
-<li><p><a href="final_project_working_copy.Rmd">final_project_working_copy</a></p></li>
-<li><p><a href="spanish_flu_analysis.Rmd">spanish_flu_analysis</a></p></li>
-<li><p><a href="sars_data.Rmd">sars_data</a></p></li>
-<li><p><a href="influenza_data.Rmd">influenza_df</a></p></li>
-<li><p><a href="covid_data.Rmd">covid_data</a></p></li>
-</ol>
->>>>>>> 47ccf4e34a408f8080226d9beea9da4ad8865ff0
 </div>
 
 
