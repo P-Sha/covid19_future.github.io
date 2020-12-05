@@ -324,35 +324,43 @@ $(document).ready(function () {
 <ol style="list-style-type: decimal">
 <li>Spanish flu (Chicago): <a href="https://www.kaggle.com/thepodclub/spanish-flu-dataset">www.Kaggle.com</a></li>
 </ol>
-<p>Description: Data contains information on 8034 mortality cases, with “Unique Point Identifier (fid)”, case type as pneumonia (1) or flu/unknown(0), point-location of each death(x(m) and y(m)), and week when death was recorded (as of 9/28/1918), for all the cases. Data recorded was for 7 weeks, which was during the <a href="cdc.gov/flu/pandemic-resources/1918-commemoration/three-waves.htm">peak of the disease</a>.</p>
+<p>Description: This dataset contains information on 8034 mortality cases, with “Unique Point Identifier (fid)”, case type as pneumonia (1) or flu/unknown(0), point-location of each death(x(m) and y(m)), and week when death was recorded (as of 9/28/1918), for all the cases. Data recorded was for 7 weeks, which was during the <a href="cdc.gov/flu/pandemic-resources/1918-commemoration/three-waves.htm">peak of the disease</a>.</p>
 <ol start="2" style="list-style-type: decimal">
-<li>SARS 2003 (Global): <a href="https://www.who.int/health-topics/severe-acute-respiratory-syndrome#tab=tab_1">WHO.int/csr/sars/</a></li>
+<li>SARS 2003 (Global + U.S.): <a href="https://www.who.int/health-topics/severe-acute-respiratory-syndrome#tab=tab_1">WHO.int/csr/sars/</a></li>
 </ol>
-<p>Description: Data contains 96 rows of daily activity, and 5 columns of date as of March 17 2003, cumulative number of cases, number of deaths, number recovered and countries for a given date.</p>
+<p>Description: Data collected from March 17, 2003 to April 2, 2003 on cumulative number of cases, number of deaths, number recovered, and countries for the given date. The tidy global dataset contains 96 rows of daily activity, and 5. The tidy U.S. dataset contains 94 rows of daily activity, and 8.</p>
 <ol start="3" style="list-style-type: decimal">
-<li>H1N1 + Influenza B: <a href="https://apps.who.int/flumart/Default?ReportNo=12">apps.who.int/flumart</a></li>
+<li>H1N1 + Influenza B Cases (Global + U.S.): <a href="https://apps.who.int/flumart/Default?ReportNo=12">apps.who.int/flumart</a></li>
 </ol>
-<p>Description: Data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak, with “no report” for many countries. Our dataset for H1N1 contained 79 rows and 3 columns. Our dataset for Inlfuenza B contained 79 rows and 3 columns.</p>
+<p>Description: Flu data is available by a country or region, with range of years (starting with 1995) and range of weeks selected. It includes weekly information on the type of flu virus (A or B) detected by subtypes of five in group A and 3 in group B, total number of positive cases, total of flu-negative cases, and ILI (Influenza like Illness). ILI activity is recorded as regional, local or sporadic outbreak, with “no report” for many countries. We normalized the datasets to contain variables of pandemic duration, number of new cases, and number of cumulative cases. The tidy dataset for global H1N1 cases contains 79 rows and 3 columns. The dataset for U.S. H1N1 cases contains 52 rows and 3 columns. The dataset for global Inlfuenza B cases contains 79 rows and 3 columns. The dataset for Inlfuenza B cases in the U.S. contains 52 rows and 3 columns.</p>
 <ol start="4" style="list-style-type: decimal">
+<li>H1N1 Deaths (Global + U.S.): <a href="https://www.kaggle.com/imdevskp/h1n1-swine-flu-2009-pandemic-dataset">www.Kaggle.com</a></li>
+</ol>
+<p>Description: This dataset contains information about new and cumulative number of deaths resulting from the H1N1 pandemic from January 2009 to August 2010. We normalized the datasets to contain variables of pandemic duration, number of new deaths, and number of cumulative deaths. The tidy dataset for global H1N1 deaths contains 50 rows and 3 columns. The tidy dataset for U.S. H1N1 deaths contains 50 rows and 3 columns.</p>
+<ol start="5" style="list-style-type: decimal">
 <li>COVID-19 (Global): <a href="https://covid19.who.int/table">covid19.who.int/table</a></li>
 </ol>
-<p>Description: This data by World Health Organization provides information on total cumulative cases of COVID-19, newly reported cases in last 24hrs, total deaths and deaths in last 24 hrs, and method of transmission (community, cluster, sporadic or no cases) for a country or a region.</p>
-<ol start="5" style="list-style-type: decimal">
-<li>COVID-19 (USA): <a href="https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Week-Ending-D/r8kw-7aab">data.cdc.gov</a></li>
-</ol>
-<p>Description: This dataset contains weekly death counts attributed to COVID-19. It is comprised of ###r covid_us_deaths %&gt;% nrow() rows ###and#### r covid_us_deaths %&gt;% ncol() columns###. The variables of interest are week start, week end, state, and number of COVID-19 deaths.</p>
+<p>Description: This data by World Health Organization provides information on total cumulative cases of COVID-19, newly reported cases in last 24hrs, total deaths and deaths in last 24 hrs, and method of transmission (community, cluster, sporadic or no cases) for a country or a region. The dataset used was taken from January 3, 2020 until November 10, 2020 and was normalized for the variables of pandemic duration, number of new case, number of cumulative cases, number of new deaths, and number of cumulative deaths. The tidy dataset contains 313 rows and 5 columns</p>
 <ol start="6" style="list-style-type: decimal">
+<li>COVID-19 Cases (USA): <a href="https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf">data.cdc.gov</a></li>
+</ol>
+<p>Description: The original dataset contained updated daily case counts of COVID-19 with many variables such as current status, sex, age, and ethnicity. The tidy dataset contains the variables pandemic duration, number of new cases, and number of cumulative cases and is comprised of 22 rows and 3 columns.</p>
+<ol start="7" style="list-style-type: decimal">
+<li>COVID-19 Deaths (USA): <a href="https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Week-Ending-D/r8kw-7aab">data.cdc.gov</a></li>
+</ol>
+<p>Description: This dataset contains updated weekly death counts attributed to COVID-19. The tidy dataset contains the variables pandemic duration, number of new cases, and number of cumulative cases and is comprised of 44 rows and 3 columns.</p>
+<ol start="8" style="list-style-type: decimal">
 <li>COVID-19 (Chicago): <a href="https://data.cityofchicago.org/Health-Human-Services/COVID-19-Daily-Cases-Deaths-and-Hospitalizations/naz8-j4nc/data">data.cityofchicago.org</a></li>
 </ol>
-<p>Description: Data includes 267 rows of dates and 58 columns, date starting from 3/1/ 2020 to 11/22/2020. Data is collected for total cases, total deaths and total hospitalizations for each day, and stratified by age groups, sex, and ethnicity for all the cases, deaths and hospitalizations.</p>
-<ol start="7" style="list-style-type: decimal">
+<p>Description: This dataset included 7 rows of dates and 2 columns, date starting from 3/1/ 2020 to 11/22/2020. Data was collected for total cases, total deaths and total hospitalizations for each day, and stratified by age groups, sex, and ethnicity for all the cases, deaths and hospitalizations.</p>
+<ol start="9" style="list-style-type: decimal">
 <li><span class="math inline">\(R_0\)</span> and other statistical summaries: <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext">thelancet.com</a></li>
 </ol>
-<p>Description: This is an article with multiple tables, table 1 with information on Basic Reproductive Rates of various prior pandemics and Covid-19. Data-scraping is used to extract the relevant table and information on it.</p>
-<ol start="8" style="list-style-type: decimal">
+<p>Description: This is an article with multiple tables, with table 1 containing information on Basic Reproductive Rates of various prior pandemics and Covid-19. Data-scraping was used to extract the relevant table and information on it.</p>
+<ol start="10" style="list-style-type: decimal">
 <li>Country Spatial Polygon Data: <a href="https://github.com/johan/world.geo.json">GitHub repo</a></li>
 </ol>
-<p>Description: This is a json file containing spatial polygon data for 180 countries. Countries are identifiable by name or 3 letter country code.</p>
+<p>Description: This is a .JSON file containing spatial polygon data for 180 countries. Countries are identifiable by name or 3 letter country code.</p>
 
 
 

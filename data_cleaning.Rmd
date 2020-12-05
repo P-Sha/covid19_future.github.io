@@ -102,7 +102,8 @@ h1n1_global_deaths =
   mutate(
     h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
     h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
-  )
+  ) %>% 
+  select(pandemic_duration, h1n1_new_deaths, h1n1_cumulative_deaths)
 
 save(h1n1_global_deaths, file = "h1n1_global_deaths.rda")
 
@@ -112,7 +113,8 @@ h1n1_us_deaths =
   mutate(
     h1n1_new_cases = h1n1_cumulative_cases - lag(h1n1_cumulative_cases),
     h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
-  )
+  ) %>% 
+  select(pandemic_duration, h1n1_new_deaths, h1n1_cumulative_deaths)
 
 save(h1n1_us_deaths, file = "h1n1_us_deaths.rda")
 ```
@@ -270,12 +272,15 @@ url = "https://data.cdc.gov/resource/vbim-akqf.json"
 covid_us_cases = 
   get_all_cases(url) %>%
   bind_rows() %>% 
-  mutate(cdc_report_dt = as.Date(cdc_report_dt)) %>% 
+  mutate(cdc_report_dt = as.Date(cdc_report_dt),
+         pandemic_interval = "2020/01/22" %--% cdc_report_dt, 
+         pandemic_duration = as.duration(pandemic_interval) / ddays(1)) %>%
   arrange(cdc_report_dt) %>% 
   mutate(case_id = row_number()) %>% 
-  relocate(case_id) %>% 
-  group_by(cdc_report_dt) %>% 
-  summarize(cumulative_cases = max(case_id))
+  relocate(case_id, pandemic_duration) %>% 
+  group_by(pandemic_duration) %>% 
+  summarize(covid_new_cases = n_distinct(case_id), 
+            covid_cumulative_cases = max(case_id))
 
 save(covid_us_cases, file = "./covid_us_cases.rda")
 
@@ -285,10 +290,13 @@ covid_us_deaths =
   fromJSON() %>% 
   as_tibble() %>% 
   clean_names() %>% 
-  mutate(data_as_of = as.Date(data_as_of),
-         start_week = as.Date(start_week),
-         end_week = as.Date(end_week)) %>% 
-  select(-group, -footnote)
+  filter(state == "United States") %>% 
+  mutate(start_week = as.Date(start_week),
+         covid_new_deaths = as.numeric(covid_deaths), 
+         pandemic_interval = "2020/01/22" %--% start_week, 
+         pandemic_duration = as.duration(pandemic_interval) / ddays(1), 
+         covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)) %>% 
+  select(pandemic_duration, covid_new_deaths, covid_cumulative_deaths)
 
 save(covid_us_deaths, file = "covid_us_deaths.rda")
 ```
@@ -331,67 +339,62 @@ save(covid_us_deaths, file = "covid_us_deaths.rda")
 ```
 
 
-
 #### COVID-19 Chicago Data (from cityofchicago.org)
 
 ```{r covid chicago data}
-covid19_chicago_rawdf =  read.csv("./data/covid19_chicago.csv") 
-
-save(covid19_chicago_rawdf, file = "covid19_chicago_rawdf.rda")
-
-covid19_chicago =
-  covid19_chicago_rawdf %>% 
+covid19_chicago_df =
+  read.csv("./data/covid19_chicago.csv") %>% 
   clean_names() %>% 
   filter(deaths_total != 0) %>% 
   mutate(
     date = as.Date(date, "%m/%d/%y")
   ) 
   
- row1 = covid19_chicago %>%  
+ row1 = covid19_chicago_df %>%  
      filter(date >= as.Date("2020-04-07") & date <= as.Date("2020-04-13")) %>% 
      summarize(
        week = 1,
        mortality = sum(deaths_total))
  
- row2 = covid19_chicago %>%  
+ row2 = covid19_chicago_df %>%  
      filter(date >= as.Date("2020-04-14") & date <= as.Date("2020-04-20")) %>% 
      summarize(
        week = 2,
         mortality = sum(deaths_total))
  
- row3 = covid19_chicago %>%  
+ row3 = covid19_chicago_df %>%  
      filter(date >= as.Date("2020-04-21") & date <= as.Date("2020-04-27")) %>% 
      summarize(
        week = 3,
         mortality = sum(deaths_total))
  
- row4 = covid19_chicago %>%  
+ row4 = covid19_chicago_df %>%  
      filter(date >= as.Date("2020-04-28") & date <= as.Date("2020-05-04")) %>% 
      summarize(
        week = 4,
         mortality = sum(deaths_total))
  
- row5 = covid19_chicago %>%  
+ row5 = covid19_chicago_df %>%  
      filter(date >= as.Date("2020-05-05") & date <= as.Date("2020-05-11")) %>% 
      summarize(
        week = 5,
         mortality = sum(deaths_total))
  
- row6 = covid19_chicago %>%  
+ row6 = covid19_chicago_df %>%  
      filter(date >= as.Date("2020-05-12") & date <= as.Date("2020-05-18")) %>% 
      summarize(
        week = 6,
         mortality = sum(deaths_total))
  
- row7 = covid19_chicago %>%  
+ row7 = covid19_chicago_df %>%  
      filter(date >= as.Date("2020-05-19") & date <= as.Date("2020-05-25")) %>% 
      summarize(
        week = 7,
         mortality = sum(deaths_total))
  
-covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
+covid19_chicago = bind_rows(row1, row2, row3, row4, row5, row6, row7)
 
-save(covid19_chicago_df, file = "covid19_chicago_df.rda")
+save(covid19_chicago, file = "covid19_chicago.rda")
 ```
 
 
