@@ -66,6 +66,8 @@ The questions of interest were to investigate on the expected severity of COVID-
 
 What might the basic reproductive rates had been in the past pandemics? Basic reproductive rate, or $R_0$ for short, is a measure that describes the ability of a pathogen to spread in a population. It is the average of secondary infections caused by an infectious individual; which we thought is a critical element in pandemics analyses.  
 
+**[How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?]**
+
 ### Data
 
 Multiple datasets were used from various shareable online sources for analysis and comparison to COVID-19. Complete list of data-descriptions is provided under the "Datasets" tab. 
@@ -111,15 +113,15 @@ load("rdas/covid19_chicago.rda")
 plot_1 =
 spanish_df %>% 
    plot_ly(
-    x = ~week, y = ~mortality, type = "bar", marker = list(color = "purple"), name = "Spanish Flu") %>% 
+    x = ~week, y = ~mortality, color = ~mortality, type = "bar") %>% 
    layout(title = "Spanish Flu",
-          xaxis = list(title = "Weeks"), 
+          xaxis = list(title = "Spanish flu"), 
           yaxis = list(title = "Mortality"))
 
 plot_2 = 
   covid19_chicago %>% 
   plot_ly(
-    x = ~week, y = ~ mortality, type = "bar", marker = list(color = "yellow"), name = "COVID-19") %>% 
+    x = ~week, y = ~ mortality, color = ~ mortality, type = "bar") %>% 
   layout(title = "Spanish Flu vs COVID-19: 7-Week Peak (Chicago)", 
          xaxis = list(title = "Weeks"),
          yaxis = list(title = "Mortality"),
@@ -325,7 +327,7 @@ us_cases %>%
 us_new_cases_log_plot + us_cumulative_cases_log_plot + plot_annotation(title = "U.S. Cases (Logarthimic Transformed): New vs Cumulative", theme = theme(plot.title = element_text(hjust = 0.5)))
 ```
 
-The global extent of the COVID-19 pandemic has been similarly impressive. Visualized here are COVID-19 case counts compared with global case counts of H1N1 and SARS visualized here along the pandemic duration in days.
+In the context of the previously mentioned viral respiratory outbreaks, the extent of the COVID-19 pandemic has been impressive. COVID-19 case counts, both globally and in the United States, dwarf the scale of the prior viral respiratory outbreaks in recent memory.
 
 ```{r}
 load("rdas/global_cases.rda")

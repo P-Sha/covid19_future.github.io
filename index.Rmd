@@ -43,13 +43,9 @@ Data comparisons for the project were performed between past pandemics and the c
 The below plots show updated COVID-19 U.S. new versus cumulative cases and deaths. Death data is updated weekly, whereas case data is updated daily. The start of the pandemic duration was set to be January 22, 2020 (the first confirmed case in the U.S.).
 
 
-<figure>
-![](pictures/global_new_ vs_cumulative_cases_log.file)
-<figcaption> New and Cumulative cases of pandemics worldwide, log-scaled to better depict comparisons.   </figcaption>
-</figure>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
-
-```{r covid19 cool plot}
 library(tidyverse)
 library(plotly)
 load("rdas/covid_us_cases.rda")
