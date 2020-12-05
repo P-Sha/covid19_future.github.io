@@ -216,8 +216,12 @@ sars_df %>%
     y = ~deaths_cum,
     color = ~country,
     type = "scatter",
-    mode = "lines"
-  ) %>% 
+    mode = "lines",
+    hoverinfo = 'text',
+    text = ~paste('</br> Country: ', country,
+                      '</br> Date: ', date,
+                      '</br> Cumulative Deaths: ', deaths_cum)
+    ) %>% 
   layout(title = "SARS 2003 Cumulative Deaths by Country",
          xaxis = list(title = "Month"),
          yaxis = list(title = "Country"))
