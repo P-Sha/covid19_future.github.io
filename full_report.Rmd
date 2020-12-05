@@ -60,7 +60,7 @@ The idea for the project was encouraged by the articles ["How the pandemic might
 
 #### _Initial_
 
-The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics. Evaluation of time-series was the primary focus of the project, intially.
+The questions of interest were to investigate on the expected severity of COVID-19 based on information provided by prior pandemics, and to predict the length and direction of the current pandemic based on the history of similar infectious pandemics. Evaluation of time-series was the primary focus of the project, initially.
 
 #### _Additional_
 
@@ -107,8 +107,23 @@ Spanish flu was a viral infection just as COVID-19, which lasted from early 1918
 
 ```{r}
 # Spanish flu versus COVID-19
+<<<<<<< HEAD
 load("./spanish_df.rda")
 load("./covid19_chicago.rda")
+=======
+
+## Spanish flu data
+
+spanish_rawdf = read.csv("./data/spanish_flu_chicago.csv") 
+
+save(spanish_rawdf, file = "rdas/spanish_rawdf.rda")
+
+spanish_df = 
+  spanish_rawdf %>% 
+  janitor::clean_names() %>% 
+  group_by(week) %>% 
+  summarize(mortality = n())
+>>>>>>> b88946ad23245d90e634ae1003f8cd3c92d9bce1
 
 plot_1 =
 spanish_df %>% 
@@ -118,6 +133,67 @@ spanish_df %>%
           xaxis = list(title = "Spanish flu"), 
           yaxis = list(title = "Mortality"))
 
+<<<<<<< HEAD
+=======
+## Covid-19 Chicago data
+
+covid19_chicago_rawdf =  read.csv("./data/covid19_chicago.csv") 
+
+save(covid19_chicago_rawdf, file = "rdas/covid19_chicago_rawdf.rda")
+
+covid19_chicago =
+  covid19_chicago_rawdf %>% 
+  janitor::clean_names() %>% 
+  filter(deaths_total != 0) %>% 
+  mutate(
+    date = as.Date(date, "%m/%d/%y")
+  ) 
+  
+ row1 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-04-07") & date <= as.Date("2020-04-13")) %>% 
+     summarize(
+       week = 1,
+       mortality = sum(deaths_total))
+ 
+ row2 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-04-14") & date <= as.Date("2020-04-20")) %>% 
+     summarize(
+       week = 2,
+        mortality = sum(deaths_total))
+ 
+ row3 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-04-21") & date <= as.Date("2020-04-27")) %>% 
+     summarize(
+       week = 3,
+        mortality = sum(deaths_total))
+ 
+ row4 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-04-28") & date <= as.Date("2020-05-04")) %>% 
+     summarize(
+       week = 4,
+        mortality = sum(deaths_total))
+ 
+ row5 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-05-05") & date <= as.Date("2020-05-11")) %>% 
+     summarize(
+       week = 5,
+        mortality = sum(deaths_total))
+ 
+ row6 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-05-12") & date <= as.Date("2020-05-18")) %>% 
+     summarize(
+       week = 6,
+        mortality = sum(deaths_total))
+ 
+ row7 = covid19_chicago %>%  
+     filter(date >= as.Date("2020-05-19") & date <= as.Date("2020-05-25")) %>% 
+     summarize(
+       week = 7,
+        mortality = sum(deaths_total))
+ 
+covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
+ 
+>>>>>>> b88946ad23245d90e634ae1003f8cd3c92d9bce1
 plot_2 = 
   covid19_chicago %>% 
   plot_ly(
@@ -135,12 +211,12 @@ The graphs show similar parabolic curves, with the peak of maximum mortality due
 
 #### SARS-CoV-1
 
-Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we were able to analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail. 
+Next we compared the first epidemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we were able to analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail. 
 
 ```{r}
 # SARS 2003 global cumulative cases 
 
-load("./sars_df.rda")
+load("rdas/sars_df.rda")
 
 sars_df %>% 
   plot_ly(
@@ -165,8 +241,8 @@ As the graph displays, SARS was a global pandemic, with majority of death toll i
 In contrast to COVID-19, SARS did not spread as widely in the western countries, or much at all in the U.S.
 
 ```{r}
-load("./sars_global.rda")
-load("./covid_global.rda")
+load("rdas/sars_global.rda")
+load("rdas/covid_global.rda")
 
 sars_cum_global =
   sars_global %>% 
@@ -211,8 +287,8 @@ Here, we see the case fatality rate of SARS was nearly 10% of documented cases.
 The first viral respiratory disease outbreak of the 21st century classified as a pandemic by the WHO was the influenza H1N1 outbreak of 2009-2010. A novel strain of influenza A, H1N1 pdm09 was the result reassortment across pig species (hence "swine" flu) and resulted in antigenic shift with high resultant susceptibility to infection among the human population.
 
 ```{r}
-load("./h1n1_global_who.rda")
-load("./h1n1_us_who.rda")
+load("rdas/h1n1_global_who.rda")
+load("rdas/h1n1_us_who.rda")
 
 h1n1_global_new_cases_plot = 
 h1n1_global_who %>%
@@ -331,7 +407,7 @@ us_new_cases_log_plot + us_cumulative_cases_log_plot + plot_annotation(title = "
 In the context of the previously mentioned viral respiratory outbreaks, the extent of the COVID-19 pandemic has been impressive. COVID-19 case counts, both globally and in the United States, dwarf the scale of the prior viral respiratory outbreaks in recent memory.
 
 ```{r}
-load("./global_cases.rda")
+load("rdas/global_cases.rda")
 
 ##linear
 global_new_cases_linear_plot =
@@ -400,7 +476,7 @@ global_new_cases_log_plot + global_cumulative_cases_log_plot + plot_annotation(t
 Similar discrepancies in overall mortality are appreciated on the global scale. Mortality data for H1N1 are unfortunately limited more significantly than case counts, however inspection of the log-transformed scales suggest a higher burden than reported, as has been [previously modeled](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(12)70121-4/fulltext).
 
 ```{r}
-load("./global_deaths.rda")
+load("rdas/global_deaths.rda")
 
 global_new_deaths_linear_plot = 
 global_deaths %>% 
@@ -465,7 +541,7 @@ Any report on pandemics is incomplete without the analysis of the basic reproduc
 A measure of how many cases a single infected individual can generate in a susceptible population, $R_0$ is not truly a rate and helps quantify an outbreak's intensity. The following table displays the $R_0$ for the pandemics discussed above, along with the time in days from exposure to symptoms of the disease, days from symptoms onset to maximum infectivity, and the proportion of individuals with mild symptoms.
 
 ```{r basic reproductive rate}
-load("./table_r0.rda")
+load("rdas/table_r0.rda")
 
 table_r0 %>%
   knitr::kable()

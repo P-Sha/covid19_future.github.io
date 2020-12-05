@@ -351,7 +351,7 @@ h1n1_global =
     h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
   )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<pre class="r"><code>save(h1n1_global, file = &quot;h1n1_global.rda&quot;)
+<pre class="r"><code>save(h1n1_global, file = &quot;rdas/h1n1_global.rda&quot;)
 
 h1n1_us = 
   h1n1_df %&gt;% 
@@ -456,7 +456,7 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
 ##   Cumulative_deaths = col_double()
 ## )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<pre class="r"><code>save(covid_global, file = &quot;covid_global.rda&quot;)</code></pre>
+<pre class="r"><code>save(covid_global, file = &quot;rdas/covid_global.rda&quot;)</code></pre>
 </div>
 <div id="sars" class="section level3">
 <h3>SARS</h3>
@@ -472,7 +472,7 @@ h1n1_global_who = read.csv(&quot;./data/global_FluNetInteractiveReport.csv&quot;
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )
 
-save(sars_us, file = &quot;sars_us.rda&quot;)
+save(sars_us, file = &quot;rdas/sars_us.rda&quot;)
 
 sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -492,7 +492,7 @@ sars_global = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) 
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<pre class="r"><code>save(sars_global, file = &quot;sars_global.rda&quot;)</code></pre>
+<pre class="r"><code>save(sars_global, file = &quot;rdas/sars_global.rda&quot;)</code></pre>
 </div>
 </div>
 <div id="visualization" class="section level2">
