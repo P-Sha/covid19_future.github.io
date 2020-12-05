@@ -15,9 +15,9 @@ library(tidyquant)
 library(jsonlite)
 ```
 
-## **Spanish flu Data**
+## **Spanish Flu Data**
 
-#### Spanish flu in Chicago, 7-week mortality, at peak (from Kaggle)
+#### Spanish Flu in Chicago (from Kaggle)
 
 ```{r spanish flu data and plot}
 spanish_rawdf = read.csv("./data/spanish_flu_chicago.csv") 
@@ -74,7 +74,7 @@ sars_us = read.csv("./data/sars_2003_complete_dataset_clean.csv") %>%
 save(sars_us, file = "rdas/sars_us.rda")
 ```
 
-#### SARS-CoV-1 Global (by countries)
+#### SARS-CoV-1 Global (from Kaggle)
 
 ```{r read and tidy sars data}
 sars_df = 
@@ -331,7 +331,7 @@ covid_us_cases =
   summarize(covid_new_cases = n_distinct(case_id), 
             covid_cumulative_cases = max(case_id))
 
-save(covid_us_cases, file = "covid_us_cases.rda")
+save(covid_us_cases, file = "rdas/covid_us_cases.rda")
 
 covid_us_deaths = 
   GET("https://data.cdc.gov/resource/r8kw-7aab.json", query = list("$limit" = 10000)) %>% 
@@ -347,24 +347,15 @@ covid_us_deaths =
          covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)) %>% 
   select(pandemic_duration, covid_new_deaths, covid_cumulative_deaths)
 
-save(covid_us_deaths, file = "covid_us_deaths.rda")
+save(covid_us_deaths, file = "rdas/covid_us_deaths.rda")
 ```
 
 
 #### COVID-19 Chicago Data (from cityofchicago.org)
 
 ```{r covid chicago data}
-<<<<<<< HEAD
 covid19_chicago_df =
   read.csv("./data/covid19_chicago.csv") %>% 
-=======
-covid19_chicago_rawdf =  read.csv("./data/covid19_chicago.csv") 
-
-save(covid19_chicago_rawdf, file = "rdas/covid19_chicago_rawdf.rda")
-
-covid19_chicago =
-  covid19_chicago_rawdf %>% 
->>>>>>> b88946ad23245d90e634ae1003f8cd3c92d9bce1
   clean_names() %>% 
   filter(deaths_total != 0) %>% 
   mutate(
@@ -415,11 +406,7 @@ covid19_chicago =
  
 covid19_chicago = bind_rows(row1, row2, row3, row4, row5, row6, row7)
 
-<<<<<<< HEAD
-save(covid19_chicago, file = "covid19_chicago.rda")
-=======
-save(covid19_chicago_df, file = "rdas/covid19_chicago_df.rda")
->>>>>>> b88946ad23245d90e634ae1003f8cd3c92d9bce1
+save(covid19_chicago, file = "rdas/covid19_chicago.rda")
 ```
 
 
@@ -444,7 +431,7 @@ global_cases =
   ) %>% 
   separate(class, into = c("disease", "trend"), sep = "_", extra = "merge")
 
-save(global_cases, file = "global_cases.rda")
+save(global_cases, file = "rdas/global_cases.rda")
 ```
 
 #### Global Deaths
@@ -464,7 +451,7 @@ global_deaths =
   ) %>% 
   separate(class, into = c("disease", "trend"), sep = "_", extra = "merge")
 
-save(global_deaths, file = "global_deaths.rda")
+save(global_deaths, file = "rdas/global_deaths.rda")
 ```
 
 #### U.S. Cases
@@ -483,7 +470,7 @@ us_cases = full_join(us_cases_second, sars_us) %>%
   ) %>% 
   separate(class, into = c("disease", "trend"), sep = "_", extra = "merge")
 
-save(us_cases, file = "us_cases.rda")
+save(us_cases, file = "rdas/us_cases.rda")
 ```
 
 
@@ -510,5 +497,5 @@ table_r0 =
   mutate(x = replace(x, x == "Transmissibility, R0", "Basic Reproductive rate, R0")) %>%
   as_tibble()
 
-save(table_r0, file = "./covid19_future.github.io/table_r0.rda")
+save(table_r0, file = "covid19_future.github.io/rdas/table_r0.rda")
 ```
