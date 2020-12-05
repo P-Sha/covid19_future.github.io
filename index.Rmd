@@ -70,6 +70,8 @@ Data for the project was collected from various online sources such as [kaggle.c
 
 Data comparisons for the project were performed between past pandemics and the current pandemic using similar and parallel, if possible, datasets (in terms of time-frame and geography of the spread). Comparisons were made by analyzing visuals and statistical parameters between the current and past pandemics. 
 
+The below plots show updated COVID-19 U.S. new versus cumulative cases and deaths. Death data is updated weekly, whereas case data is updated daily. The start of the pandemic duration was set to be January 22, 2020 (the first confirmed case in the U.S.).
+
 ```{r covid19 cool plot}
 load("rdas/covid_us_cases.rda")
 load("rdas/covid_us_deaths.rda")
@@ -115,15 +117,8 @@ covid_us_merged %>%
     x = ~pandemic_duration, y = ~cumulative_count, type = "scatter", mode = "lines", color = ~cumulative) %>% 
    layout(title = "COVID-19 U.S. New vs Cumulative Cases and Deaths",
           xaxis = list(title = "Pandemic Duration"), 
-          yaxis = list(title = "Count"),
+          yaxis = list(title = " "), 
           legend = list(x = 100, y = 0.5))
 
-subplot(plot_new, plot_cumulative, shareX = T, shareY = T)
+subplot(plot_new, plot_cumulative, shareX = T, titleY = T)
 ```
-
-
-Other results summary (copy from full report).....
-     
-
-***
-
