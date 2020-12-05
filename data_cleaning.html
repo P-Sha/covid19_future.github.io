@@ -295,7 +295,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li>
-  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Comparisons Dashboard (interactive)</a>
+  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Interactive Dashboard</a>
 </li>
 <li>
   <a href="pandemics_timeline.html">Pandemics Timeline</a>
@@ -585,7 +585,7 @@ covid_us_cases =
   summarize(covid_new_cases = n_distinct(case_id), 
             covid_cumulative_cases = max(case_id))
 
-save(covid_us_cases, file = &quot;./covid_us_cases.rda&quot;)
+save(covid_us_cases, file = &quot;rdas/covid_us_cases.rda&quot;)
 
 covid_us_deaths = 
   GET(&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;, query = list(&quot;$limit&quot; = 10000)) %&gt;% 

@@ -2,6 +2,7 @@
 title: "Future of COVID-19: Looking at Past Pandemics" 
 output:
   html_document:
+    code_folding: hide
     css: style.css
 ---
 <style type = "text/css">
@@ -38,10 +39,63 @@ Data for the project was collected from various online sources such as [kaggle.c
 
 Data comparisons for the project were performed between past pandemics and the current pandemic using similar and parallel, if possible, datasets (in terms of time-frame and geography of the spread). Comparisons were made by analyzing visuals and statistical parameters between the current and past pandemics. 
 
+<<<<<<< HEAD
 <figure>
 ![](pictures/global_new_ vs_cumulative_cases_log.file)
 <figcaption> New and Cumulative cases of pandemics worldwide, log-scaled to better depict comparisons.   </figcaption>
 </figure>
+=======
+```{r covid19 cool plot}
+load("rdas/covid_us_cases.rda")
+load("rdas/covid_us_deaths.rda")
+
+covid_us_merged = 
+  full_join(covid_us_cases, covid_us_deaths) %>% 
+  arrange(pandemic_duration) %>% 
+  relocate(pandemic_duration, covid_new_cases, covid_new_deaths) %>% 
+  pivot_longer(
+    covid_new_cases:covid_new_deaths, 
+    names_to = "new",
+    names_prefix = "covid_", 
+    values_to = "new_count") %>% 
+  mutate(
+    new = recode(new,
+                 new_cases = "New Cases",
+                 new_deaths = "New Deaths")
+  ) %>% 
+  pivot_longer(
+    covid_cumulative_cases:covid_cumulative_deaths, 
+    names_to = "cumulative",
+    names_prefix = "covid_", 
+    values_to = "cumulative_count") %>% 
+  mutate(
+    cumulative = recode(cumulative,
+                 cumulative_cases = "Cumulative Cases",
+                 cumulative_deaths = "Cumulative Deaths")
+  )
+  
+plot_new = 
+covid_us_merged %>% 
+   drop_na() %>% 
+   plot_ly(
+    x = ~pandemic_duration, y = ~new_count, type = "scatter", mode = "lines", color = ~new) %>% 
+   layout(title = "COVID-19 U.S. New Cases and Deaths",
+          xaxis = list(title = "Pandemic Duration"), 
+          yaxis = list(title = "Count"))
+
+plot_cumulative = 
+covid_us_merged %>% 
+   drop_na() %>% 
+   plot_ly(
+    x = ~pandemic_duration, y = ~cumulative_count, type = "scatter", mode = "lines", color = ~cumulative) %>% 
+   layout(title = "COVID-19 U.S. New vs Cumulative Cases and Deaths",
+          xaxis = list(title = "Pandemic Duration"), 
+          yaxis = list(title = "Count"),
+          legend = list(x = 100, y = 0.5))
+
+subplot(plot_new, plot_cumulative, shareX = T, shareY = T)
+```
+>>>>>>> 744a49ee6b43adc30f853b07b894d66b9945e543
 
 
 Other results summary (copy from full report).....
