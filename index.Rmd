@@ -49,7 +49,9 @@ The below plots show updated COVID-19 U.S. new versus cumulative cases and death
 </figure>
 
 
-```{r covid19 cool plot}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
 library(tidyverse)
 library(plotly)
 load("rdas/covid_us_cases.rda")
