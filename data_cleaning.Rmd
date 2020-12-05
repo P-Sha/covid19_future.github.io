@@ -12,9 +12,10 @@ library(rvest)
 library(httr)
 library(janitor)
 library(tidyquant)
+library(jsonlite)
 ```
 
-## **Spanish Flu Data (Chicago)**
+## **Spanish Flu Data**
 
 #### Spanish Flu in Chicago, 7-week mortality, at peak (from Kaggle)
 
@@ -227,8 +228,63 @@ save(covid_global, file = "covid_global.rda")
 
 #### COVID-19 U.S. Data (from CDC)
 
-```{r covid us data}
+```{r covid us data, eval = F}
+get_all_cases = function(url) {
+  
+  all_cases = vector("list", length = 0)
+  
+  loop_index = 1
+  chunk_size = 99999
+  DO_NEXT = TRUE
+  
+  while (DO_NEXT) {
+    message("Getting data, page ", loop_index)
+    
+    all_cases[[loop_index]] = 
+      GET(url,
+         query = list(`$order` = "cdc_report_dt",
+                       `$limit` = chunk_size,
+                       `$offset` = as.integer((loop_index - 1) * chunk_size)
+                       )
+          ) %>%
+      content("text") %>%
+      fromJSON() %>%
+      as_tibble()
+    
+    DO_NEXT = dim(all_cases[[loop_index]])[1] == chunk_size
+    loop_index = loop_index + 1
+  }
+  
+  all_cases
+  
+}
 
+url = "https://data.cdc.gov/resource/vbim-akqf.json"
+
+covid_us_cases = 
+  get_all_cases(url) %>%
+  bind_rows() %>% 
+  mutate(cdc_report_dt = as.Date(cdc_report_dt)) %>% 
+  arrange(cdc_report_dt) %>% 
+  mutate(case_id = row_number()) %>% 
+  relocate(case_id) %>% 
+  group_by(cdc_report_dt) %>% 
+  summarize(cumulative_cases = max(case_id))
+
+save(covid_us_cases, file = "./covid_us_cases.rda")
+
+covid_us_deaths = 
+  GET("https://data.cdc.gov/resource/r8kw-7aab.json", query = list("$limit" = 10000)) %>% 
+  content("text") %>% 
+  fromJSON() %>% 
+  as_tibble() %>% 
+  janitor::clean_names() %>% 
+  mutate(data_as_of = as.Date(data_as_of),
+         start_week = as.Date(start_week),
+         end_week = as.Date(end_week)) %>% 
+  select(-group, -footnote)
+
+save(covid_us_deaths, file = "covid_us_deaths.rda")
 ```
 
 
@@ -296,9 +352,26 @@ save(covid19_chicago_df, file = "covid19_chicago_df.rda")
 
 ## **Basic Reproductive rate**
 
-```{r basic reproductive rate, echo = TRUE, results = 'hide'}
-load("./table_r0.rda")
+```{r eval = F}
+r0_data_url = "https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext"
+reproductive_rate_html = read_html(r0_data_url)
 
-table_r0 %>%
-  knitr::kable()
+table_r0 =
+  reproductive_rate_html %>% 
+  html_nodes(css = "table") %>%  
+  first() %>%
+  html_table() %>% 
+  janitor::clean_names() %>% 
+  select(-interpretation) %>% 
+  filter(x == "Transmissibility, R0" | x == "Incubation period, days" | x == "Interval between symptom onset and maximum infectivity, days" | x == "Proportion with mild illness") %>% 
+  rename(
+     covid_19 = sars_co_v_2,
+     sars_2003 = sars_co_v,
+     spanish_flu = pandemic_influenza_1918,
+     h1n1_2009 = pandemic_influenza_2009
+  ) %>% 
+  mutate(x = replace(x, x == "Transmissibility, R0", "Basic Reproductive rate, R0")) %>%
+  as_tibble()
+
+save(table_r0, file = "./covid19_future.github.io/table_r0.rda")
 ```
