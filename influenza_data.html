@@ -326,7 +326,7 @@ $(document).ready(function () {
   select(year:end_date, a_total, b_total) %&gt;% 
   mutate(week = as.numeric(week), a_total = as.numeric(a_total), b_total = as.numeric(b_total)) %&gt;% 
   drop_na()
-save(influenza_df, file = &quot;influenza_df.rda&quot;)</code></pre>
+save(influenza_df, file = &quot;rdas/influenza_df.rda&quot;)</code></pre>
 <p>prelim plots:</p>
 <pre class="r"><code>influenza_df %&gt;% 
   group_by(year) %&gt;% 

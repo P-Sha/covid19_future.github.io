@@ -22,7 +22,7 @@ Spanish flu vs covid19 in Chicago (7 weeks mortality, at peak)
 
 spanish_rawdf = read.csv("./data/spanish_flu_chicago.csv") 
 
-save(spanish_rawdf, file = "spanish_rawdf.rda")
+save(spanish_rawdf, file = "rdas/spanish_rawdf.rda")
 
 spanish_df = 
   spanish_rawdf %>% 
@@ -30,7 +30,7 @@ spanish_df =
   group_by(week) %>% 
   summarize(mortality = n())
 
-save(spanish_df, file = "spanish_df.rda")
+save(spanish_df, file = "rdas/spanish_df.rda")
 
 plot_1 =
 spanish_df %>% 
@@ -111,7 +111,7 @@ subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 Basic Reproductive rate
 
 ```{r basic reproductive rate}
-load("./table_r0.rda")
+load("rdas/table_r0.rda")
 
 table_r0 %>%
   filter(x == "Basic Reproductive rate, R0") %>%            

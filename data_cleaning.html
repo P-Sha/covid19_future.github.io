@@ -321,12 +321,12 @@ $(document).ready(function () {
 
 
 <div id="spanish-flu-data" class="section level2">
-<h2><strong>Spanish Flu Data</strong></h2>
+<h2><strong>Spanish flu Data</strong></h2>
 <div id="spanish-flu-in-chicago-7-week-mortality-at-peak-from-kaggle" class="section level4">
-<h4>Spanish Flu in Chicago, 7-week mortality, at peak (from Kaggle)</h4>
+<h4>Spanish flu in Chicago, 7-week mortality, at peak (from Kaggle)</h4>
 <pre class="r"><code>spanish_rawdf = read.csv(&quot;./data/spanish_flu_chicago.csv&quot;) 
 
-save(spanish_rawdf, file = &quot;spanish_rawdf.rda&quot;)
+save(spanish_rawdf, file = &quot;rdas/spanish_rawdf.rda&quot;)
 
 spanish_df = 
   spanish_rawdf %&gt;% 
@@ -334,7 +334,7 @@ spanish_df =
   group_by(week) %&gt;% 
   summarize(mortality = n())
 
-save(spanish_df, file = &quot;spanish_df.rda&quot;)</code></pre>
+save(spanish_df, file = &quot;rdas/spanish_df.rda&quot;)</code></pre>
 </div>
 </div>
 <div id="sars-cov-1-data" class="section level2">
@@ -359,7 +359,7 @@ save(spanish_df, file = &quot;spanish_df.rda&quot;)</code></pre>
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )
 
-save(sars_global, file = &quot;sars_global.rda&quot;)
+save(sars_global, file = &quot;rdas/sars_global.rda&quot;)
 
 sars_us = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) %&gt;% 
   clean_names() %&gt;% 
@@ -373,7 +373,18 @@ sars_us = read.csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) %&gt
     sars_new_deaths = sars_cumulative_deaths - lag(sars_cumulative_deaths)
   )
 
-save(sars_us, file = &quot;sars_us.rda&quot;)</code></pre>
+save(sars_us, file = &quot;rdas/sars_us.rda&quot;)</code></pre>
+</div>
+<div id="sars-cov-1-global-by-countries" class="section level4">
+<h4>SARS-CoV-1 Global (by countries)</h4>
+<pre class="r"><code>sars_df = 
+  read_csv(&quot;./data/sars_2003_complete_dataset_clean.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(-number_recovered) %&gt;% 
+  group_by(country) %&gt;% 
+  mutate(deaths_cum = cumsum(number_of_deaths))
+
+save(sars_df, file = &quot;rdas/sars_df.rda&quot;)</code></pre>
 </div>
 </div>
 <div id="h1n1-data" class="section level2">
@@ -404,7 +415,7 @@ h1n1_global_deaths =
     h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
   )
 
-save(h1n1_global_deaths, file = &quot;h1n1_global_deaths.rda&quot;)
+save(h1n1_global_deaths, file = &quot;rdas/h1n1_global_deaths.rda&quot;)
 
 h1n1_us_deaths = 
   h1n1_kaggle %&gt;% 
@@ -414,7 +425,7 @@ h1n1_us_deaths =
     h1n1_new_deaths = h1n1_cumulative_deaths - lag(h1n1_cumulative_deaths)
   )
 
-save(h1n1_us_deaths, file = &quot;h1n1_us_deaths.rda&quot;)</code></pre>
+save(h1n1_us_deaths, file = &quot;rdas/h1n1_us_deaths.rda&quot;)</code></pre>
 </div>
 <div id="h1n1-global-and-u.s.-case-data-from-who" class="section level4">
 <h4>H1N1 Global and U.S. Case Data (from WHO)</h4>
@@ -438,7 +449,7 @@ save(h1n1_us_deaths, file = &quot;h1n1_us_deaths.rda&quot;)</code></pre>
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
   )
 
-save(h1n1_global_cases, file = &quot;h1n1_global_cases.rda&quot;)
+save(h1n1_global_cases, file = &quot;rdas/h1n1_global_cases.rda&quot;)
 
 h1n1_us_cases = read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
   clean_names() %&gt;% 
@@ -455,7 +466,7 @@ h1n1_us_cases = read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, 
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
   )
 
-save(h1n1_us_cases, file = &quot;h1n1_us_cases.rda&quot;)</code></pre>
+save(h1n1_us_cases, file = &quot;rdas/h1n1_us_cases.rda&quot;)</code></pre>
 </div>
 </div>
 <div id="influenza-b-data" class="section level2">
@@ -482,7 +493,7 @@ save(h1n1_us_cases, file = &quot;h1n1_us_cases.rda&quot;)</code></pre>
     influenza_b_cumulative_cases = CUMULATIVE_SUM(influenza_b_new_cases)
   )
 
-save(influenza_global_cases, file = &quot;influenza_global_cases.rda&quot;)
+save(influenza_global_cases, file = &quot;rdas/influenza_global_cases.rda&quot;)
 
 influenza_us_cases = 
   read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
@@ -499,7 +510,7 @@ influenza_us_cases =
     influenza_cumulative_cases = CUMULATIVE_SUM(influenza_new_cases)
   )
 
-save(influenza_us_cases, file = &quot;influenza_us_cases.rda&quot;)</code></pre>
+save(influenza_us_cases, file = &quot;rdas/influenza_us_cases.rda&quot;)</code></pre>
 </div>
 </div>
 <div id="covid-19-data" class="section level2">
@@ -517,7 +528,7 @@ save(influenza_us_cases, file = &quot;influenza_us_cases.rda&quot;)</code></pre>
   group_by(pandemic_duration) %&gt;% 
   summarize(across(covid_new_cases:covid_cumulative_deaths, sum))
 
-save(covid_global, file = &quot;covid_global.rda&quot;)</code></pre>
+save(covid_global, file = &quot;rdas/covid_global.rda&quot;)</code></pre>
 </div>
 <div id="covid-19-u.s.-data-from-cdc" class="section level4">
 <h4>COVID-19 U.S. Data (from CDC)</h4>
@@ -576,13 +587,13 @@ covid_us_deaths =
          end_week = as.Date(end_week)) %&gt;% 
   select(-group, -footnote)
 
-save(covid_us_deaths, file = &quot;covid_us_deaths.rda&quot;)</code></pre>
+save(covid_us_deaths, file = &quot;rdas/covid_us_deaths.rda&quot;)</code></pre>
 </div>
 <div id="covid-19-chicago-data-from-cityofchicago.org" class="section level4">
 <h4>COVID-19 Chicago Data (from cityofchicago.org)</h4>
 <pre class="r"><code>covid19_chicago_rawdf =  read.csv(&quot;./data/covid19_chicago.csv&quot;) 
 
-save(covid19_chicago_rawdf, file = &quot;covid19_chicago_rawdf.rda&quot;)
+save(covid19_chicago_rawdf, file = &quot;rdas/covid19_chicago_rawdf.rda&quot;)
 
 covid19_chicago =
   covid19_chicago_rawdf %&gt;% 
@@ -636,7 +647,7 @@ covid19_chicago =
  
 covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
 
-save(covid19_chicago_df, file = &quot;covid19_chicago_df.rda&quot;)</code></pre>
+save(covid19_chicago_df, file = &quot;rdas/covid19_chicago_df.rda&quot;)</code></pre>
 </div>
 </div>
 <div id="basic-reproductive-rate" class="section level2">
