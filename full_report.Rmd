@@ -208,14 +208,18 @@ Next we compared the first pandemic of the 21st century, Severe acute respirator
 
 load("./sars_df.rda")
 
-sars_df %>%
-  ggplot(aes(x = date, y = deaths_cum, color = country)) +
-  geom_line() +
-  xlab("month") +
-  ylab("cumulative deaths") +
-  ggtitle("SARS 2003 cumulative deaths by country") +
-  theme(legend.position = "bottom",
-        legend.text = element_text(size = 6))
+sars_df %>% 
+  plot_ly(
+    x = ~date,
+    y = ~deaths_cum,
+    color = ~country,
+    type = "scatter",
+    mode = "lines"
+  ) %>% 
+  layout(title = "SARS 2003 Cumulative Deaths by Country",
+         xaxis = list(title = "month"),
+         yaxis = list(title = "Country"))
+
 ```
 
 As the graph displays, SARS was a global pandemic, with majority of death toll in eastern part of the world such as China and Hong Kong. A fast-spreading albeit short-lived pandemic, it was contained within 5 months for the most part. According to the [CDC](htts://www.cdc.gov/sars/about/fs-sars.html), the first reported case was in February of 2003 in Asia. 
