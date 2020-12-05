@@ -248,7 +248,7 @@ save(covid_global, file = "rdas/covid_global.rda")
 
 #### COVID-19 U.S. Data (from CDC)
 
-```{r covid us data, eval = F}
+```{r covid us data}
 get_all_cases = function(url) {
   
   all_cases = vector("list", length = 0)
@@ -313,7 +313,7 @@ covid_us_deaths =
 save(covid_us_deaths, file = "rdas/covid_us_deaths.rda")
 ```
 
-```{r dummy covid data}
+```{r dummy covid data, eval = F}
 url = "https://data.cdc.gov/resource/vbim-akqf.json"
 
 covid_us_cases = 

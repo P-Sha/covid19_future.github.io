@@ -11,7 +11,7 @@ navbar:
         href: datasets.html
       - text: "Clean and Tidy Process"
         href: data_cleaning.html  
-    - text: "Comparisons Dashboard (interactive)"
+    - text: "Interactive Dashboard"
       href: https://jak2312.shinyapps.io/shiny_dashboard/
     - text: "Pandemics Timeline"
       href: pandemics_timeline.html
