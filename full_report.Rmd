@@ -123,7 +123,7 @@ plot_2 =
   plot_ly(
     x = ~week, y = ~ mortality, color = ~ mortality, type = "bar") %>% 
   layout(title = "Spanish Flu vs COVID-19: 7-Week Peak (Chicago)", 
-         xaxis = list(title = "Weeks"),
+         xaxis = list(title = "COVID-19   (Weeks)"),
          yaxis = list(title = "Mortality"))
 
 # Comparison-plot
@@ -154,7 +154,6 @@ sars_df %>%
                       '</br> Cumulative Deaths: ', deaths_cum)
     ) %>% 
   layout(title = "SARS 2003 Cumulative Deaths by Country",
-         xaxis = list(title = "Month"),
          yaxis = list(title = "Country"))
 
 ```
@@ -379,6 +378,8 @@ global_cases %>%
    ) +
    theme(legend.position = "hide")
 
+ggsave("./pictures/global_new_cases_log_plot")
+
 global_cumulative_cases_log_plot =
 global_cases %>% 
   filter(trend == "cumulative_cases") %>% 
@@ -393,7 +394,7 @@ global_cases %>%
   theme(legend.position = "right") + 
   scale_colour_viridis_d(name = "Disease", labels = c("COVID-19", "H1N1", "Influenza B", "SARS 2003"))
 
-global_new_cases_log_plot + global_cumulative_cases_log_plot + plot_annotation(title = "Global Cases (Logarthimic Transformed): New vs Cumulative", theme = theme(plot.title = element_text(hjust = 0.5)))
+ global_new_cases_log_plot + global_cumulative_cases_log_plot + plot_annotation(title = "Global Cases (Logarthimic Transformed): New vs Cumulative", theme = theme(plot.title = element_text(hjust = 0.5)))
 ```
 
 Similar discrepancies in overall mortality are appreciated on the global scale. Mortality data for H1N1 are unfortunately limited more significantly than case counts, however inspection of the log-transformed scales suggest a higher burden than reported, as has been [previously modeled](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(12)70121-4/fulltext).
