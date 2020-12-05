@@ -32,7 +32,10 @@ According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3
 
 Given the nature of new Zoonotic infectious diseases, and the resulting inconsistent and sometimes conflicting measures of management of COVID-19 by the current federal government, we thought it would be interesting to explore into past pandemics in an effort to read into the current one. By looking at any prevalent patterns and similarities of prior pandemics, the aim was to learn lessons from those and shed some light on the direction of COVID-19.    
 
-****** embed screencast here*************
+# Screencast Introduction
+
+<iframe width="560" height="315" src="https://youtube.com/embed/pBJaMXUYijs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 
 Data for the project was collected from various online sources such as [kaggle.com](https://www.kaggle.com), [cdc.gov](https://www.cdc.gov/datastatistics/), and [WHO.int/data](https://www.who.int/data/) for covid19 data. For a complete list of datasets and descriptions, click on the  "Datasets" tab above.
 
