@@ -474,7 +474,7 @@ table_r0 %>%
   knitr::kable()
 ```
 
-Given that R0 would change with more data gathered for COVId-19, and based on the model used to calculate it, thus far On an average all pandemics showed similar R0 values, with H1N1 being the lowest. Spanish flu, with by far the greatest devastation in terms of death toll, had a slightly lower R0 than SARS and COVID-19. With R0 of 2.0, every individual with spanish flu, on an average, would have infected two other individuals.
+Given that R0 would change as more data is gathered for COVId-19, and based on the model used to calculate it, thus far on an average all pandemics showed similar R0 values, with H1N1 being the lowest. Spanish flu, with greatest devastation in terms of death toll, had a slightly lower R0 than SARS and COVID-19. With an R0 of 2.0, every individual with spanish flu, on an average, would have infected two other individuals.
 
 ### Discussion
 
