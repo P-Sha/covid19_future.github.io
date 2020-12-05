@@ -48,13 +48,13 @@ scale_fill_discrete = scale_fill_viridis_d
 
 ## *Overview*
 
-According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en), coronavirus is one of the most researched topics of 2020, having been searched four times as much as "news" between March and May of 2020. As we live through this ongoing pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
+According to [Google Trends](https://trends.google.com/trends/story/US_cu_4Rjdh3ABAABMHM_en), "coronavirus" is one of the most researched topics of 2020, having been searched four times as much as "news" between March and May of 2020. As we live through this ongoing pandemic, what might the most googled phobia be? Due to COVID-19, it is ["the fear of other people"](https://nypost.com/2020/10/15/most-googled-phobia-of-2020-is-fear-of-other-people-amid-covid-19/
 ). So, a likely question on most peoples' minds is how would COVID-19 take its course in the near future and possibly beyond?
 
 <center>
 <figure>
 ![](pictures/history_of_pandemics.jpg)
-<figcaption> Corona virus in comparison to history's deadliest pandemics, as of March 15 2020 [[1]](https://dailymail.co.uk/news/article-8120631) </figcaption>
+<figcaption> Coronavirus in comparison to history's deadliest pandemics, as of March 15, 2020 [[1]](https://dailymail.co.uk/news/article-8120631) </figcaption>
 </figure>
 </center>
 
@@ -64,7 +64,7 @@ Given the nature of new Zoonotic infectious diseases, and the resulting inconsis
 
 ****** embed screencast here*************
 
-Data for the project was collected from various online sources such as [(kaggle.com)](https://www.kaggle.com), [(cdc.gov)](https://www.cdc.gov/datastatistics/), and [(WHO.int/data)](https://www.who.int/data/) for covid19 data. For a complete list of datasets and descriptions click on the  "Datasets" tab above.
+Data for the project was collected from various online sources such as [kaggle.com](https://www.kaggle.com), [cdc.gov](https://www.cdc.gov/datastatistics/), and [WHO.int/data](https://www.who.int/data/) for covid19 data. For a complete list of datasets and descriptions, click on the  "Datasets" tab above.
 
 
 Data comparisons for the project were performed between past pandemics and the current pandemic using similar and parallel, if possible, datasets (in terms of time-frame and geography of the spread). Comparisons were made by analyzing visuals and statistical parameters between the current and past pandemics. 

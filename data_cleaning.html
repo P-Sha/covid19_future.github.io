@@ -11,7 +11,7 @@
 
 
 
-<title>Clean and Tidy datasets</title>
+<title>Clean and Tidy Datasets</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -290,7 +290,7 @@ $(document).ready(function () {
       <a href="datasets.html">Sources and Descriptions</a>
     </li>
     <li>
-      <a href="data_cleaning.html">Clean and tidy process</a>
+      <a href="data_cleaning.html">Clean and Tidy Process</a>
     </li>
   </ul>
 </li>
@@ -315,7 +315,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Clean and Tidy datasets</h1>
+<h1 class="title toc-ignore">Clean and Tidy Datasets</h1>
 
 </div>
 
@@ -451,20 +451,23 @@ save(h1n1_us_deaths, file = &quot;rdas/h1n1_us_deaths.rda&quot;)</code></pre>
 
 save(h1n1_global_cases, file = &quot;rdas/h1n1_global_cases.rda&quot;)
 
-h1n1_us_cases = read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
+h1n1_us_cases = 
+  read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
   clean_names() %&gt;% 
   select(start_date:end_date, h1n1_new_cases = a_h1n1_pdm09) %&gt;% 
   mutate(
     start_date = as.Date(start_date),
     end_date = as.Date(end_date),
-    pandemic_interval = &quot;2009/04/06&quot; %--% end_date,
+    pandemic_interval = &quot;2009/04/06&quot; %--% start_date,
     pandemic_duration = as.duration(pandemic_interval) / ddays(1)
-  ) %&gt;% 
-    filter(pandemic_duration &gt;= 0) %&gt;% 
+  ) %&gt;%  
+  filter(start_date &gt; &quot;2009/04/06&quot;) %&gt;% 
+  filter(start_date &lt; &quot;2010/04/06&quot;) %&gt;% 
   mutate(
     h1n1_new_cases = as.numeric(h1n1_new_cases),
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
-  )
+  ) %&gt;% 
+  select(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases)
 
 save(h1n1_us_cases, file = &quot;rdas/h1n1_us_cases.rda&quot;)</code></pre>
 </div>
@@ -497,18 +500,20 @@ save(influenza_global_cases, file = &quot;rdas/influenza_global_cases.rda&quot;)
 
 influenza_us_cases = 
   read_excel(&quot;./data/USA_FluNetInteractiveReport.xlsx&quot;, skip = 5) %&gt;% 
-  janitor::clean_names() %&gt;% 
+  clean_names() %&gt;% 
   select(start_date:end_date, b_total) %&gt;% 
   mutate(start_date = as.Date(start_date),
          end_date = as.Date(end_date),
-         pandemic_interval = &quot;2009/04/06&quot; %--% end_date, 
+         pandemic_interval = &quot;2019/09/30&quot; %--% end_date, 
          pandemic_duration = as.duration(pandemic_interval) / ddays(1)) %&gt;% 
+  filter(start_date &gt; &quot;2019/09/30&quot;) %&gt;% 
+  filter(start_date &lt; &quot;2020/09/30&quot;) %&gt;% 
   drop_na() %&gt;% 
-  filter(pandemic_duration &gt;= 0) %&gt;% 
   mutate(
     influenza_new_cases = as.numeric(b_total),
     influenza_cumulative_cases = CUMULATIVE_SUM(influenza_new_cases)
-  )
+  ) %&gt;% 
+  select(pandemic_duration, influenza_new_cases, influenza_cumulative_cases)
 
 save(influenza_us_cases, file = &quot;rdas/influenza_us_cases.rda&quot;)</code></pre>
 </div>
@@ -517,7 +522,8 @@ save(influenza_us_cases, file = &quot;rdas/influenza_us_cases.rda&quot;)</code><
 <h2><strong>COVID-19 Data</strong></h2>
 <div id="covid-19-global-data-from-who" class="section level4">
 <h4>COVID-19 Global Data (from WHO)</h4>
-<pre class="r"><code>covid_global = read_csv(&quot;./data/covid19_global.csv&quot;) %&gt;% 
+<pre class="r"><code>covid_global = 
+  read_csv(&quot;./data/covid19_global.csv&quot;) %&gt;% 
   clean_names() %&gt;% 
   select(-country_code, -who_region, covid_new_cases = new_cases, covid_cumulative_cases = cumulative_cases, covid_new_deaths = new_deaths, covid_cumulative_deaths = cumulative_deaths) %&gt;% 
   mutate(
@@ -581,13 +587,51 @@ covid_us_deaths =
   content(&quot;text&quot;) %&gt;% 
   fromJSON() %&gt;% 
   as_tibble() %&gt;% 
-  janitor::clean_names() %&gt;% 
+  clean_names() %&gt;% 
   mutate(data_as_of = as.Date(data_as_of),
          start_week = as.Date(start_week),
          end_week = as.Date(end_week)) %&gt;% 
   select(-group, -footnote)
 
+<<<<<<< HEAD
 save(covid_us_deaths, file = &quot;rdas/covid_us_deaths.rda&quot;)</code></pre>
+=======
+save(covid_us_deaths, file = &quot;covid_us_deaths.rda&quot;)</code></pre>
+<pre class="r"><code>url = &quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;
+
+covid_us_cases = 
+  GET(url) %&gt;%
+  content(&quot;text&quot;) %&gt;%
+  fromJSON() %&gt;%
+  as_tibble() %&gt;% 
+  mutate(cdc_report_dt = as.Date(cdc_report_dt),
+         pandemic_interval = &quot;2020/01/22&quot; %--% cdc_report_dt, 
+         pandemic_duration = as.duration(pandemic_interval) / ddays(1)) %&gt;%
+  arrange(cdc_report_dt) %&gt;% 
+  mutate(case_id = row_number()) %&gt;% 
+  relocate(case_id, pandemic_duration) %&gt;% 
+  group_by(pandemic_duration) %&gt;% 
+  summarize(covid_new_cases = n_distinct(case_id), 
+            covid_cumulative_cases = max(case_id))
+
+save(covid_us_cases, file = &quot;covid_us_cases.rda&quot;)
+
+covid_us_deaths = 
+  GET(&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;, query = list(&quot;$limit&quot; = 10000)) %&gt;% 
+  content(&quot;text&quot;) %&gt;% 
+  fromJSON() %&gt;% 
+  as_tibble() %&gt;% 
+  clean_names() %&gt;% 
+  filter(state == &quot;United States&quot;) %&gt;% 
+  mutate(start_week = as.Date(start_week),
+         covid_new_deaths = as.numeric(covid_deaths), 
+         pandemic_interval = &quot;2020/01/22&quot; %--% start_week, 
+         pandemic_duration = as.duration(pandemic_interval) / ddays(1), 
+         covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)) %&gt;% 
+  select(pandemic_duration, covid_new_deaths, covid_cumulative_deaths)
+
+save(covid_us_deaths, file = &quot;covid_us_deaths.rda&quot;)</code></pre>
+>>>>>>> 6e098fd25307b9247eaf3651ab01b98082b45830
 </div>
 <div id="covid-19-chicago-data-from-cityofchicago.org" class="section level4">
 <h4>COVID-19 Chicago Data (from cityofchicago.org)</h4>
@@ -650,17 +694,75 @@ covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
 save(covid19_chicago_df, file = &quot;rdas/covid19_chicago_df.rda&quot;)</code></pre>
 </div>
 </div>
+<div id="merged-data" class="section level2">
+<h2><strong>Merged Data</strong></h2>
+<div id="global-cases" class="section level4">
+<h4>Global Cases</h4>
+<pre class="r"><code>global_cases_first = full_join(covid_global, h1n1_global_cases)
+global_cases_second = full_join(global_cases_first, influenza_global_cases)
+
+global_cases = 
+  full_join(global_cases_second, sars_global) %&gt;% 
+  rename(influenzab_new_cases = influenza_b_new_cases, 
+         influenzab_cumulative_cases = influenza_b_cumulative_cases) %&gt;% 
+  select(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases, covid_new_cases, covid_cumulative_cases, sars_new_cases, sars_cumulative_cases, influenzab_new_cases, influenzab_cumulative_cases) %&gt;%
+  arrange(pandemic_duration) %&gt;% 
+  pivot_longer(
+    h1n1_new_cases:influenzab_cumulative_cases,
+    names_to = &quot;class&quot;,
+    values_to = &quot;n&quot;
+  ) %&gt;% 
+  separate(class, into = c(&quot;disease&quot;, &quot;trend&quot;), sep = &quot;_&quot;, extra = &quot;merge&quot;)
+
+save(global_cases, file = &quot;global_cases.rda&quot;)</code></pre>
+</div>
+<div id="global-deaths" class="section level4">
+<h4>Global Deaths</h4>
+<pre class="r"><code>global_deaths = 
+  full_join(h1n1_global_deaths, covid_global)
+
+global_deaths =
+  full_join(global_deaths, sars_global) %&gt;% 
+  select(pandemic_duration, h1n1_new_deaths, h1n1_cumulative_deaths, covid_new_deaths, covid_cumulative_deaths, sars_new_deaths, sars_cumulative_deaths) %&gt;% 
+  arrange(pandemic_duration) %&gt;% 
+  pivot_longer(
+    h1n1_new_deaths:sars_cumulative_deaths,
+    names_to = &quot;class&quot;,
+    values_to = &quot;n&quot;
+  ) %&gt;% 
+  separate(class, into = c(&quot;disease&quot;, &quot;trend&quot;), sep = &quot;_&quot;, extra = &quot;merge&quot;)
+
+save(global_deaths, file = &quot;global_deaths.rda&quot;)</code></pre>
+</div>
+<div id="u.s.-cases" class="section level4">
+<h4>U.S. Cases</h4>
+<pre class="r"><code>us_cases_first = full_join(covid_us_cases, h1n1_us_cases)
+us_cases_second = full_join(us_cases_first, influenza_us_cases)
+
+us_cases = full_join(us_cases_second, sars_us) %&gt;% 
+  select(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases, covid_new_cases, covid_cumulative_cases, sars_new_cases, sars_cumulative_cases, influenza_new_cases, influenza_cumulative_cases) %&gt;% 
+  arrange(pandemic_duration) %&gt;% 
+  pivot_longer(
+    h1n1_new_cases:influenza_cumulative_cases,
+    names_to = &quot;class&quot;,
+    values_to = &quot;n&quot;
+  ) %&gt;% 
+  separate(class, into = c(&quot;disease&quot;, &quot;trend&quot;), sep = &quot;_&quot;, extra = &quot;merge&quot;)
+
+save(us_cases, file = &quot;us_cases.rda&quot;)</code></pre>
+</div>
+</div>
 <div id="basic-reproductive-rate" class="section level2">
-<h2><strong>Basic Reproductive rate</strong></h2>
+<h2><strong>Basic Reproductive Rate</strong></h2>
 <pre class="r"><code>r0_data_url = &quot;https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext&quot;
 reproductive_rate_html = read_html(r0_data_url)
 
 table_r0 =
   reproductive_rate_html %&gt;% 
   html_nodes(css = &quot;table&quot;) %&gt;%  
-  first() %&gt;%
+  first() %&gt;% 
   html_table() %&gt;% 
-  janitor::clean_names() %&gt;% 
+  clean_names() %&gt;% 
   select(-interpretation) %&gt;% 
   filter(x == &quot;Transmissibility, R0&quot; | x == &quot;Incubation period, days&quot; | x == &quot;Interval between symptom onset and maximum infectivity, days&quot; | x == &quot;Proportion with mild illness&quot;) %&gt;% 
   rename(

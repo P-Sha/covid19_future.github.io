@@ -9,7 +9,7 @@ navbar:
       menu:
       - text: "Sources and Descriptions"
         href: datasets.html
-      - text: "Clean and tidy process"
+      - text: "Clean and Tidy Process"
         href: data_cleaning.html  
     - text: "Comparisons Dashboard (interactive)"
       href: https://jak2312.shinyapps.io/shiny_dashboard/
