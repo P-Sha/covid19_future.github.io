@@ -278,7 +278,7 @@ h1n1_global_who %>%
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "Days: New  cases",
+    x = "(Pandemic duration: Days) New  cases",
     y = "n") +
   ggtitle("H1N1: Global")
 
@@ -304,7 +304,7 @@ h1n1_us_who %>%
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
     labs(
-    x = "Days: New cases",
+    x = "(Pandemic duration: Days) New cases",
     y = "n") +
    ggtitle("H1N1: United States")
 
@@ -338,9 +338,10 @@ global_cases %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "Days: New cases",
+    x = "(Pandemic duration: Days) New cases",
     y = "n") +
-   ggtitle("Comparisons: New cases, Global")
+   ggtitle("Comparisons: New cases, Global") +
+  theme(legend.position = "hide")
 
 global_cumulative_cases_linear_plot =
 global_cases %>% 
@@ -352,12 +353,15 @@ global_cases %>%
     x = "Cumulative cases",
     y = "",
     caption = "Linear plots"
-  )
+  ) +
+  theme(legend.position = "right")
 
 global_new_cases_linear_plot + global_cumulative_cases_linear_plot
 ```
 
-Given the orders of magnitude difference in incidence of COVID-19 compared with SARS and H1N1, a log-transformed visualization allows for more instructive comparison.
+Given the orders of magnitude difference in incidence of COVID-19 compared with SARS and H1N1, a log-transformed visualization allows for more instructive comparison. 
+Since the focus is on the slope of these lines, log transformations better depict how pandemics track relative to each other. 
+
 
 ```{r}
 ##log-transformed
@@ -369,9 +373,10 @@ global_cases %>%
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
   labs(
-    x = "Days: New cases",
+    x = "(Pandemic duration: Days) New cases",
     y = "n") +
-   ggtitle("Comparisons (transformed): New cases, Global")
+   ggtitle("Comparisons (transformed): New cases, Global") +
+   theme(legend.position = "hide")
 
 global_cumulative_cases_log_plot =
 global_cases %>% 
@@ -385,7 +390,7 @@ global_cases %>%
     y = "",
     caption = "Log-transformed plots"
   ) +
-  theme(legend.position = "hide")
+  theme(legend.position = "right")
 
 global_new_cases_log_plot + global_cumulative_cases_log_plot
 ```
@@ -402,9 +407,10 @@ global_deaths %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "Days: New deaths",
+    x = "(Pandemic duration: Days) New deaths",
     y = "n") +
-   ggtitle("Comparisons: Deaths, Global")
+   ggtitle("Comparisons: Deaths, Global") +
+   theme(legend.position = "hide")
 
 global_cumulative_deaths_linear_plot = 
 global_deaths %>% 
@@ -417,7 +423,7 @@ global_deaths %>%
     y = "",
     caption = "Linear plots"
   ) +
-  theme(legend.position = "hide")
+  theme(legend.position = "right")
 
 global_new_deaths_log_plot =
 global_deaths %>% 
@@ -429,7 +435,8 @@ global_deaths %>%
   labs(
     x = "Days: New deaths",
     y = "n") +
- ggtitle("Comparisons (transformed): Deaths, Global")
+  ggtitle("Comparisons (transformed): Deaths, Global") +
+  theme(legend.position = "hide")
 
 global_cumulative_deaths_log_plot =
 global_deaths %>% 
@@ -443,7 +450,7 @@ global_deaths %>%
     y = "",
     caption = "Log-transformed plots"
     ) +
-   theme(legend.position = "hide")
+   theme(legend.position = "right")
 
 global_new_deaths_linear_plot + global_cumulative_deaths_linear_plot
 
@@ -452,21 +459,38 @@ global_new_deaths_log_plot + global_cumulative_deaths_log_plot
 
 #### R0
 
-Any report on pandemics in incomplete without the analysis of the basic Reproductive rate, also called R0 (R naught). Prior to this pandemic, it was probably heard for the first time by many in the movie [Contagion](imdb.com/title/tt1598778/). 
+Any report on pandemics is incomplete without the analysis of the basic Reproductive rate, also called R0 (R naught), so we decided to include it in our study. Prior to this pandemic, it was probably heard for the first time by many in the movie [Contagion](imdb.com/title/tt1598778/). 
 
-A measure of how many cases a single infected individual can generate in a susceptible population, it helps quantify an outbreak's intensity.
+A measure of how many cases a single infected individual can generate in a susceptible population, R0 is not truly a rate and helps quantify an outbreak's intensity. The following table displays the R0 for the pandemics discussed above, along with the time in days from exposure to symptoms of the disease, days from symptoms onset to maximum infectivity, and the proportion of individuals with mild symptoms.
 
+```{r basic reproductive rate}
+load("./table_r0.rda")
 
+table_r0 %>%
+  knitr::kable()
+```
 
-(Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.)
-
-
-
-
+Given that R0 would change with more data gathered for COVId-19, and based on the model used to calculate it, thus far On an average all pandemics showed similar R0 values, with H1N1 being the lowest. Spanish flu, with by far the greatest devastation in terms of death toll, had a slightly lower R0 than SARS and COVID-19. With R0 of 2.0, every individual with spanish flu, on an average, would have infected two other individuals.
 
 ### Discussion
 
-Comparison of the current COVID-19 pandemic with prior viral respiratory pathogen outbreaks reveal the severity of the current outbreak in terms of both global and US-specific incident cases and mortality burden.
+Comparison of the current COVID-19 pandemic with prior viral respiratory pathogen outbreaks reveal the severity of the current outbreak in terms of both global and US-specific incident cases and mortality burden. It helps put the scale of COVID-19 in perspective relative to prior similar pandemics. 
+
+seemingly apart at first glance, study revealed some common interesting characteristics about pandemics. Cumulative cases for both SARS and H1N1 followed a logistic s-curve, fitting the spread of a disease through a healthy susceptible population. Such patterns reveal initial exponential growth, until the exhaustion of susceptible cases. 
+
+That the new cases run in wave(s) was also evident. Lack of Spanish flu data restricted its analysis, however the image below from CDC show that it ran its course globally in 3 waves. 
+
+##### _Spanish flu waves (CDC)_
+
+![](`r "https://www.cdc.gov/flu/pandemic-resources/1918-commemoration/images/death-chart.jpg"`)
+
+Another interesting aspect of the Chicago Spanish flu dataset was that more people died from a secondary bacterial infection than the actual flu, indicating that the viral-bacterial co-pathogen complications were more prevalent than the primary viral disease itself. The findings reveal that we probably need to look beyond a pandemic's primary cause for better planning and outcomes.
+
+Questions remain whether COVID-19 would turn into an endemic just as H1N1 did and  Spanish flu did with its descendant virus, or fade out with time as SARS 2003 did?  Third option seems less probable given COVID's duration and geographic spread. With many questions unanswered at this point, with the ongoing data-updates globally, a peak into past pandemics provided a better understanding into such probable courses of current Corona virus. 
+
+
+In conclusion, COVID-19 is certainly not the first pandemic, and probably not the last. Looking at past pandemics could give us some main takeaways for better preparedness and management. Researching about these past pandemics have taught us that certain non-medical measures did work in the past. For instance, according to "[Medical News Today"](https://www.medicalnewstoday.com/articles/comparing-covid-19-with-previous-pandemics#1918:-The-Spanish-flu), quick implementation of social-distancing and masking was effective during Spanish flu. Quarantine measures were highly effective during the SARS 2003 outbreak. More importantly, we are medically and scientifically better equipped than we were in the past, to bring the R0 number below one. At the end, pandemics do come to an end.  
+
 
 ***
 Authors: _Jared Klug_ | _David Nemirovsky_ | _Matthew Lawlor_ | _Purnima Sharma_ 
