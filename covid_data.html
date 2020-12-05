@@ -1,662 +1,384 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
-<meta charset="utf-8">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>covid_data.utf8</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
 
 <style type="text/css">
-@font-face {
-font-family: octicons-link;
-src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAAAZwABAAAAAACFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEU0lHAAAGaAAAAAgAAAAIAAAAAUdTVUIAAAZcAAAACgAAAAoAAQAAT1MvMgAAAyQAAABJAAAAYFYEU3RjbWFwAAADcAAAAEUAAACAAJThvmN2dCAAAATkAAAABAAAAAQAAAAAZnBnbQAAA7gAAACyAAABCUM+8IhnYXNwAAAGTAAAABAAAAAQABoAI2dseWYAAAFsAAABPAAAAZwcEq9taGVhZAAAAsgAAAA0AAAANgh4a91oaGVhAAADCAAAABoAAAAkCA8DRGhtdHgAAAL8AAAADAAAAAwGAACfbG9jYQAAAsAAAAAIAAAACABiATBtYXhwAAACqAAAABgAAAAgAA8ASm5hbWUAAAToAAABQgAAAlXu73sOcG9zdAAABiwAAAAeAAAAME3QpOBwcmVwAAAEbAAAAHYAAAB/aFGpk3jaTY6xa8JAGMW/O62BDi0tJLYQincXEypYIiGJjSgHniQ6umTsUEyLm5BV6NDBP8Tpts6F0v+k/0an2i+itHDw3v2+9+DBKTzsJNnWJNTgHEy4BgG3EMI9DCEDOGEXzDADU5hBKMIgNPZqoD3SilVaXZCER3/I7AtxEJLtzzuZfI+VVkprxTlXShWKb3TBecG11rwoNlmmn1P2WYcJczl32etSpKnziC7lQyWe1smVPy/Lt7Kc+0vWY/gAgIIEqAN9we0pwKXreiMasxvabDQMM4riO+qxM2ogwDGOZTXxwxDiycQIcoYFBLj5K3EIaSctAq2kTYiw+ymhce7vwM9jSqO8JyVd5RH9gyTt2+J/yUmYlIR0s04n6+7Vm1ozezUeLEaUjhaDSuXHwVRgvLJn1tQ7xiuVv/ocTRF42mNgZGBgYGbwZOBiAAFGJBIMAAizAFoAAABiAGIAznjaY2BkYGAA4in8zwXi+W2+MjCzMIDApSwvXzC97Z4Ig8N/BxYGZgcgl52BCSQKAA3jCV8CAABfAAAAAAQAAEB42mNgZGBg4f3vACQZQABIMjKgAmYAKEgBXgAAeNpjYGY6wTiBgZWBg2kmUxoDA4MPhGZMYzBi1AHygVLYQUCaawqDA4PChxhmh/8ODDEsvAwHgMKMIDnGL0x7gJQCAwMAJd4MFwAAAHjaY2BgYGaA4DAGRgYQkAHyGMF8NgYrIM3JIAGVYYDT+AEjAwuDFpBmA9KMDEwMCh9i/v8H8sH0/4dQc1iAmAkALaUKLgAAAHjaTY9LDsIgEIbtgqHUPpDi3gPoBVyRTmTddOmqTXThEXqrob2gQ1FjwpDvfwCBdmdXC5AVKFu3e5MfNFJ29KTQT48Ob9/lqYwOGZxeUelN2U2R6+cArgtCJpauW7UQBqnFkUsjAY/kOU1cP+DAgvxwn1chZDwUbd6CFimGXwzwF6tPbFIcjEl+vvmM/byA48e6tWrKArm4ZJlCbdsrxksL1AwWn/yBSJKpYbq8AXaaTb8AAHja28jAwOC00ZrBeQNDQOWO//sdBBgYGRiYWYAEELEwMTE4uzo5Zzo5b2BxdnFOcALxNjA6b2ByTswC8jYwg0VlNuoCTWAMqNzMzsoK1rEhNqByEyerg5PMJlYuVueETKcd/89uBpnpvIEVomeHLoMsAAe1Id4AAAAAAAB42oWQT07CQBTGv0JBhagk7HQzKxca2sJCE1hDt4QF+9JOS0nbaaYDCQfwCJ7Au3AHj+LO13FMmm6cl7785vven0kBjHCBhfpYuNa5Ph1c0e2Xu3jEvWG7UdPDLZ4N92nOm+EBXuAbHmIMSRMs+4aUEd4Nd3CHD8NdvOLTsA2GL8M9PODbcL+hD7C1xoaHeLJSEao0FEW14ckxC+TU8TxvsY6X0eLPmRhry2WVioLpkrbp84LLQPGI7c6sOiUzpWIWS5GzlSgUzzLBSikOPFTOXqly7rqx0Z1Q5BAIoZBSFihQYQOOBEdkCOgXTOHA07HAGjGWiIjaPZNW13/+lm6S9FT7rLHFJ6fQbkATOG1j2OFMucKJJsxIVfQORl+9Jyda6Sl1dUYhSCm1dyClfoeDve4qMYdLEbfqHf3O/AdDumsjAAB42mNgYoAAZQYjBmyAGYQZmdhL8zLdDEydARfoAqIAAAABAAMABwAKABMAB///AA8AAQAAAAAAAAAAAAAAAAABAAAAAA==) format('woff');
-}
-body {
--webkit-text-size-adjust: 100%;
-text-size-adjust: 100%;
-color: #333;
-font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-font-size: 16px;
-line-height: 1.6;
-word-wrap: break-word;
-}
-a {
-background-color: transparent;
-}
-a:active,
-a:hover {
-outline: 0;
-}
-strong {
-font-weight: bold;
-}
 h1 {
-font-size: 2em;
-margin: 0.67em 0;
+  font-size: 34px;
 }
-img {
-border: 0;
-}
-hr {
-box-sizing: content-box;
-height: 0;
-}
-pre {
-overflow: auto;
-}
-code,
-kbd,
-pre {
-font-family: monospace, monospace;
-font-size: 1em;
-}
-input {
-color: inherit;
-font: inherit;
-margin: 0;
-}
-html input[disabled] {
-cursor: default;
-}
-input {
-line-height: normal;
-}
-input[type="checkbox"] {
-box-sizing: border-box;
-padding: 0;
-}
-table {
-border-collapse: collapse;
-border-spacing: 0;
-}
-td,
-th {
-padding: 0;
-}
-* {
-box-sizing: border-box;
-}
-input {
-font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-a {
-color: #4078c0;
-text-decoration: none;
-}
-a:hover,
-a:active {
-text-decoration: underline;
-}
-hr {
-height: 0;
-margin: 15px 0;
-overflow: hidden;
-background: transparent;
-border: 0;
-border-bottom: 1px solid #ddd;
-}
-hr:before {
-display: table;
-content: "";
-}
-hr:after {
-display: table;
-clear: both;
-content: "";
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-margin-top: 15px;
-margin-bottom: 15px;
-line-height: 1.1;
-}
-h1 {
-font-size: 30px;
+h1.title {
+  font-size: 38px;
 }
 h2 {
-font-size: 21px;
+  font-size: 30px;
 }
 h3 {
-font-size: 16px;
+  font-size: 24px;
 }
 h4 {
-font-size: 14px;
+  font-size: 18px;
 }
 h5 {
-font-size: 12px;
+  font-size: 16px;
 }
 h6 {
-font-size: 11px;
+  font-size: 12px;
 }
-blockquote {
-margin: 0;
+.table th:not([align]) {
+  text-align: left;
 }
-ul,
-ol {
-padding: 0;
-margin-top: 0;
-margin-bottom: 0;
-}
-ol ol,
-ul ol {
-list-style-type: lower-roman;
-}
-ul ul ol,
-ul ol ol,
-ol ul ol,
-ol ol ol {
-list-style-type: lower-alpha;
-}
-dd {
-margin-left: 0;
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
 }
 code {
-font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-font-size: 12px;
-}
-pre {
-margin-top: 0;
-margin-bottom: 0;
-font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
-}
-.select::-ms-expand {
-opacity: 0;
-}
-.octicon {
-font: normal normal normal 16px/1 octicons-link;
-display: inline-block;
-text-decoration: none;
-text-rendering: auto;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
--webkit-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;
-}
-.octicon-link:before {
-content: '\f05c';
-}
-.markdown-body:before {
-display: table;
-content: "";
-}
-.markdown-body:after {
-display: table;
-clear: both;
-content: "";
-}
-.markdown-body>*:first-child {
-margin-top: 0 !important;
-}
-.markdown-body>*:last-child {
-margin-bottom: 0 !important;
-}
-a:not([href]) {
-color: inherit;
-text-decoration: none;
-}
-.anchor {
-display: inline-block;
-padding-right: 2px;
-margin-left: -18px;
-}
-.anchor:focus {
-outline: none;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-margin-top: 1em;
-margin-bottom: 16px;
-font-weight: bold;
-line-height: 1.4;
-}
-h1 .octicon-link,
-h2 .octicon-link,
-h3 .octicon-link,
-h4 .octicon-link,
-h5 .octicon-link,
-h6 .octicon-link {
-color: #000;
-vertical-align: middle;
-visibility: hidden;
-}
-h1:hover .anchor,
-h2:hover .anchor,
-h3:hover .anchor,
-h4:hover .anchor,
-h5:hover .anchor,
-h6:hover .anchor {
-text-decoration: none;
-}
-h1:hover .anchor .octicon-link,
-h2:hover .anchor .octicon-link,
-h3:hover .anchor .octicon-link,
-h4:hover .anchor .octicon-link,
-h5:hover .anchor .octicon-link,
-h6:hover .anchor .octicon-link {
-visibility: visible;
-}
-h1 {
-padding-bottom: 0.3em;
-font-size: 2.25em;
-line-height: 1.2;
-border-bottom: 1px solid #eee;
-}
-h1 .anchor {
-line-height: 1;
-}
-h2 {
-padding-bottom: 0.3em;
-font-size: 1.75em;
-line-height: 1.225;
-border-bottom: 1px solid #eee;
-}
-h2 .anchor {
-line-height: 1;
-}
-h3 {
-font-size: 1.5em;
-line-height: 1.43;
-}
-h3 .anchor {
-line-height: 1.2;
-}
-h4 {
-font-size: 1.25em;
-}
-h4 .anchor {
-line-height: 1.2;
-}
-h5 {
-font-size: 1em;
-}
-h5 .anchor {
-line-height: 1.1;
-}
-h6 {
-font-size: 1em;
-color: #777;
-}
-h6 .anchor {
-line-height: 1.1;
-}
-p,
-blockquote,
-ul,
-ol,
-dl,
-table,
-pre {
-margin-top: 0;
-margin-bottom: 16px;
-}
-hr {
-height: 4px;
-padding: 0;
-margin: 16px 0;
-background-color: #e7e7e7;
-border: 0 none;
-}
-ul,
-ol {
-padding-left: 2em;
-}
-ul ul,
-ul ol,
-ol ol,
-ol ul {
-margin-top: 0;
-margin-bottom: 0;
-}
-li>p {
-margin-top: 16px;
-}
-dl {
-padding: 0;
-}
-dl dt {
-padding: 0;
-margin-top: 16px;
-font-size: 1em;
-font-style: italic;
-font-weight: bold;
-}
-dl dd {
-padding: 0 16px;
-margin-bottom: 16px;
-}
-blockquote {
-padding: 0 15px;
-color: #777;
-border-left: 4px solid #ddd;
-}
-blockquote>:first-child {
-margin-top: 0;
-}
-blockquote>:last-child {
-margin-bottom: 0;
-}
-table {
-display: block;
-width: 100%;
-overflow: auto;
-word-break: normal;
-word-break: keep-all;
-}
-table th {
-font-weight: bold;
-}
-table th,
-table td {
-padding: 6px 13px;
-border: 1px solid #ddd;
-}
-table tr {
-background-color: #fff;
-border-top: 1px solid #ccc;
-}
-table tr:nth-child(2n) {
-background-color: #f8f8f8;
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
-max-width: 100%;
-box-sizing: content-box;
-background-color: #fff;
+  max-width:100%;
 }
-code {
-padding: 0;
-padding-top: 0.2em;
-padding-bottom: 0.2em;
-margin: 0;
-font-size: 85%;
-background-color: rgba(0,0,0,0.04);
-border-radius: 3px;
+.tabbed-pane {
+  padding-top: 12px;
 }
-code:before,
-code:after {
-letter-spacing: -0.2em;
-content: "\00a0";
+.html-widget {
+  margin-bottom: 20px;
 }
-pre>code {
-padding: 0;
-margin: 0;
-font-size: 100%;
-word-break: normal;
-white-space: pre;
-background: transparent;
-border: 0;
+button.code-folding-btn:focus {
+  outline: none;
 }
-.highlight {
-margin-bottom: 16px;
+summary {
+  display: list-item;
 }
-.highlight pre,
-pre {
-padding: 16px;
-overflow: auto;
-font-size: 85%;
-line-height: 1.45;
-background-color: #f7f7f7;
-border-radius: 3px;
-}
-.highlight pre {
-margin-bottom: 0;
-word-break: normal;
-}
-pre {
-word-wrap: normal;
-}
-pre code {
-display: inline;
-max-width: initial;
-padding: 0;
-margin: 0;
-overflow: initial;
-line-height: inherit;
-word-wrap: normal;
-background-color: transparent;
-border: 0;
-}
-pre code:before,
-pre code:after {
-content: normal;
-}
-kbd {
-display: inline-block;
-padding: 3px 5px;
-font-size: 11px;
-line-height: 10px;
-color: #555;
-vertical-align: middle;
-background-color: #fcfcfc;
-border: solid 1px #ccc;
-border-bottom-color: #bbb;
-border-radius: 3px;
-box-shadow: inset 0 -1px 0 #bbb;
-}
-.pl-c {
-color: #969896;
-}
-.pl-c1,
-.pl-s .pl-v {
-color: #0086b3;
-}
-.pl-e,
-.pl-en {
-color: #795da3;
-}
-.pl-s .pl-s1,
-.pl-smi {
-color: #333;
-}
-.pl-ent {
-color: #63a35c;
-}
-.pl-k {
-color: #a71d5d;
-}
-.pl-pds,
-.pl-s,
-.pl-s .pl-pse .pl-s1,
-.pl-sr,
-.pl-sr .pl-cce,
-.pl-sr .pl-sra,
-.pl-sr .pl-sre {
-color: #183691;
-}
-.pl-v {
-color: #ed6a43;
-}
-.pl-id {
-color: #b52a1d;
-}
-.pl-ii {
-background-color: #b52a1d;
-color: #f8f8f8;
-}
-.pl-sr .pl-cce {
-color: #63a35c;
-font-weight: bold;
-}
-.pl-ml {
-color: #693a17;
-}
-.pl-mh,
-.pl-mh .pl-en,
-.pl-ms {
-color: #1d3e81;
-font-weight: bold;
-}
-.pl-mq {
-color: #008080;
-}
-.pl-mi {
-color: #333;
-font-style: italic;
-}
-.pl-mb {
-color: #333;
-font-weight: bold;
-}
-.pl-md {
-background-color: #ffecec;
-color: #bd2c00;
-}
-.pl-mi1 {
-background-color: #eaffea;
-color: #55a532;
-}
-.pl-mdr {
-color: #795da3;
-font-weight: bold;
-}
-.pl-mo {
-color: #1d3e81;
-}
-kbd {
-display: inline-block;
-padding: 3px 5px;
-font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
-line-height: 10px;
-color: #555;
-vertical-align: middle;
-background-color: #fcfcfc;
-border: solid 1px #ccc;
-border-bottom-color: #bbb;
-border-radius: 3px;
-box-shadow: inset 0 -1px 0 #bbb;
-}
-.task-list-item {
-list-style-type: none;
-}
-.task-list-item+.task-list-item {
-margin-top: 3px;
-}
-.task-list-item input {
-margin: 0 0.35em 0.25em -1.6em;
-vertical-align: middle;
-}
-:checked+.radio-label {
-z-index: 1;
-position: relative;
-border-color: #4078c0;
-}
-.sourceLine {
-display: inline-block;
-}
-code .kw { color: #000000; }
-code .dt { color: #ed6a43; }
-code .dv { color: #009999; }
-code .bn { color: #009999; }
-code .fl { color: #009999; }
-code .ch { color: #009999; }
-code .st { color: #183691; }
-code .co { color: #969896; }
-code .ot { color: #0086b3; }
-code .al { color: #a61717; }
-code .fu { color: #63a35c; }
-code .er { color: #a61717; background-color: #e3d2d2; }
-code .wa { color: #000000; }
-code .cn { color: #008080; }
-code .sc { color: #008080; }
-code .vs { color: #183691; }
-code .ss { color: #183691; }
-code .im { color: #000000; }
-code .va {color: #008080; }
-code .cf { color: #000000; }
-code .op { color: #000000; }
-code .bu { color: #000000; }
-code .ex { color: #000000; }
-code .pp { color: #999999; }
-code .at { color: #008080; }
-code .do { color: #969896; }
-code .an { color: #008080; }
-code .cv { color: #008080; }
-code .in { color: #008080; }
 </style>
-<style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
 body {
-  box-sizing: border-box;
-  min-width: 200px;
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 45px;
-  padding-top: 0px;
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
 
 </head>
 
 <body>
 
-<h1 id="covid-19-data">COVID-19 Data</h1>
-<h2 id="us-data">U.S. Data</h2>
-<h4 id="deaths">Deaths</h4>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>covid_us_deaths_df =<span class="st"> </span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="st">  </span><span class="kw">GET</span>(<span class="st">&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;</span>, <span class="dt">query =</span> <span class="kw">list</span>(<span class="st">&quot;$limit&quot;</span> =<span class="st"> </span><span class="dv">10000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="st">  </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="st">  </span><span class="kw">fromJSON</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data_as_of =</span> <span class="kw">as.Date</span>(data_as_of),</span>
-<span id="cb1-8"><a href="#cb1-8"></a>         <span class="dt">start_week =</span> <span class="kw">as.Date</span>(start_week),</span>
-<span id="cb1-9"><a href="#cb1-9"></a>         <span class="dt">end_week =</span> <span class="kw">as.Date</span>(end_week)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>group, <span class="op">-</span>footnote)</span>
-<span id="cb1-11"><a href="#cb1-11"></a></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="kw">save</span>(covid_us_deaths_df, <span class="dt">file =</span> <span class="st">&quot;covid_us_deaths_df.rda&quot;</span>)</span></code></pre></div>
-<h4 id="cases">Cases</h4>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>get_all_cases =<span class="st"> </span><span class="cf">function</span>(url) {</span>
-<span id="cb2-2"><a href="#cb2-2"></a>  </span>
-<span id="cb2-3"><a href="#cb2-3"></a>  all_cases =<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;list&quot;</span>, <span class="dt">length =</span> <span class="dv">0</span>)</span>
-<span id="cb2-4"><a href="#cb2-4"></a>  </span>
-<span id="cb2-5"><a href="#cb2-5"></a>  loop_index =<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>  chunk_size =<span class="st"> </span><span class="dv">99999</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>  DO_NEXT =<span class="st"> </span><span class="ot">TRUE</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a>  </span>
-<span id="cb2-9"><a href="#cb2-9"></a>  <span class="cf">while</span> (DO_NEXT) {</span>
-<span id="cb2-10"><a href="#cb2-10"></a>    <span class="kw">message</span>(<span class="st">&quot;Getting data, page &quot;</span>, loop_index)</span>
-<span id="cb2-11"><a href="#cb2-11"></a>    </span>
-<span id="cb2-12"><a href="#cb2-12"></a>    all_cases[[loop_index]] =<span class="st"> </span></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="st">      </span><span class="kw">GET</span>(url,</span>
-<span id="cb2-14"><a href="#cb2-14"></a>         <span class="dt">query =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">$order</span><span class="st">`</span> =<span class="st"> &quot;cdc_report_dt&quot;</span>,</span>
-<span id="cb2-15"><a href="#cb2-15"></a>                       <span class="st">`</span><span class="dt">$limit</span><span class="st">`</span> =<span class="st"> </span>chunk_size,</span>
-<span id="cb2-16"><a href="#cb2-16"></a>                       <span class="st">`</span><span class="dt">$offset</span><span class="st">`</span> =<span class="st"> </span><span class="kw">as.integer</span>((loop_index <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>chunk_size)</span>
-<span id="cb2-17"><a href="#cb2-17"></a>                       )</span>
-<span id="cb2-18"><a href="#cb2-18"></a>          ) <span class="op">%&gt;%</span></span>
-<span id="cb2-19"><a href="#cb2-19"></a><span class="st">      </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a><span class="st">      </span><span class="kw">fromJSON</span>() <span class="op">%&gt;%</span></span>
-<span id="cb2-21"><a href="#cb2-21"></a><span class="st">      </span><span class="kw">as_tibble</span>()</span>
-<span id="cb2-22"><a href="#cb2-22"></a>    </span>
-<span id="cb2-23"><a href="#cb2-23"></a>    DO_NEXT =<span class="st"> </span><span class="kw">dim</span>(all_cases[[loop_index]])[<span class="dv">1</span>] <span class="op">==</span><span class="st"> </span>chunk_size</span>
-<span id="cb2-24"><a href="#cb2-24"></a>    loop_index =<span class="st"> </span>loop_index <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb2-25"><a href="#cb2-25"></a>  }</span>
-<span id="cb2-26"><a href="#cb2-26"></a>  </span>
-<span id="cb2-27"><a href="#cb2-27"></a>  all_cases</span>
-<span id="cb2-28"><a href="#cb2-28"></a>  </span>
-<span id="cb2-29"><a href="#cb2-29"></a>}</span>
-<span id="cb2-30"><a href="#cb2-30"></a></span>
-<span id="cb2-31"><a href="#cb2-31"></a>url =<span class="st"> &quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;</span></span>
-<span id="cb2-32"><a href="#cb2-32"></a></span>
-<span id="cb2-33"><a href="#cb2-33"></a>covid_us_cases_df =<span class="st"> </span></span>
-<span id="cb2-34"><a href="#cb2-34"></a><span class="st">  </span><span class="kw">get_all_cases</span>(url) <span class="op">%&gt;%</span></span>
-<span id="cb2-35"><a href="#cb2-35"></a><span class="st">  </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-36"><a href="#cb2-36"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cdc_report_dt =</span> <span class="kw">as.Date</span>(cdc_report_dt)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-37"><a href="#cb2-37"></a><span class="st">  </span><span class="kw">arrange</span>(cdc_report_dt) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-38"><a href="#cb2-38"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">case_id =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-39"><a href="#cb2-39"></a><span class="st">  </span><span class="kw">relocate</span>(case_id) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-40"><a href="#cb2-40"></a><span class="st">  </span><span class="kw">group_by</span>(cdc_report_dt) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-41"><a href="#cb2-41"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">cumulative_cases =</span> <span class="kw">max</span>(case_id))</span></code></pre></div>
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="full_report.html">Full Report</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Datasets
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="datasets.html">Sources and Descriptions</a>
+    </li>
+    <li>
+      <a href="data_cleaning.html">Clean and tidy process</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Comparisons Dashboard (interactive)</a>
+</li>
+<li>
+  <a href="pandemics_timeline.html">Pandemics Timeline</a>
+</li>
+<li>
+  <a href="https://github.com/P-Sha/covid19_future.github.io">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<div id="covid-19-data" class="section level1">
+<h1>COVID-19 Data</h1>
+<div id="u.s.-data" class="section level2">
+<h2>U.S. Data</h2>
+<div id="deaths" class="section level4">
+<h4>Deaths</h4>
+<pre class="r"><code>covid_us_deaths_df = 
+  GET(&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;, query = list(&quot;$limit&quot; = 10000)) %&gt;% 
+  content(&quot;text&quot;) %&gt;% 
+  fromJSON() %&gt;% 
+  as_tibble() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(data_as_of = as.Date(data_as_of),
+         start_week = as.Date(start_week),
+         end_week = as.Date(end_week)) %&gt;% 
+  select(-group, -footnote)
+
+save(covid_us_deaths_df, file = &quot;covid_us_deaths_df.rda&quot;)</code></pre>
+</div>
+<div id="cases" class="section level4">
+<h4>Cases</h4>
+<pre class="r"><code>get_all_cases = function(url) {
+  
+  all_cases = vector(&quot;list&quot;, length = 0)
+  
+  loop_index = 1
+  chunk_size = 99999
+  DO_NEXT = TRUE
+  
+  while (DO_NEXT) {
+    message(&quot;Getting data, page &quot;, loop_index)
+    
+    all_cases[[loop_index]] = 
+      GET(url,
+         query = list(`$order` = &quot;cdc_report_dt&quot;,
+                       `$limit` = chunk_size,
+                       `$offset` = as.integer((loop_index - 1) * chunk_size)
+                       )
+          ) %&gt;%
+      content(&quot;text&quot;) %&gt;%
+      fromJSON() %&gt;%
+      as_tibble()
+    
+    DO_NEXT = dim(all_cases[[loop_index]])[1] == chunk_size
+    loop_index = loop_index + 1
+  }
+  
+  all_cases
+  
+}
+
+url = &quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;
+
+covid_us_cases_df = 
+  get_all_cases(url) %&gt;%
+  bind_rows() %&gt;% 
+  mutate(cdc_report_dt = as.Date(cdc_report_dt)) %&gt;% 
+  arrange(cdc_report_dt) %&gt;% 
+  mutate(case_id = row_number()) %&gt;% 
+  relocate(case_id) %&gt;% 
+  group_by(cdc_report_dt) %&gt;% 
+  summarize(cumulative_cases = max(case_id))</code></pre>
 <pre><code>## Getting data, page 1
 
 ## Getting data, page 2
@@ -827,14 +549,61 @@ body {
 
 ## Getting data, page 85
 
-## `summarise()` ungrouping output (override with `.groups` argument)
-</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">save</span>(covid_us_cases_df, <span class="dt">file =</span> <span class="st">&quot;./covid_us_cases_df.rda&quot;</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a>covid_us_cases_df <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> cdc_report_dt, <span class="dt">y =</span> cumulative_cases)) <span class="op">+</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
-<img src="data:image/png;base64,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" width="90%" />
+## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>save(covid_us_cases_df, file = &quot;./covid_us_cases_df.rda&quot;)
+
+covid_us_cases_df %&gt;% 
+  ggplot(aes(x = cdc_report_dt, y = cumulative_cases)) +
+  geom_point()</code></pre>
+<p><img src="covid_data_files/figure-gfm/us%20cases-1.png" width="90%" /></p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 </body>
 </html>
