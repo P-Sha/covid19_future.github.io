@@ -22,6 +22,13 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -296,7 +303,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li>
-  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Comparisons Dashboard (interactive)</a>
+  <a href="https://jak2312.shinyapps.io/shiny_dashboard/">Interactive Dashboard</a>
 </li>
 <li>
   <a href="pandemics_timeline.html">Pandemics Timeline</a>
@@ -345,68 +352,56 @@ Coronavirus in comparison to history’s deadliest pandemics, as of March 15, 20
 <p>****** embed screencast here*************</p>
 <p>Data for the project was collected from various online sources such as <a href="https://www.kaggle.com">kaggle.com</a>, <a href="https://www.cdc.gov/datastatistics/">cdc.gov</a>, and <a href="https://www.who.int/data/">WHO.int/data</a> for covid19 data. For a complete list of datasets and descriptions, click on the “Datasets” tab above.</p>
 <p>Data comparisons for the project were performed between past pandemics and the current pandemic using similar and parallel, if possible, datasets (in terms of time-frame and geography of the spread). Comparisons were made by analyzing visuals and statistical parameters between the current and past pandemics.</p>
-<pre class="r"><code>load(&quot;rdas/global_cases.rda&quot;)
-load(&quot;rdas/global_deaths.rda&quot;)
+<pre class="r"><code>load(&quot;rdas/covid_us_cases.rda&quot;)
+load(&quot;rdas/covid_us_deaths.rda&quot;)
 
-##log-transformed global new and cumulative cases
-global_new_cases_log_plot =
-global_cases %&gt;% 
-  filter(trend == &quot;new_cases&quot;) %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
-  geom_point() +
-  geom_ma(ma_fun = SMA, n = 7, size = 1) +
-  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
-  labs(
-    x = &quot;(Pandemic duration: Days) New cases&quot;,
-    y = &quot;n&quot;) +
-   ggtitle(&quot;Comparisons (transformed): New cases, Global&quot;) +
-   theme(legend.position = &quot;hide&quot;)
+covid_us_merged = 
+  full_join(covid_us_cases, covid_us_deaths) %&gt;% 
+  arrange(pandemic_duration) %&gt;% 
+  relocate(pandemic_duration, covid_new_cases, covid_new_deaths) %&gt;% 
+  pivot_longer(
+    covid_new_cases:covid_new_deaths, 
+    names_to = &quot;new&quot;,
+    names_prefix = &quot;covid_&quot;, 
+    values_to = &quot;new_count&quot;) %&gt;% 
+  mutate(
+    new = recode(new,
+                 new_cases = &quot;New Cases&quot;,
+                 new_deaths = &quot;New Deaths&quot;)
+  ) %&gt;% 
+  pivot_longer(
+    covid_cumulative_cases:covid_cumulative_deaths, 
+    names_to = &quot;cumulative&quot;,
+    names_prefix = &quot;covid_&quot;, 
+    values_to = &quot;cumulative_count&quot;) %&gt;% 
+  mutate(
+    cumulative = recode(cumulative,
+                 cumulative_cases = &quot;Cumulative Cases&quot;,
+                 cumulative_deaths = &quot;Cumulative Deaths&quot;)
+  )
+  
+plot_new = 
+covid_us_merged %&gt;% 
+   drop_na() %&gt;% 
+   plot_ly(
+    x = ~pandemic_duration, y = ~new_count, type = &quot;scatter&quot;, mode = &quot;lines&quot;, color = ~new) %&gt;% 
+   layout(title = &quot;COVID-19 U.S. New Cases and Deaths&quot;,
+          xaxis = list(title = &quot;Pandemic Duration&quot;), 
+          yaxis = list(title = &quot;Count&quot;))
 
-global_cumulative_cases_log_plot =
-global_cases %&gt;% 
-  filter(trend == &quot;cumulative_cases&quot;) %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
-  geom_point() +
-  geom_ma(ma_fun = SMA, n = 7, size = 1) +
-  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
-  labs(
-    x = &quot;Cumulative cases&quot;,
-    y = &quot;&quot;,
-    caption = &quot;Log-transformed plots&quot;
-  ) +
-  theme(legend.position = &quot;right&quot;)
+plot_cumulative = 
+covid_us_merged %&gt;% 
+   drop_na() %&gt;% 
+   plot_ly(
+    x = ~pandemic_duration, y = ~cumulative_count, type = &quot;scatter&quot;, mode = &quot;lines&quot;, color = ~cumulative) %&gt;% 
+   layout(title = &quot;COVID-19 U.S. New vs Cumulative Cases and Deaths&quot;,
+          xaxis = list(title = &quot;Pandemic Duration&quot;), 
+          yaxis = list(title = &quot;Count&quot;),
+          legend = list(x = 100, y = 0.5))
 
-##log-transformed global new and cumulative deaths
-
-global_new_deaths_log_plot =
-global_deaths %&gt;% 
-  filter(trend == &quot;new_deaths&quot;) %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
-  geom_point() +
-  geom_ma(ma_fun = SMA, n = 7, size = 1) +
-  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
-  labs(
-    x = &quot;Days: New deaths&quot;,
-    y = &quot;n&quot;) +
-  ggtitle(&quot;Comparisons (transformed): Deaths, Global&quot;) +
-  theme(legend.position = &quot;hide&quot;)
-
-global_cumulative_deaths_log_plot =
-global_deaths %&gt;% 
-  filter(trend == &quot;cumulative_deaths&quot;) %&gt;% 
-  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
-  geom_point() +
-  geom_ma(ma_fun = SMA, n = 7, size = 1) +
-  scale_y_log10(breaks = trans_breaks(&quot;log10&quot;, function(x) 10^x), labels = trans_format(&quot;log10&quot;, math_format(10^.x))) +
-    labs(
-    x = &quot;Cumulative deaths&quot;,
-    y = &quot;&quot;,
-    caption = &quot;Log-transformed plots&quot;
-    ) +
-   theme(legend.position = &quot;right&quot;)
-
-(global_new_cases_log_plot + global_cumulative_cases_log_plot) / (global_new_deaths_log_plot + global_cumulative_deaths_log_plot)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" width="90%" /></p>
+subplot(plot_new, plot_cumulative, shareX = T, shareY = T)</code></pre>
+<div id="htmlwidget-cd571688014f600c4ad2" style="width:90%;height:345.6px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cd571688014f600c4ad2">{"x":{"data":[{"x":[209,272,280,284,285,286,287,288,289,290,290,291,292,293,294,295,296,297,297,298,299,300,301,302],"y":[1,1,1,1,4,2,2,7,6,8,8,17,20,131,13,32,170,194,194,105,63,191,17,14],"mode":"lines","type":"scatter","name":"New Cases","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[10,17,24,31,38,45,52,59,66,73,80,87,94,101,108,115,122,129,136,143,150,157,164,171,178,185,192,199,206,213,220,227,234,241,248,255,262,269,276,283,290,290,297,297,304,311],"y":[0,1,0,4,10,36,56,573,3171,10044,16206,17092,15459,13163,11184,9181,7195,6133,5012,4210,3816,3800,4498,5735,7132,8156,8238,7791,7181,6294,5626,4830,4390,4012,4036,3944,4468,4778,5469,6177,7271,7271,7875,7875,6763,2232],"mode":"lines","type":"scatter","name":"New Deaths","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[209,272,280,284,285,286,287,288,289,290,290,291,292,293,294,295,296,297,297,298,299,300,301,302],"y":[1,2,3,4,8,10,12,19,25,33,33,50,70,201,214,246,416,610,610,715,778,969,986,1000],"mode":"lines","type":"scatter","name":"Cumulative Cases","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x2","yaxis":"y","frame":null},{"x":[10,17,24,31,38,45,52,59,66,73,80,87,94,101,108,115,122,129,136,143,150,157,164,171,178,185,192,199,206,213,220,227,234,241,248,255,262,269,276,283,290,290,297,297,304,311],"y":[0,1,1,5,15,51,107,680,3851,13895,30101,47193,62652,75815,86999,96180,103375,109508,114520,118730,122546,126346,130844,136579,143711,151867,160105,167896,175077,181371,186997,191827,196217,200229,204265,208209,212677,217455,222924,229101,236372,236372,244247,244247,251010,253242],"mode":"lines","type":"scatter","name":"Cumulative Deaths","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x2","yaxis":"y","frame":null}],"layout":{"xaxis":{"domain":[0,0.48],"automargin":true,"title":"Pandemic Duration","anchor":"y"},"xaxis2":{"domain":[0.52,1],"automargin":true,"title":"Pandemic Duration","anchor":"y"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Count","anchor":"x"},"annotations":[],"shapes":[],"images":[],"margin":{"b":40,"l":60,"t":25,"r":10},"title":"COVID-19 U.S. New vs Cumulative Cases and Deaths","hovermode":"closest","showlegend":true,"legend":{"x":100,"y":0.5}},"attrs":{"67ec44c943f1":{"x":{},"y":{},"mode":"lines","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"},"67ec2fbd64c4":{"x":{},"y":{},"mode":"lines","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"source":"A","config":{"showSendToCloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>Other results summary (copy from full report)…..</p>
 <hr />
 </div>
