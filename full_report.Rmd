@@ -52,7 +52,7 @@ Given the scale of this pandemic, the project was inspired by the idea of trying
 
 By undertaking this project, we were hoping to identify and establish any existing pattern in past outbreaks, and then to look for predictability in possible direction(s) COVID-19 could turn to in the near future. 
 
-### Related work
+### Related Work
 
 The idea for the project was encouraged by the articles ["How the pandemic might play out in 2021 and beyond"](https://www.nature.com/articles/d41586-020-02278-5), and ["Here's how the COVID-19 pandemic could play out over the next two years"](https://www.livescience.com/covid-19-pandemic-future-scenarios.html).
 
@@ -64,9 +64,9 @@ The questions of interest were to investigate on the expected severity of COVID-
 
 #### _Additional_
 
-What might the basic reproductive rates had been in the past pandemics? Basic reproductive rate, or "r0" for short, is a measure that describes the ability of a pathogen to spread in a population. It is the average of secondary infections caused by an infectious individual; which we thought is a critical element in pandemics analyses.  
+What might the basic reproductive rates had been in the past pandemics? Basic reproductive rate, or $R_0$ for short, is a measure that describes the ability of a pathogen to spread in a population. It is the average of secondary infections caused by an infectious individual; which we thought is a critical element in pandemics analyses.  
 
-[How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?]
+**[How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?]**
 
 ### Data
 
@@ -77,11 +77,11 @@ Most of the datasets were available in ready-to-use CSV formats, requiring some 
 
 <brk><brk><brk>
 
-   Data for COVID-19 in Chicago required filtering the peak timeframe, up until the completion of this report (December 4th 2020), by weeks. This combined dataframe was then compared to the available Spanish flu record of 7 weeks.   
+Data for COVID-19 in Chicago required filtering the peak timeframe, up until the completion of this report (December 4th 2020), by weeks. This combined dataframe was then compared to the available Spanish flu record of 7 weeks.   
   
 <brk><brk><brk>
 
-  Also, the data with R0 and other statistical comparisons between the four pandemics was extracted by scraping [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext). Scraped data first had to be saved as a dataframe in order to make it compatible with the rest of the website. Information on R0 for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show r0 by disease-type graphically. 
+Also, the data with $R_0$ and other statistical comparisons between the four pandemics was extracted by scraping [thelancet.com](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext). Scraped data first had to be saved as a dataframe in order to make it compatible with the rest of the website. Information on $R_0$ for the four pandemics, incubation period, interval between symptoms to infectivity, and proportion with mild illness was retained and formatted into a table. Data was again reformatted to long in order to show $R_0$ by disease-type graphically. 
   
 <brk><brk><brk>
 
@@ -101,9 +101,9 @@ Given the rapidly changing dynamics on a daily basis of the current Coronavirus,
 We started our analysis by comparing the first pandemic of the 20th century, named Spanish flu, which has its descendant virus remaining till today as [influenza virus](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6187799/). Although the first historically documented pandemic was the Plague of 430 B.C., not much of the recorded data is available for pandemics prior to the 20th century. Recently, efforts have been made to understand the disease history by studying remnants of human remains such as the teeth. Paleontologists and scientists have identified the DNA of the bacteria that caused the [Black Death pandemic over 5,000 years ago](https://www.washingtonpost.com/health/ancient-teeth-show-history-of-epidemics-is-much-older-than-we-thought/2020/07/24/4f18ed94-b641-11ea-a8da-693df3d7674a_story.html).  
 <brk><brk><brk>
 
-#### Spanish flu
+#### Spanish Flu
 
-Spanish flu was a viral infection just as covid-19, which lasted from early 1918 to spring of 1920. With the data available, or lack of, we were able to compare its impact in Chicago. Data was recorded at the peak of the outbreak, for 7 weeks. For parallel comparison, data was extracted for peak 7 weeks as well for covid-19, from the City of Chicago databank.  
+Spanish flu was a viral infection just as COVID-19, which lasted from early 1918 to spring of 1920. With the data available, or lack of, we were able to compare its impact in Chicago. Data was recorded at the peak of the outbreak, for 7 weeks. For parallel comparison, data was extracted for peak 7 weeks as well for COVID-19, from the City of Chicago databank.  
 
 ```{r}
 # Spanish flu versus COVID-19
@@ -125,7 +125,8 @@ spanish_df %>%
    plot_ly(
     x = ~week, y = ~mortality, color = ~mortality, type = "bar") %>% 
    layout(title = "Spanish Flu",
-           xaxis = list(title = "Spanish flu"))
+          xaxis = list(title = "Spanish flu"), 
+          yaxis = list(title = "Mortality"))
 
 ## Covid-19 Chicago data
 
@@ -183,14 +184,15 @@ covid19_chicago =
        week = 7,
         mortality = sum(deaths_total))
  
- covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
+covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
  
 plot_2 = 
   covid19_chicago_df %>% 
   plot_ly(
     x = ~week, y = ~ mortality, color = ~ mortality, type = "bar") %>% 
-  layout(title = "Spanish Flu vs COVID-19: Peak 7 weeks (Chicago)",
-          xaxis = list(title = "COVID-19 (weeks)"))
+  layout(title = "Spanish Flu vs COVID-19: 7-Week Peak (Chicago)", 
+         xaxis = list(title = "Weeks"),
+         yaxis = list(title = "Mortality"))
 
 # Comparison-plot
 
@@ -199,7 +201,7 @@ subplot(plot_1, plot_2, shareX = TRUE,  shareY = TRUE)
 
 The graphs show similar parabolic curves, with the peak of maximum mortality due to Spanish flu in a week over 6 times the mortality of the current pandemic. Tracing the bars displays total mortality for a given week.  
 
-#### SARS
+#### SARS-CoV-1
 
 Next we compared the first pandemic of the 21st century, Severe acute respiratory syndrome or SARS-2003 for short, to COVID-19. With better records of data collection and availability by then, we were able to analyze the history of SARS at a global scale and were able to compare it to COVID-19 at a greater detail. 
 
@@ -217,7 +219,7 @@ sars_df %>%
     mode = "lines"
   ) %>% 
   layout(title = "SARS 2003 Cumulative Deaths by Country",
-         xaxis = list(title = "month"),
+         xaxis = list(title = "Month"),
          yaxis = list(title = "Country"))
 
 ```
@@ -235,19 +237,18 @@ sars_cum_global =
   ggplot(aes(x = pandemic_duration, y = sars_cumulative_cases)) +
   geom_point(alpha = .5, color = "blue") +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
-  xlab("Days: SARS duration") +
-  ylab("cumulative cases") +
-  ggtitle("Global Cumulative Cases: SARS 2003 versus COVID-19")
+  xlab("Pandemic Duration (days)") +
+  ylab("Cumulative Cases")
  
 covid_cum_global =
   covid_global %>% 
   ggplot(aes(x = pandemic_duration, y = covid_cumulative_cases)) +
   geom_point(alpha = .2, color = "blue") +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
-  xlab("COVID-19 duration") +
-  ylab("")  
+  xlab("Pandemic Duration (days)") +
+  ylab("Cumulative Cases")  
 
-sars_cum_global + covid_cum_global
+sars_cum_global + covid_cum_global + plot_annotation(title = "Global Cumulative Cases: SARS 2003 vs COVID-19", theme = theme(plot.title = element_text(hjust = 0.5)))
 ```
 
 Distinct difference in the scale of cumulative cases is evident in the two graphs, along with the rise in cases for a given duration of time. SARS, although spiked steeply early on, tapered off within a few months. COVID-19 meanwhile stayed at an exponential growth for the first 300 days of onset.
@@ -259,11 +260,12 @@ sars_global %>%
   ggplot(aes(x = pandemic_duration, y = sars_cumulative_deaths)) +
   geom_point(alpha = .5, color = "blue") +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
-      labs(
-    title = "SARS: cumulative deaths, global",
-    x = "Pandemic Duration, days",
-    y = "n"
-  )
+    labs(
+    title = "SARS: Cumulative Deaths, Global",
+    x = "Pandemic Duration (days)",
+    y = "Cumulative Deaths"
+  ) + 
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 Here, we see the case fatality rate of SARS was nearly 10% of documented cases.
@@ -282,9 +284,8 @@ h1n1_global_who %>%
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "(Pandemic duration: Days) New  cases",
-    y = "n") +
-  ggtitle("H1N1: Global")
+    x = "Pandemic Duration (days)",
+    y = "New Cases")
 
 h1n1_global_cumulative_cases_plot =
  h1n1_global_who %>%
@@ -292,11 +293,11 @@ h1n1_global_cumulative_cases_plot =
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "Cumulative cases",
-    y = ""
+    x = "Pandemic Duration (days)",
+    y = "Cumulative Cases"
   )
 
-(h1n1_global_new_cases_plot + h1n1_global_cumulative_cases_plot)
+h1n1_global_new_cases_plot + h1n1_global_cumulative_cases_plot + plot_annotation(title = "H1N1: Global", theme = theme(plot.title = element_text(hjust = 0.5)))
 ```
 
 The initial outbreak came in two waves prior to the development and distribution of an effective vaccine. In the interim history, the novel H1N1 strain has become an endemic influenza illness with global, and as demonstrated here, US cases and deaths reported yearly.
@@ -308,9 +309,8 @@ h1n1_us_who %>%
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
     labs(
-    x = "(Pandemic duration: Days) New cases",
-    y = "n") +
-   ggtitle("H1N1: United States")
+    x = "Pandemic Duration (days)",
+    y = "New Cases")
 
 h1n1_us_cumulative_cases_plot =
  h1n1_us_who %>%
@@ -318,16 +318,79 @@ h1n1_us_cumulative_cases_plot =
   geom_point(alpha = .5) +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "Cumulative cases",
-    y = ""
+    x = "Pandemic Duration (days)",
+    y = "Cumulative Cases"
   )
 
- (h1n1_us_new_cases_plot + h1n1_us_cumulative_cases_plot)
+h1n1_us_new_cases_plot + h1n1_us_cumulative_cases_plot + plot_annotation(title = "H1N1: United States", theme = theme(plot.title = element_text(hjust = 0.5)))
 ```
 
 Given the rapidity and severity of this outbreak, official case and death counts are known to grossly underestimate disease burden during this pandemic.
 
 #### COVID-19
+
+**insert some text  here about U.S. comparisons**
+
+```{r}
+load("./us_cases.rda")
+
+##linear
+us_new_cases_linear_plot =
+us_cases %>% 
+  filter(trend == "new_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    x = "Pandemic Duration (days)",
+    y = "New Cases") +
+  theme(legend.position = "hide")
+
+us_cumulative_cases_linear_plot =
+us_cases %>% 
+  filter(trend == "cumulative_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  labs(
+    x = "Pandemic Duration (days)",
+    y = "Cumulative Cases"
+  ) +
+  theme(legend.position = "right") + 
+  scale_colour_viridis_d(name = "Disease", labels = c("COVID-19", "H1N1", "Influenza B", "SARS 2003"))
+
+us_new_cases_linear_plot + us_cumulative_cases_linear_plot + plot_annotation(title = "U.S. Cases: New vs Cumulative", theme = theme(plot.title = element_text(hjust = 0.5)))
+
+##log
+us_new_cases_log_plot =
+us_cases %>% 
+  filter(trend == "new_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
+  labs(
+    x = "Pandemic Duration (days)",
+    y = "log(New Cases)"
+   ) +
+   theme(legend.position = "hide")
+
+us_cumulative_cases_log_plot =
+us_cases %>% 
+  filter(trend == "cumulative_cases") %>% 
+  ggplot(aes(x = pandemic_duration, y = n, color = disease)) +
+  geom_point() +
+  geom_ma(ma_fun = SMA, n = 7, size = 1) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
+  labs(
+    x = "Pandemic Duration (days)",
+    y = "log(Cumulative Cases)"
+  ) +
+  theme(legend.position = "right") + 
+  scale_colour_viridis_d(name = "Disease", labels = c("COVID-19", "H1N1", "Influenza B", "SARS 2003"))
+
+us_new_cases_log_plot + us_cumulative_cases_log_plot + plot_annotation(title = "U.S. Cases (Logarthimic Transformed): New vs Cumulative", theme = theme(plot.title = element_text(hjust = 0.5)))
+```
 
 In the context of the previously mentioned viral respiratory outbreaks, the extent of the COVID-19 pandemic has been impressive. COVID-19 case counts, both globally and in the United States, dwarf the scale of the prior viral respiratory outbreaks in recent memory.
 
@@ -342,9 +405,8 @@ global_cases %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "(Pandemic duration: Days) New cases",
-    y = "n") +
-   ggtitle("Comparisons: New cases, Global") +
+    x = "Pandemic Duration (days)",
+    y = "New Cases") +
   theme(legend.position = "hide")
 
 global_cumulative_cases_linear_plot =
@@ -354,13 +416,13 @@ global_cases %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "Cumulative cases",
-    y = "",
-    caption = "Linear plots"
+    x = "Pandemic Duration (days)",
+    y = "Cumulative Cases"
   ) +
-  theme(legend.position = "right")
+  theme(legend.position = "right") + 
+  scale_colour_viridis_d(name = "Disease", labels = c("COVID-19", "H1N1", "Influenza B", "SARS 2003"))
 
-global_new_cases_linear_plot + global_cumulative_cases_linear_plot
+global_new_cases_linear_plot + global_cumulative_cases_linear_plot + plot_annotation(title = "Global Cases: New vs Cumulative", theme = theme(plot.title = element_text(hjust = 0.5)))
 ```
 
 Given the orders of magnitude difference in incidence of COVID-19 compared with SARS and H1N1, a log-transformed visualization allows for more instructive comparison. 
@@ -377,9 +439,9 @@ global_cases %>%
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
   labs(
-    x = "(Pandemic duration: Days) New cases",
-    y = "n") +
-   ggtitle("Comparisons (transformed): New cases, Global") +
+    x = "Pandemic Duration (days)",
+    y = "log(New Cases)"
+   ) +
    theme(legend.position = "hide")
 
 global_cumulative_cases_log_plot =
@@ -390,13 +452,13 @@ global_cases %>%
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
   labs(
-    x = "Cumulative cases",
-    y = "",
-    caption = "Log-transformed plots"
+    x = "Pandemic Duration (days)",
+    y = "log(Cumulative Cases)"
   ) +
-  theme(legend.position = "right")
+  theme(legend.position = "right") + 
+  scale_colour_viridis_d(name = "Disease", labels = c("COVID-19", "H1N1", "Influenza B", "SARS 2003"))
 
-global_new_cases_log_plot + global_cumulative_cases_log_plot
+global_new_cases_log_plot + global_cumulative_cases_log_plot + plot_annotation(title = "Global Cases (Logarthimic Transformed): New vs Cumulative", theme = theme(plot.title = element_text(hjust = 0.5)))
 ```
 
 Similar discrepancies in overall mortality are appreciated on the global scale. Mortality data for H1N1 are unfortunately limited more significantly than case counts, however inspection of the log-transformed scales suggest a higher burden than reported, as has been [previously modeled](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(12)70121-4/fulltext).
@@ -411,9 +473,8 @@ global_deaths %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "(Pandemic duration: Days) New deaths",
-    y = "n") +
-   ggtitle("Comparisons: Deaths, Global") +
+    x = "Pandemic Duration (days)",
+    y = "New Deaths") + 
    theme(legend.position = "hide")
 
 global_cumulative_deaths_linear_plot = 
@@ -423,11 +484,11 @@ global_deaths %>%
   geom_point() +
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   labs(
-    x = "Cumulative deaths",
-    y = "",
-    caption = "Linear plots"
+    x = "Pandemic Duration (days)",
+    y = "Cumulative Deaths"
   ) +
-  theme(legend.position = "right")
+  theme(legend.position = "right") + 
+  scale_colour_viridis_d(name = "Disease", labels = c("COVID-19", "H1N1", "SARS 2003"))
 
 global_new_deaths_log_plot =
 global_deaths %>% 
@@ -437,9 +498,9 @@ global_deaths %>%
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
   labs(
-    x = "Days: New deaths",
-    y = "n") +
-  ggtitle("Comparisons (transformed): Deaths, Global") +
+    x = "Pandemic Duration (days)",
+    y = "log(New Deaths"
+  ) + 
   theme(legend.position = "hide")
 
 global_cumulative_deaths_log_plot =
@@ -450,22 +511,22 @@ global_deaths %>%
   geom_ma(ma_fun = SMA, n = 7, size = 1) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x))) +
     labs(
-    x = "Cumulative deaths",
-    y = "",
-    caption = "Log-transformed plots"
+      x = "Pandemic Duration (days)",
+      y = "log(Cumulive Deaths)"
     ) +
-   theme(legend.position = "right")
+    theme(legend.position = "right") + 
+    scale_colour_viridis_d(name = "Disease", labels = c("COVID-19", "H1N1", "SARS 2003"))
 
-global_new_deaths_linear_plot + global_cumulative_deaths_linear_plot
+global_new_deaths_linear_plot + global_cumulative_deaths_linear_plot + plot_annotation(title = "Global Deaths: New vs Cumulative", theme = theme(plot.title = element_text(hjust = 0.5)))
 
-global_new_deaths_log_plot + global_cumulative_deaths_log_plot
+global_new_deaths_log_plot + global_cumulative_deaths_log_plot + plot_annotation(title = "Global Deaths (Logarthimic Transformed): New vs Cumulative", theme = theme(plot.title = element_text(hjust = 0.5)))
 ```
 
-#### R0
+#### $R_0$
 
-Any report on pandemics is incomplete without the analysis of the basic Reproductive rate, also called R0 (R naught), so we decided to include it in our study. Prior to this pandemic, it was probably heard for the first time by many in the movie [Contagion](imdb.com/title/tt1598778/). 
+Any report on pandemics is incomplete without the analysis of the basic reproductive rate, also called $R_0$, so we decided to include it in our study. Prior to this pandemic, it was probably heard for the first time by many in the movie [Contagion](imdb.com/title/tt1598778/). 
 
-A measure of how many cases a single infected individual can generate in a susceptible population, R0 is not truly a rate and helps quantify an outbreak's intensity. The following table displays the R0 for the pandemics discussed above, along with the time in days from exposure to symptoms of the disease, days from symptoms onset to maximum infectivity, and the proportion of individuals with mild symptoms.
+A measure of how many cases a single infected individual can generate in a susceptible population, $R_0$ is not truly a rate and helps quantify an outbreak's intensity. The following table displays the $R_0$ for the pandemics discussed above, along with the time in days from exposure to symptoms of the disease, days from symptoms onset to maximum infectivity, and the proportion of individuals with mild symptoms.
 
 ```{r basic reproductive rate}
 load("./table_r0.rda")
@@ -474,7 +535,7 @@ table_r0 %>%
   knitr::kable()
 ```
 
-Given that R0 would change as more data is gathered for COVId-19, and based on the model used to calculate it, thus far on an average all pandemics showed similar R0 values, with H1N1 being the lowest. Spanish flu, with greatest devastation in terms of death toll, had a slightly lower R0 than SARS and COVID-19. With an R0 of 2.0, every individual with spanish flu, on an average, would have infected two other individuals.
+Given that $R_0$ would change as more data is gathered for COVId-19, and based on the model used to calculate it, thus far on an average all pandemics showed similar $R_0$ values, with H1N1 being the lowest. Spanish flu, with greatest devastation in terms of death toll, had a slightly lower $R_0$ than SARS and COVID-19. With an $R_0$ of 2.0, every individual with spanish flu, on an average, would have infected two other individuals.
 
 ### Discussion
 
@@ -493,7 +554,7 @@ Another interesting aspect of the Chicago Spanish flu dataset was that more peop
 Questions remain whether COVID-19 would turn into an endemic just as H1N1 did and  Spanish flu did with its descendant virus, or fade out with time as SARS 2003 did?  Third option seems less probable given COVID's duration and geographic spread. With many questions unanswered at this point, with the ongoing data-updates globally, a peak into past pandemics provided a better understanding into such probable courses of current Corona virus. 
 
 
-In conclusion, COVID-19 is certainly not the first pandemic, and probably not the last. Looking at past pandemics could give us some main takeaways for better preparedness and management. Researching about these past pandemics have taught us that certain non-medical measures did work in the past. For instance, according to "[Medical News Today"](https://www.medicalnewstoday.com/articles/comparing-covid-19-with-previous-pandemics#1918:-The-Spanish-flu), quick implementation of social-distancing and masking was effective during Spanish flu. Quarantine measures were highly effective during the SARS 2003 outbreak. More importantly, we are medically and scientifically better equipped than we were in the past, to bring the R0 number below one. At the end, pandemics do come to an end.  
+In conclusion, COVID-19 is certainly not the first pandemic, and probably not the last. Looking at past pandemics could give us some main takeaways for better preparedness and management. Researching about these past pandemics have taught us that certain non-medical measures did work in the past. For instance, according to "[Medical News Today"](https://www.medicalnewstoday.com/articles/comparing-covid-19-with-previous-pandemics#1918:-The-Spanish-flu), quick implementation of social-distancing and masking was effective during Spanish flu. Quarantine measures were highly effective during the SARS 2003 outbreak. More importantly, we are medically and scientifically better equipped than we were in the past, to bring the $R_0$ number below one. At the end, pandemics do come to an end.  
 
 
 ***

@@ -1,5 +1,5 @@
 ---
-title: "Clean and Tidy datasets"
+title: "Clean and Tidy Datasets"
 output: html_document
 ---
 
@@ -142,20 +142,23 @@ h1n1_global_cases =
 
 save(h1n1_global_cases, file = "h1n1_global_cases.rda")
 
-h1n1_us_cases = read_excel("./data/USA_FluNetInteractiveReport.xlsx", skip = 5) %>% 
+h1n1_us_cases = 
+  read_excel("./data/USA_FluNetInteractiveReport.xlsx", skip = 5) %>% 
   clean_names() %>% 
   select(start_date:end_date, h1n1_new_cases = a_h1n1_pdm09) %>% 
   mutate(
     start_date = as.Date(start_date),
     end_date = as.Date(end_date),
-    pandemic_interval = "2009/04/06" %--% end_date,
+    pandemic_interval = "2009/04/06" %--% start_date,
     pandemic_duration = as.duration(pandemic_interval) / ddays(1)
-  ) %>% 
-    filter(pandemic_duration >= 0) %>% 
+  ) %>%  
+  filter(start_date > "2009/04/06") %>% 
+  filter(start_date < "2010/04/06") %>% 
   mutate(
     h1n1_new_cases = as.numeric(h1n1_new_cases),
     h1n1_cumulative_cases = CUMULATIVE_SUM(h1n1_new_cases)
-  )
+  ) %>% 
+  select(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases)
 
 save(h1n1_us_cases, file = "h1n1_us_cases.rda")
 ```
@@ -190,18 +193,20 @@ save(influenza_global_cases, file = "influenza_global_cases.rda")
 
 influenza_us_cases = 
   read_excel("./data/USA_FluNetInteractiveReport.xlsx", skip = 5) %>% 
-  janitor::clean_names() %>% 
+  clean_names() %>% 
   select(start_date:end_date, b_total) %>% 
   mutate(start_date = as.Date(start_date),
          end_date = as.Date(end_date),
-         pandemic_interval = "2009/04/06" %--% end_date, 
+         pandemic_interval = "2019/09/30" %--% end_date, 
          pandemic_duration = as.duration(pandemic_interval) / ddays(1)) %>% 
+  filter(start_date > "2019/09/30") %>% 
+  filter(start_date < "2020/09/30") %>% 
   drop_na() %>% 
-  filter(pandemic_duration >= 0) %>% 
   mutate(
     influenza_new_cases = as.numeric(b_total),
     influenza_cumulative_cases = CUMULATIVE_SUM(influenza_new_cases)
-  )
+  ) %>% 
+  select(pandemic_duration, influenza_new_cases, influenza_cumulative_cases)
 
 save(influenza_us_cases, file = "influenza_us_cases.rda")
 ```
@@ -212,7 +217,8 @@ save(influenza_us_cases, file = "influenza_us_cases.rda")
 #### COVID-19 Global Data (from WHO)
 
 ```{r covid global data}
-covid_global = read_csv("./data/covid19_global.csv") %>% 
+covid_global = 
+  read_csv("./data/covid19_global.csv") %>% 
   clean_names() %>% 
   select(-country_code, -who_region, covid_new_cases = new_cases, covid_cumulative_cases = cumulative_cases, covid_new_deaths = new_deaths, covid_cumulative_deaths = cumulative_deaths) %>% 
   mutate(
@@ -278,7 +284,7 @@ covid_us_deaths =
   content("text") %>% 
   fromJSON() %>% 
   as_tibble() %>% 
-  janitor::clean_names() %>% 
+  clean_names() %>% 
   mutate(data_as_of = as.Date(data_as_of),
          start_week = as.Date(start_week),
          end_week = as.Date(end_week)) %>% 
@@ -286,6 +292,44 @@ covid_us_deaths =
 
 save(covid_us_deaths, file = "covid_us_deaths.rda")
 ```
+
+```{r dummy covid data}
+url = "https://data.cdc.gov/resource/vbim-akqf.json"
+
+covid_us_cases = 
+  GET(url) %>%
+  content("text") %>%
+  fromJSON() %>%
+  as_tibble() %>% 
+  mutate(cdc_report_dt = as.Date(cdc_report_dt),
+         pandemic_interval = "2020/01/22" %--% cdc_report_dt, 
+         pandemic_duration = as.duration(pandemic_interval) / ddays(1)) %>%
+  arrange(cdc_report_dt) %>% 
+  mutate(case_id = row_number()) %>% 
+  relocate(case_id, pandemic_duration) %>% 
+  group_by(pandemic_duration) %>% 
+  summarize(covid_new_cases = n_distinct(case_id), 
+            covid_cumulative_cases = max(case_id))
+
+save(covid_us_cases, file = "covid_us_cases.rda")
+
+covid_us_deaths = 
+  GET("https://data.cdc.gov/resource/r8kw-7aab.json", query = list("$limit" = 10000)) %>% 
+  content("text") %>% 
+  fromJSON() %>% 
+  as_tibble() %>% 
+  clean_names() %>% 
+  filter(state == "United States") %>% 
+  mutate(start_week = as.Date(start_week),
+         covid_new_deaths = as.numeric(covid_deaths), 
+         pandemic_interval = "2020/01/22" %--% start_week, 
+         pandemic_duration = as.duration(pandemic_interval) / ddays(1), 
+         covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)) %>% 
+  select(pandemic_duration, covid_new_deaths, covid_cumulative_deaths)
+
+save(covid_us_deaths, file = "covid_us_deaths.rda")
+```
+
 
 
 #### COVID-19 Chicago Data (from cityofchicago.org)
@@ -350,7 +394,72 @@ covid19_chicago_df = bind_rows(row1, row2, row3, row4, row5, row6, row7)
 save(covid19_chicago_df, file = "covid19_chicago_df.rda")
 ```
 
-## **Basic Reproductive rate**
+
+## **Merged Data**
+
+#### Global Cases
+
+```{r merge global cases}
+global_cases_first = full_join(covid_global, h1n1_global_cases)
+global_cases_second = full_join(global_cases_first, influenza_global_cases)
+
+global_cases = 
+  full_join(global_cases_second, sars_global) %>% 
+  rename(influenzab_new_cases = influenza_b_new_cases, 
+         influenzab_cumulative_cases = influenza_b_cumulative_cases) %>% 
+  select(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases, covid_new_cases, covid_cumulative_cases, sars_new_cases, sars_cumulative_cases, influenzab_new_cases, influenzab_cumulative_cases) %>%
+  arrange(pandemic_duration) %>% 
+  pivot_longer(
+    h1n1_new_cases:influenzab_cumulative_cases,
+    names_to = "class",
+    values_to = "n"
+  ) %>% 
+  separate(class, into = c("disease", "trend"), sep = "_", extra = "merge")
+
+save(global_cases, file = "global_cases.rda")
+```
+
+#### Global Deaths
+
+```{r merge global deaths}
+global_deaths = 
+  full_join(h1n1_global_deaths, covid_global)
+
+global_deaths =
+  full_join(global_deaths, sars_global) %>% 
+  select(pandemic_duration, h1n1_new_deaths, h1n1_cumulative_deaths, covid_new_deaths, covid_cumulative_deaths, sars_new_deaths, sars_cumulative_deaths) %>% 
+  arrange(pandemic_duration) %>% 
+  pivot_longer(
+    h1n1_new_deaths:sars_cumulative_deaths,
+    names_to = "class",
+    values_to = "n"
+  ) %>% 
+  separate(class, into = c("disease", "trend"), sep = "_", extra = "merge")
+
+save(global_deaths, file = "global_deaths.rda")
+```
+
+#### U.S. Cases
+
+```{r merge us cases}
+us_cases_first = full_join(covid_us_cases, h1n1_us_cases)
+us_cases_second = full_join(us_cases_first, influenza_us_cases)
+
+us_cases = full_join(us_cases_second, sars_us) %>% 
+  select(pandemic_duration, h1n1_new_cases, h1n1_cumulative_cases, covid_new_cases, covid_cumulative_cases, sars_new_cases, sars_cumulative_cases, influenza_new_cases, influenza_cumulative_cases) %>% 
+  arrange(pandemic_duration) %>% 
+  pivot_longer(
+    h1n1_new_cases:influenza_cumulative_cases,
+    names_to = "class",
+    values_to = "n"
+  ) %>% 
+  separate(class, into = c("disease", "trend"), sep = "_", extra = "merge")
+
+save(us_cases, file = "us_cases.rda")
+```
+
+
+## **Basic Reproductive Rate**
 
 ```{r eval = F}
 r0_data_url = "https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext"
@@ -359,9 +468,9 @@ reproductive_rate_html = read_html(r0_data_url)
 table_r0 =
   reproductive_rate_html %>% 
   html_nodes(css = "table") %>%  
-  first() %>%
+  first() %>% 
   html_table() %>% 
-  janitor::clean_names() %>% 
+  clean_names() %>% 
   select(-interpretation) %>% 
   filter(x == "Transmissibility, R0" | x == "Incubation period, days" | x == "Interval between symptom onset and maximum infectivity, days" | x == "Proportion with mild illness") %>% 
   rename(
