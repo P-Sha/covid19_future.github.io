@@ -5,30 +5,19 @@ output: html_document
 
 ```{r setup and load data, include=FALSE}
 library(tidyverse)
-<<<<<<< HEAD
-load("./spanish_rawdf.rda")
-load("./sars_us.rda")
-load("./sars_global.rda")
-load("./influenza_us_cases.rda")
-load("./influenza_global_cases.rda")
-load("./h1n1_us_cases.rda")
-load("./h1n1_global_cases.rda")
-load("./h1n1_us_deaths.rda")
-load("./h1n1_global_deaths.rda")
-load("./covid19_chicago_df.rda")
-load("./covid_global.rda")
-load("./covid_us_cases.rda")
-load("./covid_us_deaths.rda")
-=======
 load("rdas/spanish_rawdf.rda")
 load("rdas/sars_us.rda")
 load("rdas/sars_global.rda")
+load("rdas/influenza_us_cases.rda")
 load("rdas/influenza_global_cases.rda")
-load("rdas/h1n1_df.rda")
-load("rdas/covid19_chicago_rawdf.rda")
-#load("rdas/covid_us_cases.rda")
-#load("rdas/covid_us_deaths.rda")
->>>>>>> b88946ad23245d90e634ae1003f8cd3c92d9bce1
+load("rdas/h1n1_us_cases.rda")
+load("rdas/h1n1_global_cases.rda")
+load("rdas/h1n1_us_deaths.rda")
+load("rdas/h1n1_global_deaths.rda")
+load("rdas/covid19_chicago_df.rda")
+load("rdas/covid_global.rda")
+load("rdas/covid_us_cases.rda")
+load("rdas/covid_us_deaths.rda")
 ```
 
 Data for the project was collected from the following online resources:
