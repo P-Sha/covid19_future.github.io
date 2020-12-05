@@ -320,8 +320,8 @@ $(document).ready(function () {
 </div>
 
 
-<div id="spanish-flu-data-chicago" class="section level2">
-<h2><strong>Spanish Flu Data (Chicago)</strong></h2>
+<div id="spanish-flu-data" class="section level2">
+<h2><strong>Spanish Flu Data</strong></h2>
 <div id="spanish-flu-in-chicago-7-week-mortality-at-peak-from-kaggle" class="section level4">
 <h4>Spanish Flu in Chicago, 7-week mortality, at peak (from Kaggle)</h4>
 <pre class="r"><code>spanish_rawdf = read.csv(&quot;./data/spanish_flu_chicago.csv&quot;) 
@@ -521,6 +521,62 @@ save(covid_global, file = &quot;covid_global.rda&quot;)</code></pre>
 </div>
 <div id="covid-19-u.s.-data-from-cdc" class="section level4">
 <h4>COVID-19 U.S. Data (from CDC)</h4>
+<pre class="r"><code>get_all_cases = function(url) {
+  
+  all_cases = vector(&quot;list&quot;, length = 0)
+  
+  loop_index = 1
+  chunk_size = 99999
+  DO_NEXT = TRUE
+  
+  while (DO_NEXT) {
+    message(&quot;Getting data, page &quot;, loop_index)
+    
+    all_cases[[loop_index]] = 
+      GET(url,
+         query = list(`$order` = &quot;cdc_report_dt&quot;,
+                       `$limit` = chunk_size,
+                       `$offset` = as.integer((loop_index - 1) * chunk_size)
+                       )
+          ) %&gt;%
+      content(&quot;text&quot;) %&gt;%
+      fromJSON() %&gt;%
+      as_tibble()
+    
+    DO_NEXT = dim(all_cases[[loop_index]])[1] == chunk_size
+    loop_index = loop_index + 1
+  }
+  
+  all_cases
+  
+}
+
+url = &quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;
+
+covid_us_cases = 
+  get_all_cases(url) %&gt;%
+  bind_rows() %&gt;% 
+  mutate(cdc_report_dt = as.Date(cdc_report_dt)) %&gt;% 
+  arrange(cdc_report_dt) %&gt;% 
+  mutate(case_id = row_number()) %&gt;% 
+  relocate(case_id) %&gt;% 
+  group_by(cdc_report_dt) %&gt;% 
+  summarize(cumulative_cases = max(case_id))
+
+save(covid_us_cases, file = &quot;./covid_us_cases.rda&quot;)
+
+covid_us_deaths = 
+  GET(&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;, query = list(&quot;$limit&quot; = 10000)) %&gt;% 
+  content(&quot;text&quot;) %&gt;% 
+  fromJSON() %&gt;% 
+  as_tibble() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(data_as_of = as.Date(data_as_of),
+         start_week = as.Date(start_week),
+         end_week = as.Date(end_week)) %&gt;% 
+  select(-group, -footnote)
+
+save(covid_us_deaths, file = &quot;covid_us_deaths.rda&quot;)</code></pre>
 </div>
 <div id="covid-19-chicago-data-from-cityofchicago.org" class="section level4">
 <h4>COVID-19 Chicago Data (from cityofchicago.org)</h4>
@@ -585,10 +641,27 @@ save(covid19_chicago_df, file = &quot;covid19_chicago_df.rda&quot;)</code></pre>
 </div>
 <div id="basic-reproductive-rate" class="section level2">
 <h2><strong>Basic Reproductive rate</strong></h2>
-<pre class="r"><code>load(&quot;./table_r0.rda&quot;)
+<pre class="r"><code>r0_data_url = &quot;https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30484-9/fulltext&quot;
+reproductive_rate_html = read_html(r0_data_url)
 
-table_r0 %&gt;%
-  knitr::kable()</code></pre>
+table_r0 =
+  reproductive_rate_html %&gt;% 
+  html_nodes(css = &quot;table&quot;) %&gt;%  
+  first() %&gt;%
+  html_table() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(-interpretation) %&gt;% 
+  filter(x == &quot;Transmissibility, R0&quot; | x == &quot;Incubation period, days&quot; | x == &quot;Interval between symptom onset and maximum infectivity, days&quot; | x == &quot;Proportion with mild illness&quot;) %&gt;% 
+  rename(
+     covid_19 = sars_co_v_2,
+     sars_2003 = sars_co_v,
+     spanish_flu = pandemic_influenza_1918,
+     h1n1_2009 = pandemic_influenza_2009
+  ) %&gt;% 
+  mutate(x = replace(x, x == &quot;Transmissibility, R0&quot;, &quot;Basic Reproductive rate, R0&quot;)) %&gt;%
+  as_tibble()
+
+save(table_r0, file = &quot;./covid19_future.github.io/table_r0.rda&quot;)</code></pre>
 </div>
 
 
