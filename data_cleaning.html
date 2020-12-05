@@ -602,40 +602,6 @@ covid_us_deaths =
   select(pandemic_duration, covid_new_deaths, covid_cumulative_deaths)
 
 save(covid_us_deaths, file = &quot;rdas/covid_us_deaths.rda&quot;)</code></pre>
-<pre class="r"><code>url = &quot;https://data.cdc.gov/resource/vbim-akqf.json&quot;
-
-covid_us_cases = 
-  GET(url) %&gt;%
-  content(&quot;text&quot;) %&gt;%
-  fromJSON() %&gt;%
-  as_tibble() %&gt;% 
-  mutate(cdc_report_dt = as.Date(cdc_report_dt),
-         pandemic_interval = &quot;2020/01/22&quot; %--% cdc_report_dt, 
-         pandemic_duration = as.duration(pandemic_interval) / ddays(1)) %&gt;%
-  arrange(cdc_report_dt) %&gt;% 
-  mutate(case_id = row_number()) %&gt;% 
-  relocate(case_id, pandemic_duration) %&gt;% 
-  group_by(pandemic_duration) %&gt;% 
-  summarize(covid_new_cases = n_distinct(case_id), 
-            covid_cumulative_cases = max(case_id))
-
-save(covid_us_cases, file = &quot;rdas/covid_us_cases.rda&quot;)
-
-covid_us_deaths = 
-  GET(&quot;https://data.cdc.gov/resource/r8kw-7aab.json&quot;, query = list(&quot;$limit&quot; = 10000)) %&gt;% 
-  content(&quot;text&quot;) %&gt;% 
-  fromJSON() %&gt;% 
-  as_tibble() %&gt;% 
-  clean_names() %&gt;% 
-  filter(state == &quot;United States&quot;) %&gt;% 
-  mutate(start_week = as.Date(start_week),
-         covid_new_deaths = as.numeric(covid_deaths), 
-         pandemic_interval = &quot;2020/01/22&quot; %--% start_week, 
-         pandemic_duration = as.duration(pandemic_interval) / ddays(1), 
-         covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)) %&gt;% 
-  select(pandemic_duration, covid_new_deaths, covid_cumulative_deaths)
-
-save(covid_us_deaths, file = &quot;rdas/covid_us_deaths.rda&quot;)</code></pre>
 </div>
 <div id="covid-19-chicago-data-from-cityofchicago.org" class="section level4">
 <h4>COVID-19 Chicago Data (from cityofchicago.org)</h4>

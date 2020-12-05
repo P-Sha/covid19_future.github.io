@@ -313,43 +313,6 @@ covid_us_deaths =
 save(covid_us_deaths, file = "rdas/covid_us_deaths.rda")
 ```
 
-```{r dummy covid data, eval = F}
-url = "https://data.cdc.gov/resource/vbim-akqf.json"
-
-covid_us_cases = 
-  GET(url) %>%
-  content("text") %>%
-  fromJSON() %>%
-  as_tibble() %>% 
-  mutate(cdc_report_dt = as.Date(cdc_report_dt),
-         pandemic_interval = "2020/01/22" %--% cdc_report_dt, 
-         pandemic_duration = as.duration(pandemic_interval) / ddays(1)) %>%
-  arrange(cdc_report_dt) %>% 
-  mutate(case_id = row_number()) %>% 
-  relocate(case_id, pandemic_duration) %>% 
-  group_by(pandemic_duration) %>% 
-  summarize(covid_new_cases = n_distinct(case_id), 
-            covid_cumulative_cases = max(case_id))
-
-save(covid_us_cases, file = "rdas/covid_us_cases.rda")
-
-covid_us_deaths = 
-  GET("https://data.cdc.gov/resource/r8kw-7aab.json", query = list("$limit" = 10000)) %>% 
-  content("text") %>% 
-  fromJSON() %>% 
-  as_tibble() %>% 
-  clean_names() %>% 
-  filter(state == "United States") %>% 
-  mutate(start_week = as.Date(start_week),
-         covid_new_deaths = as.numeric(covid_deaths), 
-         pandemic_interval = "2020/01/22" %--% start_week, 
-         pandemic_duration = as.duration(pandemic_interval) / ddays(1), 
-         covid_cumulative_deaths = CUMULATIVE_SUM(covid_new_deaths)) %>% 
-  select(pandemic_duration, covid_new_deaths, covid_cumulative_deaths)
-
-save(covid_us_deaths, file = "rdas/covid_us_deaths.rda")
-```
-
 
 #### COVID-19 Chicago Data (from cityofchicago.org)
 
