@@ -2,6 +2,7 @@
 title: "Future of COVID-19: Looking at Past Pandemics" 
 output:
   html_document:
+    code_folding: hide
     css: style.css
 ---
 <style type = "text/css">

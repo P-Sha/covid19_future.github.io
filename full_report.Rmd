@@ -66,8 +66,6 @@ The questions of interest were to investigate on the expected severity of COVID-
 
 What might the basic reproductive rates had been in the past pandemics? Basic reproductive rate, or $R_0$ for short, is a measure that describes the ability of a pathogen to spread in a population. It is the average of secondary infections caused by an infectious individual; which we thought is a critical element in pandemics analyses.  
 
-**[How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?]**
-
 ### Data
 
 Multiple datasets were used from various shareable online sources for analysis and comparison to COVID-19. Complete list of data-descriptions is provided under the "Datasets" tab. 
