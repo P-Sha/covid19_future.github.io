@@ -11,37 +11,6 @@ h1.title {color: brown}
 
 </style>
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
-
-library(tidyverse)
-library(plotly)
-library(ggplot2)
-library(dygraphs)
-library(rvest)
-library(httr)
-library(readxl)
-library(tidyquant)
-library(patchwork)
-library(scales)
-
-knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.asp = .6,
-  out.width = "90%"
-)
-
-theme_set(theme_minimal() + theme(legend.position = "bottom"))
-
-options(
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis"
-)
-
-scale_colour_discrete = scale_colour_viridis_d
-scale_fill_discrete = scale_fill_viridis_d
-```
-
 ***
  _Jared Klug_, _David Nemirovsky_, _Matthew Lawlor_ _and_ _Purnima Sharma_ 
 
@@ -70,9 +39,19 @@ Data for the project was collected from various online sources such as [kaggle.c
 
 Data comparisons for the project were performed between past pandemics and the current pandemic using similar and parallel, if possible, datasets (in terms of time-frame and geography of the spread). Comparisons were made by analyzing visuals and statistical parameters between the current and past pandemics. 
 
+
 The below plots show updated COVID-19 U.S. new versus cumulative cases and deaths. Death data is updated weekly, whereas case data is updated daily. The start of the pandemic duration was set to be January 22, 2020 (the first confirmed case in the U.S.).
 
+
+<figure>
+![](pictures/global_new_ vs_cumulative_cases_log.file)
+<figcaption> New and Cumulative cases of pandemics worldwide, log-scaled to better depict comparisons.   </figcaption>
+</figure>
+
+
 ```{r covid19 cool plot}
+library(tidyverse)
+library(plotly)
 load("rdas/covid_us_cases.rda")
 load("rdas/covid_us_deaths.rda")
 
