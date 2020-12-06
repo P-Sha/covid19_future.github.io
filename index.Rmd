@@ -99,3 +99,16 @@ covid_us_merged %>%
 
 subplot(plot_new, plot_cumulative, shareX = T, titleY = T)
 ```
+
+
+Among the varying diseases the results showed some interesting patterns when compared, such as the s-curves of cumulative analysis and the waves pattern in recurrence of some of these outbreaks. Results also indicated devastation caused by each one, and the need for preparedness required at the very onset of infections caused by such novel pathogens as  SARS-CoV-2, the new coronavirus. Analyzing the basic reproduction number (R0) of these diseases revealed their intensity, and the fact that COVID-19 ranked highest among them. Even though in reality R0, a measure of how contagious a disease is, is not a fixed entity, it is a good navigation tool to assist in managing pandemics, and realizing its values of past pandemics could help shed light on the tools that might have worked to contain them. The comparison showed us that even though R0 was slightly lower for Spanish flu, its toll was unmatched. Partly, probably due to the living conditions and hygiene levels of the time, and the fact that it was during World war I that might have aided its spread.  
+
+<brk><brk><brk>
+
+Even though quantifications might not be exact of many,  greater understanding of past patterns helped realize possible directions COVID-19 could take. Our comparisons-Dashboard effectively compares COVID-19 to some of the prior pandemics in terms of total cases,mortality and fatality by region.
+
+<brk><brk><brk>
+
+ As the world changes blanketed by coronavirus, awaiting a solution, it might shape out as H1N1 did with its gradually diminished waves, or die down as Spanish flu eventually did.Our “full report page” analyses these outcomes in greater depth.
+ 
+***
